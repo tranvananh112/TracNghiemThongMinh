@@ -30,23 +30,26 @@ class SmartQuestionParser {
     }
 
     /**
-     * Parse câu hỏi từ text với nhiều format khác nhau
+     * Parse câu hỏi từ text với nhiều format khác nhau - IMPROVED VERSION
      */
     parseQuestions(text) {
         if (!text || !text.trim()) {
             throw new Error('Văn bản câu hỏi trống!');
         }
 
-        const lines = text.split('\n').map(line => line.trim()).filter(line => line);
+        const lines = text.split('\n');
         const questions = [];
         let currentQuestion = null;
         let currentOptions = [];
         let currentQuestionNumber = 0;
+        let currentQuestionText = '';
 
         for (let i = 0; i < lines.length; i++) {
-            const line = lines[i];
+            const line = lines[i].trim();
 
-            // Thử nhận diện câu hỏi
+            if (!line) continue; // Skip empty lines
+
+            // Thử nhận diện câu hỏi MỚI
             const questionMatch = this.matchQuestion(line);
 
             if (questionMatch) {
@@ -54,14 +57,15 @@ class SmartQuestionParser {
                 if (currentQuestion && currentOptions.length >= 2) {
                     questions.push({
                         questionNumber: currentQuestionNumber,
-                        question: currentQuestion,
+                        question: currentQuestionText.trim(),
                         options: currentOptions
                     });
                 }
 
                 // Bắt đầu câu hỏi mới
                 currentQuestionNumber = questionMatch.number;
-                currentQuestion = questionMatch.text;
+                currentQuestionText = questionMatch.text;
+                currentQuestion = true;
                 currentOptions = [];
                 continue;
             }
@@ -70,6 +74,7 @@ class SmartQuestionParser {
             const optionMatch = this.matchOption(line);
 
             if (optionMatch && currentQuestion) {
+                // Nếu có lựa chọn mới, lưu lựa chọn trước
                 currentOptions.push({
                     letter: optionMatch.letter.toUpperCase(),
                     text: optionMatch.text
@@ -77,14 +82,16 @@ class SmartQuestionParser {
                 continue;
             }
 
-            // Nếu không match pattern nào, có thể là phần tiếp theo của câu hỏi hoặc option
-            if (currentQuestion && currentOptions.length === 0) {
-                // Nối vào câu hỏi hiện tại
-                currentQuestion += ' ' + line;
-            } else if (currentOptions.length > 0) {
-                // Nối vào option cuối cùng
-                const lastOption = currentOptions[currentOptions.length - 1];
-                lastOption.text += ' ' + line;
+            // Nếu không match pattern nào
+            if (currentQuestion) {
+                if (currentOptions.length === 0) {
+                    // Chưa có lựa chọn nào → nối vào câu hỏi
+                    currentQuestionText += ' ' + line;
+                } else {
+                    // Đã có lựa chọn → nối vào lựa chọn cuối cùng
+                    const lastOption = currentOptions[currentOptions.length - 1];
+                    lastOption.text += ' ' + line;
+                }
             }
         }
 
@@ -92,7 +99,7 @@ class SmartQuestionParser {
         if (currentQuestion && currentOptions.length >= 2) {
             questions.push({
                 questionNumber: currentQuestionNumber,
-                question: currentQuestion,
+                question: currentQuestionText.trim(),
                 options: currentOptions
             });
         }

@@ -957,6 +957,91 @@ class QuizManager {
             }
         });
     }
+
+    previewQuestions() {
+        const textarea = document.getElementById('questions-input');
+        const preview = document.getElementById('questions-preview');
+        const text = textarea.value.trim();
+
+        if (!text) {
+            preview.className = 'input-preview';
+            preview.innerHTML = '';
+            return;
+        }
+
+        try {
+            const parser = new SmartQuestionParser();
+            const questions = parser.parseQuestions(text);
+
+            preview.className = 'input-preview success show';
+            preview.innerHTML = `
+                <i class="fas fa-check-circle"></i>
+                <strong>✅ Nhận diện thành công ${questions.length} câu hỏi!</strong>
+                <div style="margin-top: 8px; font-size: 13px; opacity: 0.9;">
+                    ${questions.map(q => `Câu ${q.questionNumber}: ${q.options.length} lựa chọn`).join(' • ')}
+                </div>
+            `;
+        } catch (error) {
+            preview.className = 'input-preview error show';
+            preview.innerHTML = `
+                <i class="fas fa-exclamation-circle"></i>
+                <strong>Chưa nhận diện được:</strong> ${error.message}
+            `;
+        }
+    }
+
+    previewAnswers() {
+        const questionsText = document.getElementById('questions-input').value.trim();
+        const answersText = document.getElementById('answers-input').value.trim();
+        const preview = document.getElementById('answers-preview');
+
+        if (!answersText) {
+            preview.className = 'input-preview';
+            preview.innerHTML = '';
+            return;
+        }
+
+        try {
+            const parser = new SmartQuestionParser();
+
+            // Cần biết số lượng câu hỏi để validate
+            let expectedCount = 0;
+            if (questionsText) {
+                try {
+                    const questions = parser.parseQuestions(questionsText);
+                    expectedCount = questions.length;
+                } catch (e) {
+                    // Ignore
+                }
+            }
+
+            if (expectedCount === 0) {
+                preview.className = 'input-preview error show';
+                preview.innerHTML = `
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Vui lòng nhập câu hỏi trước</strong>
+                `;
+                return;
+            }
+
+            const answers = parser.parseAnswers(answersText, expectedCount);
+
+            preview.className = 'input-preview success show';
+            preview.innerHTML = `
+                <i class="fas fa-check-circle"></i>
+                <strong>✅ Nhận diện thành công ${answers.length} đáp án!</strong>
+                <div style="margin-top: 8px; font-size: 13px; opacity: 0.9;">
+                    ${answers.join(', ')}
+                </div>
+            `;
+        } catch (error) {
+            preview.className = 'input-preview error show';
+            preview.innerHTML = `
+                <i class="fas fa-exclamation-circle"></i>
+                <strong>Chưa nhận diện được:</strong> ${error.message}
+            `;
+        }
+    }
 }
 
 // Expose QuizManager to window for patches that access window.QuizManager

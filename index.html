@@ -286,7 +286,8 @@
                             </button>
                             <textarea id="questions-input"
                                 placeholder="Nhập câu hỏi (hỗ trợ nhiều format):&#10;&#10;Câu 1: Thủ đô của Việt Nam?&#10;A. Hồ Chí Minh&#10;B. Hà Nội&#10;&#10;Hoặc: 1. Thủ đô?&#10;A) HCM&#10;B) HN&#10;&#10;Click 'Xem ví dụ' để biết thêm format"
-                                class="form-textarea large"></textarea>
+                                class="form-textarea large" oninput="quizManager.previewQuestions()"></textarea>
+                            <div id="questions-preview" class="input-preview"></div>
                             <button type="button" class="btn-help"
                                 onclick="quizManager.showFormatExamples('questions')">
                                 <i class="fas fa-question-circle"></i> Xem ví dụ format
@@ -304,7 +305,8 @@
                             </button>
                             <textarea id="answers-input"
                                 placeholder="Nhập đáp án (hỗ trợ nhiều format):&#10;&#10;Câu 1: B&#10;Câu 2: A&#10;&#10;Hoặc: 1. B&#10;2. A&#10;&#10;Hoặc đơn giản: B&#10;A"
-                                class="form-textarea"></textarea>
+                                class="form-textarea" oninput="quizManager.previewAnswers()"></textarea>
+                            <div id="answers-preview" class="input-preview"></div>
                             <button type="button" class="btn-help" onclick="quizManager.showFormatExamples('answers')">
                                 <i class="fas fa-question-circle"></i> Xem ví dụ format
                             </button>
