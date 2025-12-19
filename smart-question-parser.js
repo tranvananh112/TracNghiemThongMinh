@@ -30,12 +30,44 @@ class SmartQuestionParser {
     }
 
     /**
+     * Pre-process text: Tự động tách văn bản trải ngang thành nhiều dòng
+     * Ví dụ: "Câu 1: Text A. Option1 B. Option2" → "Câu 1: Text\nA. Option1\nB. Option2"
+     */
+    preprocessText(text) {
+        if (!text || !text.trim()) {
+            return text;
+        }
+
+        // Tách theo pattern câu hỏi mới (Câu X: hoặc X.)
+        // Thêm newline trước mỗi câu hỏi mới
+        text = text.replace(/\s+((?:Câu|Cau|Question|Q)\s*\d+\s*[:：.)\-])/gi, '\n$1');
+        text = text.replace(/\s+(\d+\s*[:：.)\-]\s*[A-Z])/g, '\n$1');
+
+        // Tách theo pattern lựa chọn (A. B. C. D.)
+        // Thêm newline trước mỗi lựa chọn
+        text = text.replace(/\s+([A-D]\s*[:：.)\-]\s*)/gi, '\n$1');
+
+        // Xử lý trường hợp đặc biệt: "...Android. B. Text" → "...Android.\nB. Text"
+        // Nhưng không tách: "Android. Đây là" (không phải lựa chọn)
+        text = text.replace(/([.!?])\s+([A-D])\s*[:：.)\-]\s+([A-Z])/g, '$1\n$2. $3');
+
+        // Loại bỏ khoảng trắng thừa
+        text = text.replace(/\n\s+/g, '\n');
+        text = text.replace(/\s+\n/g, '\n');
+
+        return text.trim();
+    }
+
+    /**
      * Parse câu hỏi từ text với nhiều format khác nhau - IMPROVED VERSION
      */
     parseQuestions(text) {
         if (!text || !text.trim()) {
             throw new Error('Văn bản câu hỏi trống!');
         }
+
+        // Pre-process: Tự động tách văn bản trải ngang thành nhiều dòng
+        text = this.preprocessText(text);
 
         const lines = text.split('\n');
         const questions = [];

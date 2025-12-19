@@ -958,6 +958,27 @@ class QuizManager {
         });
     }
 
+    autoFormatQuestions() {
+        const textarea = document.getElementById('questions-input');
+        const text = textarea.value.trim();
+
+        if (!text) {
+            this.showToast('⚠️ Vui lòng nhập câu hỏi trước!', 'error');
+            return;
+        }
+
+        try {
+            const parser = new SmartQuestionParser();
+            const formatted = parser.preprocessText(text);
+
+            textarea.value = formatted;
+            this.previewQuestions();
+            this.showToast('✨ Đã tự động định dạng văn bản!', 'success');
+        } catch (error) {
+            this.showToast('❌ Lỗi: ' + error.message, 'error');
+        }
+    }
+
     previewQuestions() {
         const textarea = document.getElementById('questions-input');
         const preview = document.getElementById('questions-preview');
