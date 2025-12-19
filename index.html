@@ -950,6 +950,9 @@
     <!-- Smart Question Parser - Nhận diện tự động nhiều format -->
     <script src="smart-question-parser.js"></script>
 
+    <!-- Sound Manager - Quản lý âm thanh (MUST BE BEFORE script.js) -->
+    <script src="sound-manager.js"></script>
+
     <script src="script.js"></script>
     <script src="script-modern.js"></script>
     <!-- PATCH: Fix updateAnswerModern - MUST BE RIGHT AFTER script-modern.js -->
@@ -1012,15 +1015,20 @@
     <!-- COMPLETE PROTECTION FOR ROOM QUIZ - MUST BE ABSOLUTE LAST -->
     <script src="fix-room-quiz-complete-protection.js"></script>
 
-    <!-- Sound Manager - Quản lý âm thanh -->
-    <script src="sound-manager.js"></script>
-
     <!-- ABSOLUTE QUIZ PROTECTION - MUST BE VERY LAST -->
     <script src="ABSOLUTE_QUIZ_PROTECTION.js"></script>
 
     <!-- Audio for answer selection -->
     <audio id="answer-sound" preload="auto">
         <source src="chinhxac.wav" type="audio/wav">
+    </audio>
+
+    <!-- Audio for quiz results -->
+    <audio id="success-sound" preload="auto">
+        <source src="âm thanh chúc mừng.wav" type="audio/wav">
+    </audio>
+    <audio id="fail-sound" preload="auto">
+        <source src="saidapan.wav" type="audio/wav">
     </audio>
 </body>
 

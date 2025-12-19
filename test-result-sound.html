@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Result Sound</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background: #4CAF50;
+            color: white;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        .fail-btn {
+            background: #f44336;
+        }
+
+        .fail-btn:hover {
+            background: #da190b;
+        }
+
+        .info {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔊 Test Âm Thanh Kết Quả</h1>
+
+    <div class="info">
+        <p><strong>Hướng dẫn:</strong></p>
+        <ul>
+            <li>Nhấn nút "Test Đạt (≥70%)" để nghe âm thanh chúc mừng</li>
+            <li>Nhấn nút "Test Trượt (<70%)" để nghe âm thanh sai đáp án</li>
+            <li>Mỗi âm thanh sẽ phát trong 3 giây</li>
+        </ul>
+    </div>
+
+    <div>
+        <button onclick="testSuccess()">🎉 Test Đạt (≥70%)</button>
+        <button class="fail-btn" onclick="testFail()">😢 Test Trượt (<70%)< /button>
+    </div>
+
+    <div id="log"
+        style="margin-top: 20px; padding: 10px; background: #f9f9f9; border-radius: 5px; font-family: monospace; font-size: 12px;">
+    </div>
+
+    <!-- Audio elements -->
+    <audio id="success-sound" preload="auto">
+        <source src="âm thanh chúc mừng.wav" type="audio/wav">
+    </audio>
+    <audio id="fail-sound" preload="auto">
+        <source src="saidapan.wav" type="audio/wav">
+    </audio>
+
+    <script>
+        const successAudio = document.getElementById('success-sound');
+        const failAudio = document.getElementById('fail-sound');
+        const logDiv = document.getElementById('log');
+
+        function log(message) {
+            const time = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${time}] ${message}<br>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+
+        function playSound(audio, name) {
+            log(`Đang phát ${name}...`);
+
+            audio.currentTime = 0;
+
+            const playPromise = audio.play();
+
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    log(`✅ ${name} đang phát thành công`);
+
+                    setTimeout(() => {
+                        audio.pause();
+                        audio.currentTime = 0;
+                        log(`⏹️ ${name} đã dừng sau 3 giây`);
+                    }, 3000);
+                }).catch(error => {
+                    log(`❌ Lỗi phát ${name}: ${error.message}`);
+                });
+            }
+        }
+
+        function testSuccess() {
+            log('--- Test âm thanh THÀNH CÔNG (≥70%) ---');
+            playSound(successAudio, 'Âm thanh chúc mừng');
+        }
+
+        function testFail() {
+            log('--- Test âm thanh THẤT BẠI (<70%) ---');
+            playSound(failAudio, 'Âm thanh sai đáp án');
+        }
+
+        // Log khi trang load
+        window.addEventListener('load', () => {
+            log('✅ Trang đã load xong');
+            log(`Success audio: ${successAudio ? 'OK' : 'NOT FOUND'}`);
+            log(`Fail audio: ${failAudio ? 'OK' : 'NOT FOUND'}`);
+        });
+    </script>
+</body>
+
+</html>

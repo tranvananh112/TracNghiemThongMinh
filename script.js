@@ -663,6 +663,21 @@ class QuizManager {
             }
         }
 
+        // Phát âm thanh kết quả dựa trên tỷ lệ đúng
+        const percentage = (correctCount / this.currentQuiz.totalQuestions) * 100;
+        console.log('Quiz submitted - Score:', correctCount + '/' + this.currentQuiz.totalQuestions, 'Percentage:', percentage + '%');
+
+        // Thử phát âm thanh bằng nhiều cách
+        if (typeof window.playQuizResultSound === 'function') {
+            console.log('Using playQuizResultSound function...');
+            window.playQuizResultSound(percentage);
+        } else if (window.soundManager && typeof window.soundManager.playResultSound === 'function') {
+            console.log('Using soundManager.playResultSound...');
+            window.soundManager.playResultSound(percentage);
+        } else {
+            console.error('No sound playing method available!');
+        }
+
         this.showToast('🎉 Đã nộp bài thành công!', 'success');
         this.switchTab('results');
         this.displayResults();
