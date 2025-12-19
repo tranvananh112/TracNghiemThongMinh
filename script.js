@@ -5,12 +5,12 @@ class QuizManager {
         this.currentAnswers = {};
         this.currentResults = null;
         this.aiGeneratedQuiz = null;
-        
+
         this.initializeTheme();
         this.initializeEventListeners();
         this.loadQuizList();
         this.updateQuizSelector();
-        
+
         // Initialize AI Generator after DOM is ready
         setTimeout(() => {
             this.loadAISettings();
@@ -29,7 +29,7 @@ class QuizManager {
         document.body.classList.toggle('dark-mode');
         const isDark = document.body.classList.contains('dark-mode');
         const icon = document.querySelector('#theme-toggle i');
-        
+
         if (isDark) {
             icon.classList.replace('fa-moon', 'fa-sun');
             localStorage.setItem('theme', 'dark');
@@ -49,21 +49,21 @@ class QuizManager {
 
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
-        
+
         const iconMap = {
             success: 'fa-check-circle',
             error: 'fa-exclamation-circle',
             warning: 'fa-exclamation-triangle',
             info: 'fa-info-circle'
         };
-        
+
         toast.innerHTML = `
             <i class="fas ${iconMap[type]}"></i>
             <span>${message}</span>
         `;
-        
+
         document.body.appendChild(toast);
-        
+
         setTimeout(() => {
             toast.remove();
         }, 3000);
@@ -138,7 +138,7 @@ class QuizManager {
         try {
             const text = await navigator.clipboard.readText();
             const textarea = document.getElementById(targetId);
-            
+
             if (!text) {
                 this.showToast('⚠️ Clipboard trống!', 'warning');
                 return;
@@ -235,81 +235,21 @@ class QuizManager {
     }
 
     parseQuestions(text) {
-        const questions = [];
-        const lines = text.split('\n').map(line => line.trim()).filter(line => line);
-        
-        let currentQuestion = null;
-        let currentOptions = [];
+        // Sử dụng Smart Parser
+        const parser = new SmartQuestionParser();
+        const parsedQuestions = parser.parseQuestions(text);
 
-        for (let line of lines) {
-            if (line.match(/^Câu\s+\d+[:：]/)) {
-                // Save previous question
-                if (currentQuestion && currentOptions.length >= 2) {
-                    questions.push({
-                        question: currentQuestion.replace(/^Câu\s+\d+[:：]\s*/, ''),
-                        options: currentOptions
-                    });
-                }
-                
-                // Start new question
-                currentQuestion = line;
-                currentOptions = [];
-            } else if (line.match(/^[A-Da-d][:：.]\s*/)) {
-                // Extract option
-                const option = line.replace(/^[A-Da-d][:：.]\s*/, '');
-                const letter = line.charAt(0).toUpperCase();
-                currentOptions.push({
-                    letter: letter,
-                    text: option
-                });
-            }
-        }
-
-        // Save last question
-        if (currentQuestion && currentOptions.length >= 2) {
-            questions.push({
-                question: currentQuestion.replace(/^Câu\s+\d+[:：]\s*/, ''),
-                options: currentOptions
-            });
-        }
-
-        if (questions.length === 0) {
-            throw new Error('Không tìm thấy câu hỏi hợp lệ! Vui lòng kiểm tra định dạng.');
-        }
-
-        return questions;
+        // Chuyển đổi sang format cũ để tương thích
+        return parsedQuestions.map(q => ({
+            question: q.question,
+            options: q.options
+        }));
     }
 
     parseAnswers(text, expectedCount) {
-        const answers = [];
-        const lines = text.split('\n').map(line => line.trim()).filter(line => line);
-        
-        for (let line of lines) {
-            // Format: "Câu 1: B" or "Câu 1. B" or "Câu 1 : B" (with spaces)
-            if (line.match(/^Câu\s+\d+\s*[:：.]\s*[A-Da-d]$/i)) {
-                const answer = line.replace(/^Câu\s+\d+\s*[:：.]\s*/i, '').trim().toUpperCase();
-                answers.push(answer);
-            }
-            // Format: "1. B" or "1: B" or "1 : B" (with spaces)
-            else if (line.match(/^\d+\s*[:：.]\s*[A-Da-d]$/)) {
-                const answer = line.replace(/^\d+\s*[:：.]\s*/, '').trim().toUpperCase();
-                answers.push(answer);
-            }
-            // Format: Just "B" or " B " (with spaces)
-            else if (line.match(/^[A-Da-d]$/i)) {
-                answers.push(line.toUpperCase());
-            }
-        }
-
-        if (answers.length === 0) {
-            throw new Error('Không tìm thấy đáp án hợp lệ! Vui lòng kiểm tra định dạng.');
-        }
-
-        if (answers.length !== expectedCount) {
-            throw new Error(`Cần ${expectedCount} đáp án, chỉ tìm thấy ${answers.length}! Vui lòng kiểm tra lại.`);
-        }
-
-        return answers;
+        // Sử dụng Smart Parser
+        const parser = new SmartQuestionParser();
+        return parser.parseAnswers(text, expectedCount);
     }
 
     saveQuizzes() {
@@ -325,7 +265,7 @@ class QuizManager {
 
     loadQuizList() {
         const quizList = document.getElementById('quiz-list');
-        
+
         if (this.quizzes.length === 0) {
             quizList.innerHTML = `
                 <div class="empty-state">
@@ -376,7 +316,7 @@ class QuizManager {
     updateQuizSelector() {
         const selector = document.getElementById('quiz-selector');
         selector.innerHTML = '<option value="">Chọn bài quiz...</option>';
-        
+
         this.quizzes.forEach(quiz => {
             const option = document.createElement('option');
             option.value = quiz.id;
@@ -457,7 +397,7 @@ class QuizManager {
         this.closeEditModal();
         this.loadQuizList();
         this.updateQuizSelector();
-        
+
         this.showToast('✅ Cập nhật quiz thành công!', 'success');
     }
 
@@ -556,7 +496,7 @@ class QuizManager {
 
     renderQuiz() {
         const container = document.getElementById('quiz-container');
-        
+
         const quizHTML = `
             <div class="progress-bar-container">
                 <div class="progress-bar" id="quiz-progress-bar" style="width: 0%"></div>
@@ -617,14 +557,14 @@ class QuizManager {
         const answeredCount = Object.keys(this.currentAnswers).length;
         const totalQuestions = this.currentQuiz.totalQuestions;
         const percentage = (answeredCount / totalQuestions) * 100;
-        
+
         const progressBar = document.getElementById('quiz-progress-bar');
         const answeredCountEl = document.getElementById('answered-count');
-        
+
         if (progressBar) {
             progressBar.style.width = percentage + '%';
         }
-        
+
         if (answeredCountEl) {
             answeredCountEl.textContent = answeredCount;
         }
@@ -645,20 +585,20 @@ class QuizManager {
 
     updateAnswer(questionIndex, selectedAnswer) {
         this.currentAnswers[questionIndex] = selectedAnswer;
-        
+
         const option = document.querySelector(`#q${questionIndex}_${selectedAnswer}`).closest('.option');
         document.querySelectorAll(`input[name="question_${questionIndex}"]`).forEach(input => {
             input.closest('.option').classList.remove('selected');
         });
         option.classList.add('selected');
-        
+
         this.updateProgressBar();
     }
 
     submitQuiz() {
         const answeredCount = Object.keys(this.currentAnswers).length;
         const totalQuestions = this.currentQuiz.totalQuestions;
-        
+
         if (answeredCount < totalQuestions) {
             const unanswered = totalQuestions - answeredCount;
             if (!confirm(`Bạn còn ${unanswered} câu chưa trả lời. Bạn có muốn nộp bài không?`)) {
@@ -716,7 +656,7 @@ class QuizManager {
                 totalQuestions: this.currentQuiz.totalQuestions,
                 totalTime: totalTime
             };
-            
+
             // Lưu vào leaderboard
             if (window.roomManager) {
                 window.roomManager.saveResultToLeaderboard(this.currentQuiz.roomId, roomResult);
@@ -748,9 +688,9 @@ class QuizManager {
         let performanceClass = '';
         let performanceMessage = '';
         let performanceIcon = '';
-        
+
         const percentage = (correctCount / totalQuestions) * 100;
-        
+
         if (percentage >= 90) {
             performanceClass = 'excellent';
             performanceMessage = 'Xuất sắc! 🌟';
@@ -833,22 +773,22 @@ class QuizManager {
 
     reviewAnswers(filterWrongOnly = false) {
         if (!this.currentResults) return;
-        
+
         const { results } = this.currentResults;
         const reviewSection = document.getElementById('review-section');
         const reviewTitle = document.getElementById('review-title');
         const detailsContainer = document.getElementById('results-details-container');
-        
+
         if (!reviewSection || !detailsContainer) return;
-        
-        const displayResults = filterWrongOnly 
-            ? results.filter(r => !r.isCorrect) 
+
+        const displayResults = filterWrongOnly
+            ? results.filter(r => !r.isCorrect)
             : results;
-        
+
         if (reviewTitle) {
             reviewTitle.textContent = filterWrongOnly ? 'Chi Tiết Các Câu Sai' : 'Chi Tiết Từng Câu';
         }
-        
+
         if (displayResults.length === 0) {
             detailsContainer.innerHTML = `
                 <div class="empty-state">
@@ -864,14 +804,14 @@ class QuizManager {
                     const isUserAnswer = opt.letter === result.userAnswer;
                     const isCorrectAnswer = opt.letter === result.correctAnswer;
                     let optionClass = 'result-option';
-                    
+
                     if (isCorrectAnswer) {
                         optionClass += ' correct-option';
                     }
                     if (isUserAnswer && !isCorrectAnswer) {
                         optionClass += ' wrong-option';
                     }
-                    
+
                     return `
                         <div class="${optionClass}">
                             <span class="option-letter">${opt.letter}.</span>
@@ -882,7 +822,7 @@ class QuizManager {
                         </div>
                     `;
                 }).join('');
-                
+
                 return `
                     <div class="result-question ${result.isCorrect ? 'correct' : 'incorrect'}">
                         <div class="result-question-header">
@@ -901,15 +841,15 @@ class QuizManager {
                     </div>
                 `;
             }).join('');
-            
+
             detailsContainer.innerHTML = questionsHTML;
         }
-        
+
         reviewSection.style.display = 'block';
         reviewSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        
-        const message = filterWrongOnly 
-            ? '❌ Đang xem các câu sai' 
+
+        const message = filterWrongOnly
+            ? '❌ Đang xem các câu sai'
             : '📖 Đang xem lại bài làm';
         this.showToast(message, 'info');
     }
@@ -925,12 +865,12 @@ class QuizManager {
     startNewQuiz() {
         this.currentQuiz = null;
         this.currentAnswers = {};
-        
+
         this.switchTab('quiz');
-        
+
         document.getElementById('quiz-selector').value = '';
         document.getElementById('start-quiz').disabled = true;
-        
+
         document.getElementById('quiz-container').innerHTML = `
             <div class="quiz-placeholder">
                 <i class="fas fa-clipboard-list"></i>
@@ -938,7 +878,7 @@ class QuizManager {
                 <p>Chọn một bài quiz và bấm "Bắt Đầu" để làm bài mới</p>
             </div>
         `;
-        
+
         this.showToast('🎯 Hãy chọn bài quiz mới để bắt đầu!', 'success');
     }
 
@@ -969,6 +909,54 @@ class QuizManager {
             showStreakDetails();
         }
     }
+
+    showFormatExamples(type) {
+        const parser = new SmartQuestionParser();
+        const examples = parser.getExamples();
+
+        const title = type === 'questions' ? '📝 Các Format Câu Hỏi Được Hỗ Trợ' : '✅ Các Format Đáp Án Được Hỗ Trợ';
+        const content = type === 'questions' ? examples.questions : examples.answers;
+
+        // Tạo modal
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            <div class="modal-content" style="max-width: 600px;">
+                <div class="modal-header">
+                    <h3>${title}</h3>
+                    <button class="modal-close" onclick="this.closest('.modal-overlay').remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <pre style="white-space: pre-wrap; font-family: 'Segoe UI', sans-serif; line-height: 1.6; background: #f5f5f5; padding: 15px; border-radius: 8px; max-height: 500px; overflow-y: auto;">${content}</pre>
+                    <div style="margin-top: 20px; padding: 15px; background: #e3f2fd; border-radius: 8px; border-left: 4px solid #2196F3;">
+                        <strong>💡 Lưu ý:</strong>
+                        <ul style="margin: 10px 0 0 20px;">
+                            <li>Hệ thống tự động nhận diện format</li>
+                            <li>Không cần theo đúng format cố định</li>
+                            <li>Có thể trộn lẫn các format khác nhau</li>
+                            <li>Hỗ trợ cả tiếng Việt và tiếng Anh</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="this.closest('.modal-overlay').remove()">
+                        <i class="fas fa-check"></i> Đã hiểu
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // Close on overlay click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+    }
 }
 
 // Expose QuizManager to window for patches that access window.QuizManager
@@ -979,7 +967,7 @@ if (typeof window !== 'undefined' && typeof window.QuizManager === 'undefined') 
 let quizManager;
 document.addEventListener('DOMContentLoaded', () => {
     quizManager = new QuizManager();
-    
+
     // Initialize scroll to top button
     initScrollToTop();
 });
@@ -992,7 +980,7 @@ function initScrollToTop() {
     scrollBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
     scrollBtn.title = 'Cuộn lên đầu trang';
     document.body.appendChild(scrollBtn);
-    
+
     // Chỉ hiện nút khi cuộn xuống > 500px (thay vì 300px)
     let scrollTimeout;
     window.addEventListener('scroll', () => {
@@ -1006,7 +994,7 @@ function initScrollToTop() {
             }
         }, 100);
     }, { passive: true });
-    
+
     scrollBtn.addEventListener('click', () => {
         window.scrollTo({
             top: 0,
