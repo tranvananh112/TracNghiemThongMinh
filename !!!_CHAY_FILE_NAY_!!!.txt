@@ -1,0 +1,54 @@
+╔═══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║   CHẠY FILE NÀY ĐỂ PUSH CODE LÊN GITHUB                      ║
+║                                                               ║
+╚═══════════════════════════════════════════════════════════════╝
+
+
+┌───────────────────────────────────────────────────────────────┐
+│                                                               │
+│   DOUBLE-CLICK FILE NÀY:                                      │
+│                                                               │
+│   ►►► EXECUTE_NOW.bat ◄◄◄                                    │
+│                                                               │
+└───────────────────────────────────────────────────────────────┘
+
+
+Script sẽ tự động:
+
+  ✓ Di chuyển files lên root
+  ✓ Xóa thư mục cũ  
+  ✓ Push lên GitHub
+
+
+═══════════════════════════════════════════════════════════════
+
+NẾU SCRIPT BÁO LỖI "GIT CHƯA CÀI ĐẶT":
+
+  Mở Git Bash (click chuột phải → "Git Bash Here")
+  
+  Chạy lệnh này (copy toàn bộ 1 dòng):
+
+  mv TracNghiemProMax-main/* . && mv TracNghiemProMax-main/.gitignore . && rm -rf TracNghiemProMax-main && rm -rf .vscode && git add . && git commit -m "Fix: Move to root" && git push origin main --force
+
+
+═══════════════════════════════════════════════════════════════
+
+SAU KHI CHẠY XONG:
+
+  1. Vào GitHub kiểm tra:
+     https://github.com/tranvananh112/TracNghiemThongMinh
+     
+  2. Đợi Vercel deploy (1-2 phút)
+  
+  3. Mở website kiểm tra
+
+
+═══════════════════════════════════════════════════════════════
+
+BẮT ĐẦU NGAY:
+
+  ►►► Double-click: EXECUTE_NOW.bat
+
+
+═══════════════════════════════════════════════════════════════

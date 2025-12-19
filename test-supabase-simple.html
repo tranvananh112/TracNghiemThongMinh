@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Supabase - Đơn Giản</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .status {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border-left: 4px solid #ffc107;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .results {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .quiz-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-item strong {
+            color: #667eea;
+            font-size: 16px;
+        }
+
+        .quiz-item small {
+            color: #666;
+            display: block;
+            margin-top: 5px;
+        }
+
+        pre {
+            background: #2d3748;
+            color: #68d391;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 13px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, .3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>
+            <span>🧪</span>
+            Test Kết Nối Supabase
+        </h1>
+        <p class="subtitle">Kiểm tra kết nối và dữ liệu trong Supabase</p>
+
+        <div id="status"></div>
+
+        <div class="buttons">
+            <button onclick="testConnection()">
+                <span>🔍</span>
+                Kiểm Tra Kết Nối
+            </button>
+            <button onclick="testGetAllQuizzes()" class="btn-success">
+                <span>📋</span>
+                Lấy Tất Cả Quiz
+            </button>
+            <button onclick="testCreateQuiz()" class="btn-success">
+                <span>➕</span>
+                Tạo Quiz Test
+            </button>
+            <button onclick="testDeleteAllQuizzes()" class="btn-danger">
+                <span>🗑️</span>
+                Xóa Quiz Test
+            </button>
+        </div>
+
+        <div id="results" class="results" style="display: none;"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://uyjakelguelunqzdbscb.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5amFrZWxndWVsdW5xemRic2NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwNjE4MDQsImV4cCI6MjA4MTYzNzgwNH0.TdZm16WGlB35vla_wKaoHwMLfCrUirY-EN46olOFyyk';
+
+        const { createClient } = supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function showResults(content) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.style.display = 'block';
+            resultsDiv.innerHTML = content;
+        }
+
+        async function testConnection() {
+            showStatus('🔄 Đang kiểm tra kết nối...', 'info');
+
+            try {
+                const { data, error, count } = await supabaseClient
+                    .from('shared_quizzes')
+                    .select('*', { count: 'exact', head: true });
+
+                if (error) {
+                    showStatus('❌ Lỗi kết nối: ' + error.message, 'error');
+                    showResults(`<pre>${JSON.stringify(error, null, 2)}</pre>`);
+                } else {
+                    showStatus(`✅ Kết nối Supabase thành công! Có ${count || 0} quiz trong database.`, 'success');
+                    showResults(`<pre>Kết nối OK!\nSố quiz: ${count || 0}</pre>`);
+                }
+            } catch (error) {
+                showStatus('❌ Lỗi: ' + error.message, 'error');
+                showResults(`<pre>${JSON.stringify(error, null, 2)}</pre>`);
+            }
+        }
+
+        async function testGetAllQuizzes() {
+            showStatus('🔄 Đang lấy danh sách quiz...', 'info');
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('shared_quizzes')
+                    .select('*')
+                    .order('shared_at', { ascending: false })
+                    .limit(50);
+
+                if (error) {
+                    showStatus('❌ Lỗi: ' + error.message, 'error');
+                    showResults(`<pre>${JSON.stringify(error, null, 2)}</pre>`);
+                } else {
+                    showStatus(`✅ Tìm thấy ${data.length} quiz trong Supabase`, 'success');
+
+                    if (data.length === 0) {
+                        showResults(`
+                            <div class="status warning">
+                                ⚠️ Không có quiz nào trong database.<br>
+                                Hãy click "➕ Tạo Quiz Test" để tạo quiz mẫu!
+                            </div>
+                        `);
+                    } else {
+                        let html = '<h3 style="color: #667eea; margin-bottom: 15px;">📚 Danh sách Quiz:</h3>';
+                        data.forEach((quiz, index) => {
+                            html += `
+                                <div class="quiz-item">
+                                    <strong>${index + 1}. ${quiz.title}</strong>
+                                    <small>👤 Người tạo: ${quiz.user_name}</small>
+                                    <small>📝 Số câu: ${quiz.total_questions}</small>
+                                    <small>👁️ Lượt xem: ${quiz.views || 0} | 📊 Lượt làm: ${quiz.attempts || 0}</small>
+                                    <small>🆔 ID: ${quiz.id}</small>
+                                </div>
+                            `;
+                        });
+                        showResults(html);
+                    }
+                }
+            } catch (error) {
+                showStatus('❌ Lỗi: ' + error.message, 'error');
+                showResults(`<pre>${JSON.stringify(error, null, 2)}</pre>`);
+            }
+        }
+
+        async function testCreateQuiz() {
+            showStatus('🔄 Đang tạo quiz test...', 'info');
+
+            try {
+                const testQuiz = {
+                    title: '🧪 Quiz Test - ' + new Date().toLocaleString('vi-VN'),
+                    description: 'Đây là quiz test để kiểm tra kết nối Supabase',
+                    questions: [
+                        {
+                            question: 'Supabase là gì?',
+                            answers: ['Database', 'Backend as a Service', 'Cloud Storage', 'Tất cả đều đúng'],
+                            correctAnswer: 3
+                        },
+                        {
+                            question: 'Supabase sử dụng database nào?',
+                            answers: ['MySQL', 'PostgreSQL', 'MongoDB', 'SQLite'],
+                            correctAnswer: 1
+                        }
+                    ],
+                    total_questions: 2,
+                    user_name: 'Test User',
+                    views: 0,
+                    attempts: 0,
+                    likes: 0,
+                    tags: ['test', 'supabase'],
+                    difficulty: 'easy',
+                    category: 'test'
+                };
+
+                const { data, error } = await supabaseClient
+                    .from('shared_quizzes')
+                    .insert([testQuiz])
+                    .select()
+                    .single();
+
+                if (error) {
+                    showStatus('❌ Lỗi tạo quiz: ' + error.message, 'error');
+                    showResults(`<pre>${JSON.stringify(error, null, 2)}</pre>`);
+                } else {
+                    showStatus('✅ Đã tạo quiz test thành công!', 'success');
+                    showResults(`
+                        <div class="quiz-item">
+                            <strong>✨ Quiz vừa tạo:</strong>
+                            <small>📝 ${data.title}</small>
+                            <small>🆔 ID: ${data.id}</small>
+                        </div>
+                    `);
+
+                    // Tự động load lại danh sách sau 1 giây
+                    setTimeout(() => testGetAllQuizzes(), 1000);
+                }
+            } catch (error) {
+                showStatus('❌ Lỗi: ' + error.message, 'error');
+                showResults(`<pre>${JSON.stringify(error, null, 2)}</pre>`);
+            }
+        }
+
+        async function testDeleteAllQuizzes() {
+            if (!confirm('⚠️ Bạn có chắc muốn xóa TẤT CẢ quiz test?\n(Chỉ xóa quiz có tiêu đề chứa "Quiz Test")')) {
+                return;
+            }
+
+            showStatus('🔄 Đang xóa quiz test...', 'info');
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('shared_quizzes')
+                    .delete()
+                    .ilike('title', '%Quiz Test%')
+                    .select();
+
+                if (error) {
+                    showStatus('❌ Lỗi xóa: ' + error.message, 'error');
+                    showResults(`<pre>${JSON.stringify(error, null, 2)}</pre>`);
+                } else {
+                    showStatus(`✅ Đã xóa ${data.length} quiz test`, 'success');
+                    showResults(`<pre>Đã xóa ${data.length} quiz test thành công!</pre>`);
+
+                    // Tự động load lại danh sách sau 1 giây
+                    setTimeout(() => testGetAllQuizzes(), 1000);
+                }
+            } catch (error) {
+                showStatus('❌ Lỗi: ' + error.message, 'error');
+                showResults(`<pre>${JSON.stringify(error, null, 2)}</pre>`);
+            }
+        }
+
+        // Auto test khi load trang
+        window.addEventListener('load', () => {
+            console.log('🚀 Page loaded, testing connection...');
+            testConnection();
+        });
+    </script>
+</body>
+
+</html>

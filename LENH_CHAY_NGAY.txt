@@ -1,0 +1,53 @@
+========================================
+  COPY VÀ PASTE CÁC LỆNH NÀY VÀO GIT BASH
+========================================
+
+BƯỚC 1: Mở Git Bash
+- Click chuột phải trong thư mục project
+- Chọn "Git Bash Here"
+
+BƯỚC 2: Copy và paste từng lệnh sau (nhấn Enter sau mỗi lệnh)
+
+# Di chuyển files lên root
+mv TracNghiemProMax-main/* . 2>/dev/null
+mv TracNghiemProMax-main/.gitignore . 2>/dev/null
+
+# Xóa thư mục cũ
+rm -rf TracNghiemProMax-main
+rm -rf .vscode
+
+# Kiểm tra index.html đã ở root chưa
+ls -la index.html
+
+# Thêm tất cả files vào git
+git add .
+
+# Commit
+git commit -m "Fix: Move files to root directory for deployment"
+
+# Push lên GitHub (force)
+git push origin main --force
+
+========================================
+  NẾU LỖI "BRANCH MASTER" THAY VÌ "MAIN"
+========================================
+
+git push origin master --force
+
+========================================
+  NẾU LỖI "NO REMOTE"
+========================================
+
+git remote add origin https://github.com/tranvananh112/TracNghiemThongMinh.git
+git push origin main --force
+
+========================================
+  SAU KHI PUSH XONG
+========================================
+
+1. Vào GitHub kiểm tra: https://github.com/tranvananh112/TracNghiemThongMinh
+2. Xem index.html có ở root không
+3. Đợi Vercel deploy (1-2 phút)
+4. Mở website kiểm tra
+
+========================================

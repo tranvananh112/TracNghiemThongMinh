@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Chia Sẻ Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #f0f2f5;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .status {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🧪 Test Chia Sẻ Quiz Lên Supabase</h1>
+
+        <div id="status"></div>
+
+        <button onclick="testShareQuiz()">📤 Chia Sẻ Quiz Test</button>
+        <button onclick="testGetAllQuizzes()">📋 Xem Tất Cả Quiz</button>
+        <button onclick="openMainPage()">🏠 Mở Trang Chính</button>
+
+        <div id="results"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://uyjakelguelunqzdbscb.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5amFrZWxndWVsdW5xemRic2NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwNjE4MDQsImV4cCI6MjA4MTYzNzgwNH0.TdZm16WGlB35vla_wKaoHwMLfCrUirY-EN46olOFyyk';
+
+        const { createClient } = supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        function showStatus(message, type = 'info') {
+            document.getElementById('status').innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        function showResults(html) {
+            document.getElementById('results').innerHTML = html;
+        }
+
+        async function testShareQuiz() {
+            showStatus('📤 Đang chia sẻ quiz test...', 'info');
+
+            const testQuiz = {
+                title: '🎯 Quiz Test Chia Sẻ - ' + new Date().toLocaleString('vi-VN'),
+                description: 'Quiz này được tạo để test chức năng chia sẻ',
+                questions: [
+                    {
+                        question: 'Câu hỏi 1: 2 + 2 = ?',
+                        answers: ['3', '4', '5', '6'],
+                        correctAnswer: 1
+                    },
+                    {
+                        question: 'Câu hỏi 2: Thủ đô Việt Nam?',
+                        answers: ['Hà Nội', 'TP.HCM', 'Đà Nẵng', 'Huế'],
+                        correctAnswer: 0
+                    },
+                    {
+                        question: 'Câu hỏi 3: 5 x 5 = ?',
+                        answers: ['20', '25', '30', '35'],
+                        correctAnswer: 1
+                    }
+                ],
+                total_questions: 3,
+                user_name: 'Test User',
+                views: 0,
+                attempts: 0,
+                likes: 0,
+                tags: ['test', 'demo'],
+                difficulty: 'easy',
+                category: 'test'
+            };
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('shared_quizzes')
+                    .insert([testQuiz])
+                    .select()
+                    .single();
+
+                if (error) {
+                    showStatus('❌ Lỗi: ' + error.message, 'error');
+                    showResults(`<pre>${JSON.stringify(error, null, 2)}</pre>`);
+                } else {
+                    showStatus('✅ Đã chia sẻ quiz thành công!', 'success');
+                    showResults(`
+                        <h3>✨ Quiz vừa chia sẻ:</h3>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                        <p><strong>Bây giờ:</strong></p>
+                        <ol>
+                            <li>Mở tab ẩn danh (Ctrl+Shift+N)</li>
+                            <li>Truy cập: <a href="http://localhost:3000" target="_blank">http://localhost:3000</a></li>
+                            <li>Vào tab "Khám Phá"</li>
+                            <li>Bạn sẽ thấy quiz này!</li>
+                        </ol>
+                    `);
+
+                    // Auto load danh sách sau 1 giây
+                    setTimeout(() => testGetAllQuizzes(), 1000);
+                }
+            } catch (error) {
+                showStatus('❌ Lỗi: ' + error.message, 'error');
+                showResults(`<pre>${error.stack}</pre>`);
+            }
+        }
+
+        async function testGetAllQuizzes() {
+            showStatus('📋 Đang lấy danh sách quiz...', 'info');
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('shared_quizzes')
+                    .select('*')
+                    .order('shared_at', { ascending: false })
+                    .limit(20);
+
+                if (error) {
+                    showStatus('❌ Lỗi: ' + error.message, 'error');
+                    showResults(`<pre>${JSON.stringify(error, null, 2)}</pre>`);
+                } else {
+                    showStatus(`✅ Tìm thấy ${data.length} quiz`, 'success');
+
+                    if (data.length === 0) {
+                        showResults(`
+                            <div class="status info">
+                                ℹ️ Chưa có quiz nào. Click "📤 Chia Sẻ Quiz Test" để tạo!
+                            </div>
+                        `);
+                    } else {
+                        let html = '<h3>📚 Danh sách Quiz trong Supabase:</h3>';
+                        data.forEach((quiz, index) => {
+                            html += `
+                                <div style="background: #f8f9fa; padding: 15px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #007bff;">
+                                    <strong>${index + 1}. ${quiz.title}</strong><br>
+                                    <small>👤 ${quiz.user_name} | 📝 ${quiz.total_questions} câu | 👁️ ${quiz.views || 0} lượt xem</small><br>
+                                    <small style="color: #666;">🆔 ${quiz.id}</small>
+                                </div>
+                            `;
+                        });
+                        showResults(html);
+                    }
+                }
+            } catch (error) {
+                showStatus('❌ Lỗi: ' + error.message, 'error');
+                showResults(`<pre>${error.stack}</pre>`);
+            }
+        }
+
+        function openMainPage() {
+            window.open('http://localhost:3000', '_blank');
+        }
+
+        // Auto load khi mở trang
+        window.addEventListener('load', () => {
+            testGetAllQuizzes();
+        });
+    </script>
+</body>
+
+</html>

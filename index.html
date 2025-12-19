@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>QuizTva Studio - Hệ Thống Trắc Nghiệm Thông Minh</title>
+    <link rel="icon" type="image/png"
+        href="https://anhtran.id.vn/wp-content/uploads/2025/09/cropped-Generated-Image-September-18-2025-8_04PM-1.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style-modern-quiz.css">
+    <link rel="stylesheet" href="style-updated.css">
+    <link rel="stylesheet" href="style-ai-quiz.css">
+    <link rel="stylesheet" href="style-responsive-enhanced.css">
+    <link rel="stylesheet" href="style-mobile-enhanced.css">
+    <link rel="stylesheet" href="style-mobile-optimized.css">
+    <link rel="stylesheet" href="style-streak.css">
+    <link rel="stylesheet" href="style-explore.css">
+    <link rel="stylesheet" href="style-analytics.css">
+    <link rel="stylesheet" href="style-room.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- JSZip library for reading Word files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+</head>
+
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Main Layout -->
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <i class="fas fa-graduation-cap logo-icon"></i>
+                    <span class="logo-text">QuizTva Studio</span>
+                </div>
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+
+            <div class="sidebar-content">
+                <!-- User Section -->
+                <div class="sidebar-section">
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">Cá nhân</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Menu -->
+                <nav class="sidebar-nav">
+                    <div class="nav-section">
+                        <a href="#" class="nav-item active" data-tab="home">
+                            <i class="fas fa-home"></i>
+                            <span>Trang Chủ</span>
+                        </a>
+                        <a href="#" class="nav-item" data-tab="input">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Tạo Bài Quiz</span>
+                        </a>
+                        <a href="#" class="nav-item" data-tab="ai-quiz">
+                            <i class="fas fa-robot"></i>
+                            <span>AI Tạo Quiz</span>
+                        </a>
+                        <a href="#" class="nav-item" data-tab="room">
+                            <i class="fas fa-door-open"></i>
+                            <span>Tạo Phòng Thi</span>
+                        </a>
+                        <a href="#" class="nav-item" data-tab="explore">
+                            <i class="fas fa-compass"></i>
+                            <span>Khám Phá Đề Thi</span>
+                        </a>
+                        <a href="#" class="nav-item" data-tab="manage">
+                            <i class="fas fa-list"></i>
+                            <span>Quản Lý Quiz</span>
+                        </a>
+                        <a href="#" class="nav-item" data-tab="quiz">
+                            <i class="fas fa-play-circle"></i>
+                            <span>Làm Bài</span>
+                        </a>
+                        <a href="#" class="nav-item" data-tab="results">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Kết Quả</span>
+                        </a>
+                        <a href="#" class="nav-item" data-tab="analytics" id="analytics-nav-item">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Báo Cáo</span>
+                            <span class="admin-only-badge">Admin</span>
+                        </a>
+                    </div>
+                </nav>
+
+                <!-- Footer -->
+                <div class="sidebar-footer">
+                    <div class="copyright">
+                        © Trần Văn Anh - 2025
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-wrapper">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <div class="current-quiz-info">
+                        <div class="quiz-avatar">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="quiz-details">
+                            <div class="quiz-name">Kênh đề thi</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="header-center">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Tìm kiếm đề thi" id="search-input">
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <button class="btn-create-quiz" data-tab="input">
+                        <i class="fas fa-plus"></i>
+                        <span>Tạo đề thi</span>
+                    </button>
+                    <button class="theme-toggle-btn" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <div class="user-menu">
+                        <div class="user-avatar-small" id="admin-logo-trigger" style="cursor: pointer;"
+                            title="Admin Access">
+                            <img src="https://anhtran.id.vn/wp-content/uploads/2025/09/cropped-Generated-Image-September-18-2025-8_04PM-1.png"
+                                alt="User Avatar" class="user-avatar-image">
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content Area -->
+            <main class="main-content-area">
+                <!-- Home Tab -->
+                <section id="home-tab" class="tab-content active">
+                    <!-- Stats Section -->
+                    <div class="stats-section">
+                        <h2 class="section-title">Thành tựu học tập</h2>
+
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon blue">
+                                    <i class="fas fa-book-open"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-label">Tổng số quiz</div>
+                                    <div class="stat-value" id="total-quizzes">0</div>
+                                </div>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="stat-icon green">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-label">Đã hoàn thành</div>
+                                    <div class="stat-value" id="completed-quizzes">0</div>
+                                </div>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="stat-icon purple">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-label">Điểm trung bình</div>
+                                    <div class="stat-value" id="average-score">0</div>
+                                </div>
+                            </div>
+
+                            <div class="stat-card streak-card" onclick="quizManager.showStreakDetails()">
+                                <div class="stat-icon red">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-label">Chuỗi ngày học</div>
+                                    <div class="stat-value" id="streak-days">0</div>
+                                    <div class="stat-sublabel" id="streak-message">Bắt đầu học hôm nay!</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!-- Recent Access Section -->
+                    <div class="recent-section">
+                        <div class="section-header">
+                            <h2 class="section-title">Danh sách Quiz</h2>
+                            <a href="#" class="view-more" data-tab="manage">Xem tất cả</a>
+                        </div>
+
+                        <div class="quiz-grid" id="home-quiz-grid">
+                            <div class="empty-state-card">
+                                <i class="fas fa-folder-open"></i>
+                                <h3>Chưa có quiz nào</h3>
+                                <p>Hãy tạo quiz đầu tiên của bạn!</p>
+                                <button class="btn-primary" data-tab="input">
+                                    <i class="fas fa-plus"></i>
+                                    Tạo quiz mới
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Features Section -->
+                    <div class="features-section">
+                        <h2 class="section-title">Tính năng nổi bật</h2>
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <div class="feature-icon"><i class="fas fa-magic"></i></div>
+                                <h3>Tạo Quiz Nhanh</h3>
+                                <p>Nhập câu hỏi và đáp án đơn giản, hệ thống tự động xử lý</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                                <h3>Quản Lý Thông Minh</h3>
+                                <p>Chỉnh sửa, sao chép, xóa quiz dễ dàng</p>
+                            </div>
+                            <div class="feature-card">
+                                <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+                                <h3>Responsive</h3>
+                                <p>Hoạt động mượt mà trên mọi thiết bị</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </section>
+
+                <!-- Input Tab -->
+                <section id="input-tab" class="tab-content">
+                    <div class="page-header">
+                        <h2 class="page-title">
+                            <i class="fas fa-plus-circle"></i>
+                            Tạo Bài Quiz Mới
+                        </h2>
+                    </div>
+
+                    <div class="form-card">
+                        <div class="form-group">
+                            <label>Tên bài quiz</label>
+                            <input type="text" id="quiz-title" placeholder="Nhập tên bài quiz..." class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Mô tả</label>
+                            <textarea id="quiz-description" placeholder="Mô tả bài quiz (không bắt buộc)..."
+                                class="form-textarea"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-question-circle"></i>
+                                Câu hỏi và lựa chọn
+                            </label>
+                            <button class="btn-paste-inline"
+                                onclick="quizManager.pasteFromClipboard('questions-input')">
+                                <i class="fas fa-paste"></i>
+                                Dán
+                            </button>
+                            <textarea id="questions-input"
+                                placeholder="Nhập câu hỏi theo format:&#10;&#10;Câu 1: Thủ đô của Việt Nam là gì?&#10;A. Hồ Chí Minh&#10;B. Hà Nội&#10;C. Đà Nẵng&#10;D. Huế"
+                                class="form-textarea large"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-check-circle"></i>
+                                Đáp án đúng
+                            </label>
+                            <button class="btn-paste-inline" onclick="quizManager.pasteFromClipboard('answers-input')">
+                                <i class="fas fa-paste"></i>
+                                Dán
+                            </button>
+                            <textarea id="answers-input"
+                                placeholder="Nhập đáp án theo thứ tự:&#10;&#10;Câu 1: B&#10;Câu 2: B"
+                                class="form-textarea"></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn-primary" id="process-quiz">
+                                <i class="fas fa-magic"></i>
+                                Xử lý & Tạo quiz
+                            </button>
+                            <button class="btn-secondary" id="clear-input">
+                                <i class="fas fa-trash"></i>
+                                Xóa hết
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- AI Quiz Tab -->
+                <section id="ai-quiz-tab" class="tab-content">
+                    <div class="page-header">
+                        <h2 class="page-title">
+                            <i class="fas fa-robot"></i>
+                            AI Tạo Quiz Tự Động
+                        </h2>
+                        <p style="margin-top: 10px; opacity: 0.9;">
+                            Dán nội dung bài học, AI sẽ tự động tạo câu hỏi trắc nghiệm cho bạn
+                        </p>
+                    </div>
+
+                    <div class="form-card">
+                        <div class="ai-info-banner">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <strong>Cách sử dụng:</strong> Tải file tài liệu (Word, PDF, TXT) hoặc dán nội dung bài
+                                học vào ô bên dưới.
+                                AI sẽ phân tích và tự động tạo câu hỏi trắc nghiệm từ nội dung đó.
+                            </div>
+                        </div>
+
+                        <!-- File Upload Section -->
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                Tải file tài liệu
+                            </label>
+                            <div class="file-upload-area" id="file-upload-area">
+                                <input type="file" id="ai-file-input" accept=".txt,.doc,.docx,.pdf"
+                                    style="display: none;">
+                                <div class="file-upload-content">
+                                    <i class="fas fa-file-upload"></i>
+                                    <h4>Kéo thả file vào đây hoặc click để chọn</h4>
+                                    <p>Hỗ trợ: Word (.docx), PDF (.pdf), Text (.txt)</p>
+                                    <button type="button" class="btn-secondary" id="select-file-btn">
+                                        <i class="fas fa-folder-open"></i>
+                                        Chọn File
+                                    </button>
+                                </div>
+                                <div class="file-info" id="file-info" style="display: none;">
+                                    <div class="file-icon">
+                                        <i class="fas fa-file-alt"></i>
+                                    </div>
+                                    <div class="file-details">
+                                        <div class="file-name" id="file-name"></div>
+                                        <div class="file-size" id="file-size"></div>
+                                    </div>
+                                    <button type="button" class="btn-remove-file" id="remove-file-btn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="divider-with-text">
+                            <span>HOẶC</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-keyboard"></i>
+                                Nhập nội dung trực tiếp
+                            </label>
+                            <button class="btn-paste-inline" id="paste-ai-content">
+                                <i class="fas fa-paste"></i>
+                                Dán
+                            </button>
+                            <textarea id="ai-content-input"
+                                placeholder="Dán nội dung bài học vào đây...&#10;&#10;Ví dụ:&#10;Việt Nam là một quốc gia nằm ở Đông Nam Á. Thủ đô của Việt Nam là Hà Nội. Việt Nam có diện tích khoảng 331.212 km² và dân số khoảng 98 triệu người. Việt Nam có 63 tỉnh thành..."
+                                class="form-textarea large" rows="12"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-list-ol"></i>
+                                Số lượng câu hỏi
+                            </label>
+                            <input type="number" id="ai-question-count" value="10" min="5" max="50" class="form-input"
+                                style="max-width: 200px;">
+                            <small style="display: block; margin-top: 8px; opacity: 0.7;">
+                                AI sẽ cố gắng tạo số câu hỏi này (tùy thuộc vào độ dài nội dung)
+                            </small>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn-primary" id="generate-ai-quiz">
+                                <i class="fas fa-magic"></i>
+                                Tạo Quiz Bằng AI
+                            </button>
+                            <button class="btn-secondary" id="clear-ai-input">
+                                <i class="fas fa-trash"></i>
+                                Xóa Nội Dung
+                            </button>
+                        </div>
+
+                        <!-- Loading State -->
+                        <div id="ai-loading" class="ai-loading" style="display: none;">
+                            <div class="ai-loading-spinner"></div>
+                            <div class="ai-loading-text">
+                                <h3>🤖 AI đang phân tích nội dung...</h3>
+                                <p>Vui lòng đợi trong giây lát</p>
+                            </div>
+                        </div>
+
+                        <!-- Preview Section -->
+                        <div id="ai-preview" class="ai-preview-section" style="display: none;">
+                            <div class="ai-preview-header">
+                                <h3>
+                                    <i class="fas fa-eye"></i>
+                                    Xem Trước Quiz
+                                    <span class="ai-question-count">
+                                        (<span id="ai-question-total">0</span> câu hỏi)
+                                    </span>
+                                </h3>
+                                <div class="ai-preview-actions">
+                                    <button class="btn-secondary btn-sm" id="edit-ai-quiz">
+                                        <i class="fas fa-edit"></i>
+                                        Chỉnh Sửa
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-top: 20px;">
+                                <label>
+                                    <i class="fas fa-tag"></i>
+                                    Tên quiz
+                                </label>
+                                <input type="text" id="ai-quiz-name" placeholder="Nhập tên cho quiz..."
+                                    class="form-input">
+                            </div>
+
+                            <div id="ai-quiz-preview-content" class="ai-quiz-preview-content">
+                                <!-- Questions will be inserted here -->
+                            </div>
+
+                            <div class="form-actions" style="margin-top: 30px;">
+                                <button class="btn-primary" id="save-ai-quiz">
+                                    <i class="fas fa-save"></i>
+                                    Lưu Quiz
+                                </button>
+                                <button class="btn-secondary" id="cancel-ai-quiz">
+                                    <i class="fas fa-times"></i>
+                                    Hủy
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Explore Tab -->
+                <section id="explore-tab" class="tab-content">
+                    <div class="page-header">
+                        <h2 class="page-title">
+                            <i class="fas fa-compass"></i>
+                            Khám Phá Đề Thi
+                        </h2>
+                        <p style="margin-top: 10px; opacity: 0.9;">
+                            Khám phá và làm bài các đề thi được chia sẻ bởi cộng đồng
+                        </p>
+                    </div>
+
+                    <!-- User Name Section -->
+                    <div class="user-name-section">
+                        <label>
+                            <i class="fas fa-user-circle"></i>
+                            Tên của bạn (để chia sẻ đề thi)
+                        </label>
+                        <input type="text" id="user-name-input" placeholder="Nhập tên của bạn..." class="form-input">
+                        <small>Tên này sẽ hiển thị khi bạn chia sẻ đề thi</small>
+                    </div>
+
+                    <!-- Join Room Section -->
+                    <div class="room-join-section">
+                        <div class="room-join-header">
+                            <h2><i class="fas fa-sign-in-alt"></i> Nhập Phòng Thi</h2>
+                            <p>Nhập mã phòng 6 số để tham gia phòng thi</p>
+                        </div>
+                        <div class="room-join-form">
+                            <div class="room-join-input-group">
+                                <input type="text" id="join-room-code-input" placeholder="Nhập mã phòng..."
+                                    maxlength="6" class="form-input">
+                                <button class="btn-join-room" id="btn-join-room">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                    Vào Phòng
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Refresh Button -->
+                    <div class="explore-header" style="margin-top: 20px;">
+                        <button class="btn-refresh" id="refresh-shared-quizzes">
+                            <i class="fas fa-sync-alt"></i>
+                            Làm mới danh sách
+                        </button>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div id="explore-loading" class="explore-loading">
+                        <div class="explore-loading-spinner"></div>
+                        <div class="explore-loading-text">Đang tải đề thi...</div>
+                    </div>
+
+                    <!-- Shared Quizzes Grid -->
+                    <div class="shared-quizzes-grid" id="shared-quizzes-grid">
+                        <div class="empty-state-card">
+                            <i class="fas fa-compass"></i>
+                            <h3>Đang tải đề thi...</h3>
+                            <p>Vui lòng đợi trong giây lát</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Room Tab - Tạo Phòng Thi -->
+                <section id="room-tab" class="tab-content">
+                    <div class="page-header">
+                        <h2 class="page-title">
+                            <i class="fas fa-door-open"></i>
+                            Tạo Phòng Thi
+                        </h2>
+                        <p style="margin-top: 10px; opacity: 0.9;">
+                            Tạo phòng thi riêng để chia sẻ với lớp học mà không cần chia sẻ lên cộng đồng
+                        </p>
+                    </div>
+
+                    <!-- Room Creation Section -->
+                    <div class="room-creation-section">
+                        <div class="room-creation-header">
+                            <i class="fas fa-plus-circle"></i>
+                            <h3>Tạo Phòng Thi Mới</h3>
+                        </div>
+
+                        <div class="room-form-grid">
+                            <div class="room-form-group">
+                                <label>
+                                    <i class="fas fa-signature"></i>
+                                    Tên phòng <span style="color: red;">*</span>
+                                </label>
+                                <input type="text" id="room-name-input" placeholder="Ví dụ: Kiểm tra Toán 10 - Chương 1"
+                                    maxlength="100">
+                            </div>
+
+                            <div class="room-form-group">
+                                <label>
+                                    <i class="fas fa-key"></i>
+                                    Mã phòng (6 số) <span style="color: red;">*</span>
+                                </label>
+                                <div class="room-code-generator">
+                                    <input type="text" id="room-code-input" placeholder="Nhập hoặc tạo tự động"
+                                        maxlength="6" pattern="[0-9]{6}">
+                                    <button class="btn-generate-code" id="btn-generate-room-code">
+                                        <i class="fas fa-random"></i>
+                                        Tạo mã
+                                    </button>
+                                </div>
+                                <small class="room-code-note">
+                                    Mã phòng dùng để người khác tham gia
+                                </small>
+                            </div>
+
+                            <div class="room-form-group room-quiz-selector">
+                                <label>
+                                    <i class="fas fa-book"></i>
+                                    Chọn đề thi <span style="color: red;">*</span>
+                                </label>
+                                <select id="room-quiz-selector">
+                                    <option value="">-- Chọn đề thi từ Quản lý Quiz --</option>
+                                </select>
+                                <small class="room-code-note">
+                                    Đề thi phải được tạo trước trong mục "Quản lý Quiz"
+                                </small>
+                            </div>
+
+                            <div class="room-form-group" style="grid-column: 1 / -1;">
+                                <label>
+                                    <i class="fas fa-align-left"></i>
+                                    Mô tả phòng
+                                </label>
+                                <textarea id="room-description-input" placeholder="Mô tả ngắn gọn về phòng thi này..."
+                                    rows="3"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="room-actions">
+                            <button class="btn-create-room" id="btn-create-room">
+                                <i class="fas fa-plus-circle"></i>
+                                Tạo Phòng Thi
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- My Rooms Section -->
+                    <div class="my-rooms-section">
+                        <div class="my-rooms-header">
+                            <h3>
+                                <i class="fas fa-list"></i>
+                                Phòng Thi Của Tôi
+                            </h3>
+                            <button class="btn-refresh" id="refresh-my-rooms">
+                                <i class="fas fa-sync-alt"></i>
+                                Làm mới
+                            </button>
+                        </div>
+
+                        <!-- Loading State -->
+                        <div id="rooms-loading" class="room-loading" style="display: none;">
+                            <div class="room-loading-spinner"></div>
+                            <div class="room-loading-text">Đang tải phòng thi...</div>
+                        </div>
+
+                        <!-- Rooms Grid -->
+                        <div class="rooms-grid" id="my-rooms-grid">
+                            <div class="rooms-empty-state">
+                                <i class="fas fa-door-open"></i>
+                                <h3>Chưa có phòng thi nào</h3>
+                                <p>Hãy tạo phòng thi đầu tiên của bạn!</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Manage Tab -->
+                <section id="manage-tab" class="tab-content">
+                    <div class="page-header">
+                        <h2 class="page-title">
+                            <i class="fas fa-cog"></i>
+                            Quản Lý Quiz
+                        </h2>
+                    </div>
+
+                    <div id="quiz-list" class="quiz-manage-list">
+                        <div class="empty-state-card">
+                            <i class="fas fa-folder-open"></i>
+                            <h3>Chưa có quiz nào</h3>
+                            <p>Hãy tạo quiz đầu tiên của bạn!</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz Tab -->
+                <section id="quiz-tab" class="tab-content">
+                    <div class="page-header">
+                        <h2 class="page-title">
+                            <i class="fas fa-play"></i>
+                            Làm Bài Trắc Nghiệm
+                        </h2>
+                    </div>
+
+                    <div class="quiz-start-card">
+                        <div class="quiz-controls-modern">
+                            <div class="quiz-control-group">
+                                <label>
+                                    <i class="fas fa-clipboard-list"></i>
+                                    Chọn bài quiz
+                                </label>
+                                <select id="quiz-selector" class="form-select">
+                                    <option value="">-- Chọn bài quiz để làm --</option>
+                                </select>
+                            </div>
+
+                            <div class="quiz-control-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="shuffle-questions">
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-text">
+                                        <i class="fas fa-random"></i>
+                                        Xáo trộn câu hỏi
+                                    </span>
+                                </label>
+                            </div>
+
+                            <button id="start-quiz" class="btn-primary btn-large" disabled>
+                                <i class="fas fa-play"></i>
+                                Bắt Đầu Làm Bài
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="quiz-container" class="quiz-container"></div>
+                </section>
+
+                <!-- Results Tab -->
+                <section id="results-tab" class="tab-content">
+                    <div class="page-header">
+                        <h2 class="page-title">
+                            <i class="fas fa-trophy"></i>
+                            Kết Quả Làm Bài
+                        </h2>
+                    </div>
+
+                    <div id="results-container" class="results-container">
+                        <div class="empty-state-card">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>Chưa có kết quả nào</h3>
+                            <p>Hoàn thành một bài quiz để xem kết quả</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Analytics Tab (Admin Only) -->
+                <section id="analytics-tab" class="tab-content">
+                    <div class="page-header">
+                        <h2 class="page-title">
+                            <i class="fas fa-chart-line"></i>
+                            Báo Cáo Analytics
+                            <span class="admin-only-badge" style="margin-left: 15px;">Admin Only</span>
+                        </h2>
+                        <p style="margin-top: 10px; opacity: 0.9;">
+                            Theo dõi hoạt động người dùng, thiết bị, vị trí và thống kê truy cập
+                        </p>
+                    </div>
+
+                    <div id="analytics-content">
+                        <!-- Content will be loaded by admin-analytics.js -->
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal for editing quiz -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Chỉnh Sửa Quiz</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="edit-title" placeholder="Tên quiz..." class="modal-input">
+                <textarea id="edit-description" placeholder="Mô tả..." class="modal-textarea"></textarea>
+                <div id="edit-questions" class="edit-questions"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="save-edit" class="btn-primary">
+                    <i class="fas fa-save"></i>
+                    Lưu Thay Đổi
+                </button>
+                <button id="cancel-edit" class="btn-secondary">
+                    <i class="fas fa-times"></i>
+                    Hủy
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for quiz details -->
+    <div id="quiz-details-modal" class="modal">
+        <div class="quiz-details-modal-content modal-content">
+            <div class="quiz-details-content">
+                <!-- Content will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Password Modal -->
+    <div id="admin-password-modal" class="modal">
+        <div class="modal-overlay" onclick="adminManager.closePasswordModal()"></div>
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3><i class="fas fa-shield-alt"></i> Admin Access</h3>
+                <button class="modal-close" onclick="adminManager.closePasswordModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-lock"></i>
+                        Nhập mật khẩu Admin (6 số)
+                    </label>
+                    <input type="password" id="admin-password-input" placeholder="Nhập mật khẩu..." class="form-input"
+                        maxlength="6" style="text-align: center; font-size: 24px; letter-spacing: 10px;">
+                    <small style="display: block; margin-top: 8px; color: var(--text-secondary);">
+                        Chỉ Admin mới có quyền truy cập
+                    </small>
+                </div>
+                <div id="admin-error-message"
+                    style="display: none; color: #ef4444; margin-top: 10px; text-align: center;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    Mật khẩu không đúng!
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" onclick="adminManager.verifyPassword()">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Đăng Nhập
+                </button>
+                <button class="btn-secondary" onclick="adminManager.closePasswordModal()">
+                    <i class="fas fa-times"></i>
+                    Hủy
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Room Details Modal -->
+    <div id="room-details-modal" class="room-details-modal">
+        <div class="room-details-content">
+            <div class="room-details-modal-content">
+                <!-- Content will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- User Name Modal -->
+    <div id="user-name-modal" class="user-name-modal">
+        <div class="user-name-content">
+            <div class="user-name-modal-content">
+                <!-- Content will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for sharing quiz -->
+    <div id="share-quiz-modal" class="modal">
+        <div class="modal-overlay" onclick="exploreQuizManager.closeShareModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-share-alt"></i> Chia Sẻ Đề Thi</h3>
+                <button class="modal-close" onclick="exploreQuizManager.closeShareModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="share-info-banner">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>Lưu ý:</strong> Bạn có thể đặt tên và mô tả mới cho bài chia sẻ.
+                        Bài gốc của bạn sẽ không bị thay đổi.
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 20px;">
+                    <label>
+                        <i class="fas fa-user-circle"></i>
+                        Tên của bạn <span style="color: red;">*</span>
+                    </label>
+                    <input type="text" id="share-user-name" placeholder="Nhập tên của bạn..." class="modal-input">
+                    <small style="display: block; margin-top: 5px; color: var(--text-secondary);">
+                        Tên này sẽ hiển thị cho mọi người biết ai đã chia sẻ
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-heading"></i>
+                        Tên đề thi <span style="color: red;">*</span>
+                    </label>
+                    <input type="text" id="share-quiz-title" placeholder="Nhập tên đề thi..." class="modal-input">
+                    <small style="display: block; margin-top: 5px; color: var(--text-secondary);">
+                        Đặt tên mới cho đề thi khi chia sẻ (khác với tên gốc)
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-align-left"></i>
+                        Mô tả đề thi
+                    </label>
+                    <textarea id="share-quiz-description" placeholder="Nhập mô tả cho đề thi..." class="modal-textarea"
+                        rows="4"></textarea>
+                    <small style="display: block; margin-top: 5px; color: var(--text-secondary);">
+                        Mô tả ngắn gọn về nội dung đề thi
+                    </small>
+                </div>
+
+                <div class="share-quiz-info">
+                    <div class="info-item">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Số câu hỏi: <strong id="share-quiz-count">0</strong></span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-calendar"></i>
+                        <span>Ngày chia sẻ: <strong id="share-quiz-date">Hôm nay</strong></span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Thời gian: <strong id="share-quiz-time">Bây giờ</strong></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" onclick="exploreQuizManager.confirmShareQuiz()">
+                    <i class="fas fa-share-alt"></i>
+                    Chia Sẻ Ngay
+                </button>
+                <button class="btn-secondary" onclick="exploreQuizManager.closeShareModal()">
+                    <i class="fas fa-times"></i>
+                    Hủy
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="cloud-storage.js"></script>
+    <script>
+        window.firebaseQuizManager = new CloudQuizManager();
+        window.isFirebaseInitialized = true;
+        window.firebaseQuizManager.startAutoSync();
+        console.log('✅ Cloud storage ready');
+    </script>
+
+    <!-- Community Sharing - Không cần server, không cần cùng mạng -->
+    <script src="community-share.js"></script>
+
+    <!-- Supabase Integration - Cloud sharing -->
+    <script type="module" src="supabase-config.js"></script>
+
+    <script src="script.js"></script>
+    <script src="script-modern.js"></script>
+    <!-- PATCH: Fix updateAnswerModern - MUST BE RIGHT AFTER script-modern.js -->
+    <script src="PATCH_UPDATE_ANSWER.js"></script>
+    <script src="script-updated.js"></script>
+    <script src="ai-quiz.js"></script>
+    <script src="ai-file-handler.js"></script>
+    <script src="mobile-menu.js"></script>
+    <script src="streak-tracker.js"></script>
+    <script src="explore-quiz.js"></script>
+
+    <!-- FORCE SUPABASE FIX V2 - MUST BE RIGHT AFTER explore-quiz.js -->
+    <script src="FIX_FORCE_SUPABASE_V2.js"></script>
+
+    <script src="admin-manager.js"></script>
+
+    <!-- Analytics Tracker -->
+    <script src="analytics-tracker.js"></script>
+
+    <!-- Admin Analytics Dashboard -->
+    <script src="admin-analytics.js"></script>
+
+    <!-- Room Manager -->
+    <script src="room-manager.js"></script>
+
+    <!-- FINAL ABSOLUTE FIX: Chặn PATCH request, bảo vệ currentQuiz 100% -->
+    <script src="FINAL_ABSOLUTE_FIX.js"></script>
+
+    <script>
+        // Override renderQuiz with modern version for 3-column layout
+        document.addEventListener('DOMContentLoaded', function () {
+            if (typeof QuizManager !== 'undefined') {
+                // Override methods to use modern 3-column layout
+                QuizManager.prototype.renderQuiz = QuizManager.prototype.renderQuizModern;
+                QuizManager.prototype.startTimer = QuizManager.prototype.startTimerModern;
+                QuizManager.prototype.updateProgressBar = QuizManager.prototype.updateProgressBarModern;
+                QuizManager.prototype.updateAnswer = QuizManager.prototype.updateAnswerModern;
+
+                console.log('✅ Modern quiz layout activated!');
+            }
+
+            // Initialize Analytics Dashboard when clicking Analytics tab
+            const analyticsNavItem = document.getElementById('analytics-nav-item');
+            if (analyticsNavItem) {
+                analyticsNavItem.addEventListener('click', function () {
+                    // Wait for tab to switch
+                    setTimeout(() => {
+                        if (window.adminAnalytics) {
+                            window.adminAnalytics.loadDashboard();
+                        }
+                    }, 100);
+                });
+            }
+        });
+    </script>
+
+    <!-- ROOM QUIZ VALIDATION & UPGRADE - MUST BE AFTER ROOM MANAGER -->
+    <script src="room-quiz-validation-upgrade.js"></script>
+
+    <!-- COMPLETE PROTECTION FOR ROOM QUIZ - MUST BE ABSOLUTE LAST -->
+    <script src="fix-room-quiz-complete-protection.js"></script>
+
+    <!-- ABSOLUTE QUIZ PROTECTION - MUST BE VERY LAST -->
+    <script src="ABSOLUTE_QUIZ_PROTECTION.js"></script>
+</body>
+
+</html>

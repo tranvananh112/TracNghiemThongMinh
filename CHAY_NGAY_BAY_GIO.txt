@@ -1,0 +1,87 @@
+╔═══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║   XÓA GIT CŨ - PUSH CODE MỚI LÊN GITHUB                       ║
+║                                                               ║
+╚═══════════════════════════════════════════════════════════════╝
+
+
+Script này sẽ:
+  1. Xóa Git cũ (.git)
+  2. Di chuyển files từ TracNghiemProMax-main/ lên root
+  3. Khởi tạo Git mới
+  4. Push lên GitHub: https://github.com/tranvananh112/TracNghiemThongMinh.git
+
+
+═══════════════════════════════════════════════════════════════
+
+CÁCH 1: WINDOWS (KHUYẾN NGHỊ)
+
+  Double-click file:
+  
+  ►►►►► RESET_AND_PUSH.bat ◄◄◄◄◄
+
+
+═══════════════════════════════════════════════════════════════
+
+CÁCH 2: GIT BASH
+
+  1. Click chuột phải → "Git Bash Here"
+  2. Chạy lệnh:
+  
+     bash reset-and-push.sh
+
+
+═══════════════════════════════════════════════════════════════
+
+CÁCH 3: LỆNH TRỰC TIẾP (GIT BASH)
+
+  Copy và paste toàn bộ đoạn này vào Git Bash:
+
+  rm -rf .git && mv TracNghiemProMax-main/* . 2>/dev/null && mv TracNghiemProMax-main/.gitignore . 2>/dev/null && rm -rf TracNghiemProMax-main && rm -rf .vscode && git init && git remote add origin https://github.com/tranvananh112/TracNghiemThongMinh.git && git add . && git commit -m "Initial commit: Move to root" && git branch -M main && git push -u origin main --force
+
+
+═══════════════════════════════════════════════════════════════
+
+SAU KHI PUSH XONG:
+
+  1. Kiểm tra GitHub:
+     https://github.com/tranvananh112/TracNghiemThongMinh
+     
+     → index.html phải ở root (không còn trong thư mục con)
+     
+  2. Deploy trên Vercel:
+     - Vào vercel.com
+     - Import GitHub repository
+     - Root Directory: để trống
+     - Deploy
+     
+  3. Cấu hình Supabase CORS:
+     - Vào: https://supabase.com/dashboard
+     - Project: uyjakelguelunqzdbscb
+     - Settings → API → CORS Configuration
+     - Thêm domain Vercel của bạn
+     
+  4. Test website:
+     - Mở trên 2 thiết bị
+     - Tạo quiz và chia sẻ
+     - Kiểm tra thiết bị khác có thấy không
+
+
+═══════════════════════════════════════════════════════════════
+
+LƯU Ý:
+
+  - Script sẽ XÓA Git cũ hoàn toàn
+  - Tất cả lịch sử commit cũ sẽ bị xóa
+  - Đây là fresh start hoàn toàn
+  - Bạn có thể cần nhập GitHub username/password hoặc token
+
+
+═══════════════════════════════════════════════════════════════
+
+BẮT ĐẦU NGAY:
+
+  ►►►►► Double-click: RESET_AND_PUSH.bat
+
+
+═══════════════════════════════════════════════════════════════

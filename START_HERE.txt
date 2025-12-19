@@ -1,0 +1,69 @@
+╔═══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║              PUSH CODE LÊN GITHUB - BẮT ĐẦU Ở ĐÂY            ║
+║                                                               ║
+╚═══════════════════════════════════════════════════════════════╝
+
+
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃                                                             ┃
+┃  BƯỚC 1: DOUBLE-CLICK FILE NÀY                              ┃
+┃                                                             ┃
+┃  ►►►►► EXECUTE_NOW.bat ◄◄◄◄◄                               ┃
+┃                                                             ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+
+Script sẽ tự động:
+  ✓ Di chuyển files từ TracNghiemProMax-main/ lên root
+  ✓ Xóa thư mục cũ
+  ✓ Push code lên GitHub
+
+
+═══════════════════════════════════════════════════════════════
+
+NẾU SCRIPT KHÔNG CHẠY ĐƯỢC:
+
+  Mở Git Bash (click chuột phải → "Git Bash Here")
+  
+  Chạy lệnh:
+  
+  bash push-to-github.sh
+
+
+═══════════════════════════════════════════════════════════════
+
+HOẶC CHẠY LỆNH TRỰC TIẾP (GIT BASH):
+
+  mv TracNghiemProMax-main/* . && mv TracNghiemProMax-main/.gitignore . && rm -rf TracNghiemProMax-main && rm -rf .vscode && git add . && git commit -m "Fix: Move to root" && git push origin main --force
+
+
+═══════════════════════════════════════════════════════════════
+
+SAU KHI PUSH XONG:
+
+  1. Kiểm tra GitHub:
+     https://github.com/tranvananh112/TracNghiemThongMinh
+     
+  2. Đợi Vercel deploy (1-2 phút)
+  
+  3. Cấu hình Supabase CORS
+  
+  4. Test website
+
+
+═══════════════════════════════════════════════════════════════
+
+ĐỌC HƯỚNG DẪN CHI TIẾT:
+
+  📖 HUONG_DAN_CUOI_CUNG.md  ← Đọc file này nếu cần chi tiết
+
+
+═══════════════════════════════════════════════════════════════
+
+BẮT ĐẦU NGAY:
+
+  ►►►►► Double-click: EXECUTE_NOW.bat
+
+
+═══════════════════════════════════════════════════════════════

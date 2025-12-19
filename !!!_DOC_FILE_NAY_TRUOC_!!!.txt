@@ -1,0 +1,142 @@
+╔═══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║   HƯỚNG DẪN ĐẨY CODE LÊN GITHUB VÀ DEPLOY                     ║
+║                                                               ║
+╚═══════════════════════════════════════════════════════════════╝
+
+
+TỔNG QUAN:
+  Script sẽ tự động:
+  1. Xóa Git cũ
+  2. Di chuyển files lên root
+  3. Khởi tạo Git mới
+  4. Push lên GitHub
+
+
+═══════════════════════════════════════════════════════════════
+  BƯỚC 1: PUSH CODE LÊN GITHUB
+═══════════════════════════════════════════════════════════════
+
+Double-click file này:
+
+  ►►►►► RESET_AND_PUSH.bat ◄◄◄◄◄
+
+Hoặc nếu dùng Git Bash:
+
+  bash reset-and-push.sh
+
+
+Script sẽ hỏi bạn nhập GitHub username/password hoặc token.
+
+Nếu chưa có token, tạo tại:
+  https://github.com/settings/tokens
+  - Chọn: Generate new token (classic)
+  - Chọn quyền: repo (full control)
+  - Copy token và dùng làm password
+
+
+═══════════════════════════════════════════════════════════════
+  BƯỚC 2: KIỂM TRA GITHUB
+═══════════════════════════════════════════════════════════════
+
+Sau khi push xong, vào:
+  https://github.com/tranvananh112/TracNghiemThongMinh
+
+Kiểm tra:
+  ✓ index.html ở root (không còn trong thư mục con)
+  ✓ Tất cả files đã được upload
+
+
+═══════════════════════════════════════════════════════════════
+  BƯỚC 3: DEPLOY LÊN VERCEL
+═══════════════════════════════════════════════════════════════
+
+Đọc hướng dẫn chi tiết trong file:
+  📖 HUONG_DAN_DEPLOY_VERCEL.md
+
+Tóm tắt:
+  1. Vào: https://vercel.com
+  2. Đăng nhập bằng GitHub
+  3. Import repository: TracNghiemThongMinh
+  4. Root Directory: để trống
+  5. Click Deploy
+  6. Đợi 1-2 phút
+
+
+═══════════════════════════════════════════════════════════════
+  BƯỚC 4: CẤU HÌNH SUPABASE CORS
+═══════════════════════════════════════════════════════════════
+
+Sau khi deploy xong Vercel:
+
+  1. Copy domain Vercel (ví dụ: https://your-app.vercel.app)
+  
+  2. Vào: https://supabase.com/dashboard
+  
+  3. Chọn project: uyjakelguelunqzdbscb
+  
+  4. Settings → API → CORS Configuration
+  
+  5. Thêm domain Vercel
+  
+  6. Save
+
+
+═══════════════════════════════════════════════════════════════
+  BƯỚC 5: TEST WEBSITE
+═══════════════════════════════════════════════════════════════
+
+Mở website Vercel trên 2 thiết bị:
+
+  Thiết bị 1:
+    - Tạo quiz mới
+    - Click "Chia sẻ"
+    
+  Thiết bị 2:
+    - Vào mục "Khám phá"
+    - Phải thấy quiz vừa chia sẻ
+
+
+═══════════════════════════════════════════════════════════════
+  CÁC FILE QUAN TRỌNG
+═══════════════════════════════════════════════════════════════
+
+  🔧 RESET_AND_PUSH.bat           → Script push lên GitHub
+  🔧 reset-and-push.sh            → Script Git Bash
+  
+  📖 HUONG_DAN_DEPLOY_VERCEL.md   → Hướng dẫn deploy Vercel
+  📖 CHAY_NGAY_BAY_GIO.txt        → Hướng dẫn nhanh
+
+
+═══════════════════════════════════════════════════════════════
+  LƯU Ý QUAN TRỌNG
+═══════════════════════════════════════════════════════════════
+
+  ⚠️  Script sẽ XÓA Git cũ hoàn toàn
+  ⚠️  Lịch sử commit cũ sẽ bị xóa
+  ⚠️  Đây là fresh start hoàn toàn
+  
+  ✓  Đảm bảo bạn đã backup nếu cần
+  ✓  Chuẩn bị GitHub username/password hoặc token
+
+
+═══════════════════════════════════════════════════════════════
+  BẮT ĐẦU NGAY
+═══════════════════════════════════════════════════════════════
+
+  BƯỚC 1: Double-click → RESET_AND_PUSH.bat
+  
+  BƯỚC 2: Đọc → HUONG_DAN_DEPLOY_VERCEL.md
+  
+  BƯỚC 3: Deploy trên Vercel
+  
+  BƯỚC 4: Cấu hình Supabase CORS
+  
+  BƯỚC 5: Test website
+
+
+═══════════════════════════════════════════════════════════════
+
+Chúc bạn thành công! 🚀
+
+═══════════════════════════════════════════════════════════════
