@@ -702,6 +702,17 @@
                                 </label>
                             </div>
 
+                            <div class="quiz-control-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="enable-sound" checked>
+                                    <span class="checkbox-custom"></span>
+                                    <span class="checkbox-text">
+                                        <i class="fas fa-volume-up"></i>
+                                        Bật âm thanh
+                                    </span>
+                                </label>
+                            </div>
+
                             <button id="start-quiz" class="btn-primary btn-large" disabled>
                                 <i class="fas fa-play"></i>
                                 Bắt Đầu Làm Bài
@@ -1001,8 +1012,16 @@
     <!-- COMPLETE PROTECTION FOR ROOM QUIZ - MUST BE ABSOLUTE LAST -->
     <script src="fix-room-quiz-complete-protection.js"></script>
 
+    <!-- Sound Manager - Quản lý âm thanh -->
+    <script src="sound-manager.js"></script>
+
     <!-- ABSOLUTE QUIZ PROTECTION - MUST BE VERY LAST -->
     <script src="ABSOLUTE_QUIZ_PROTECTION.js"></script>
+
+    <!-- Audio for answer selection -->
+    <audio id="answer-sound" preload="auto">
+        <source src="chinhxac.wav" type="audio/wav">
+    </audio>
 </body>
 
 </html>
