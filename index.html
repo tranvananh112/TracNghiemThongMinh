@@ -8,6 +8,21 @@
     <title>QuizTva Studio - Hệ Thống Trắc Nghiệm Thông Minh</title>
     <link rel="icon" type="image/png"
         href="https://anhtran.id.vn/wp-content/uploads/2025/09/cropped-Generated-Image-September-18-2025-8_04PM-1.png">
+
+    <!-- 🦌🎅 PRELOAD GIFS WITH HIGH PRIORITY FOR INSTANT LOADING -->
+    <link rel="preload" href="hưu nhảy.gif" as="image" fetchpriority="high">
+    <link rel="preload" href="ông già noel.gif" as="image" fetchpriority="high">
+
+    <!-- Preload script để load GIFs ngay lập tức -->
+    <script>
+        // Load GIFs ngay lập tức, không đợi DOM
+        (function () {
+            const reindeer = new Image();
+            reindeer.src = 'hưu nhảy.gif';
+            const santa = new Image();
+            santa.src = 'ông già noel.gif';
+        })();
+    </script>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="style-modern-quiz.css">
     <link rel="stylesheet" href="style-updated.css">
@@ -19,10 +34,31 @@
     <link rel="stylesheet" href="style-explore.css">
     <link rel="stylesheet" href="style-analytics.css">
     <link rel="stylesheet" href="style-room.css">
+    <!-- 🎄 THEME NOEL & TẾT 2026 🎊 -->
+    <link rel="stylesheet" href="style-newyear-2026.css">
+
+    <!-- 🚫 TẮT ĐƯỜNG KẺ DI CHUYỂN -->
+    <style>
+        /* Chỉ xóa gạch ở Chuỗi ngày học (streak-card) */
+        .streak-card::before,
+        .streak-card::after,
+        .stat-card::before {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            animation: none !important;
+            transition: none !important;
+            transform: none !important;
+        }
+    </style>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- JSZip library for reading Word files -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <!-- 🎅 Rive Animation Library for Santa Claus -->
+    <script src="https://unpkg.com/@rive-app/canvas@2.7.0"></script>
 
 </head>
 
@@ -110,6 +146,14 @@
                     <div class="copyright">
                         © Trần Văn Anh - 2025
                     </div>
+
+                    <!-- 🎄 MERRY CHRISTMAS GIF ANIMATION -->
+                    <div class="christmas-gif-container">
+                        <img src="Merry Christmas GIF.gif" alt="Merry Christmas" class="christmas-gif">
+                        <div class="gif-overlay">
+                            <div class="christmas-greeting">🎄 Giáng Sinh An Lành! 🎄</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </aside>
@@ -141,6 +185,13 @@
                         <i class="fas fa-plus"></i>
                         <span>Tạo đề thi</span>
                     </button>
+
+                    <!-- 🎄 TEXT NOEL 3D -->
+                    <div class="christmas-text-3d">
+                        <div class="christmas-line-1">Merry Christmas</div>
+                        <div class="christmas-line-2">Happy New Year 2026</div>
+                    </div>
+
                     <button class="theme-toggle-btn" id="theme-toggle">
                         <i class="fas fa-moon"></i>
                     </button>
@@ -163,7 +214,12 @@
                         <h2 class="section-title">Thành tựu học tập</h2>
 
                         <div class="stats-grid">
-                            <div class="stat-card">
+                            <div class="stat-card" style="position: relative; overflow: visible;">
+                                <!-- 🎅 SANTA CLAUS GIF ON TOP -->
+                                <img src="ông già noel.gif" alt="Santa Claus" class="santa-on-card" loading="eager"
+                                    fetchpriority="high" decoding="async"
+                                    style="position: absolute; top: -30px; right: 10px; width: 60px; z-index: 10;">
+
                                 <div class="stat-icon blue">
                                     <i class="fas fa-book-open"></i>
                                 </div>
@@ -193,7 +249,13 @@
                                 </div>
                             </div>
 
-                            <div class="stat-card streak-card" onclick="quizManager.showStreakDetails()">
+                            <div class="stat-card streak-card" onclick="quizManager.showStreakDetails()"
+                                style="position: relative; overflow: visible;">
+                                <!-- 🦌 JUMPING REINDEER ON TOP -->
+                                <img src="hưu nhảy.gif" alt="Jumping Reindeer" class="reindeer-on-card" loading="eager"
+                                    fetchpriority="high" decoding="async"
+                                    style="position: absolute; top: -30px; right: 10px; width: 60px; z-index: 10;">
+
                                 <div class="stat-icon red">
                                     <i class="fas fa-fire"></i>
                                 </div>
@@ -1018,6 +1080,9 @@
     <!-- ABSOLUTE QUIZ PROTECTION - MUST BE VERY LAST -->
     <script src="ABSOLUTE_QUIZ_PROTECTION.js"></script>
 
+    <!-- 🎄 HIỆU ỨNG NOEL & TẾT 2026 🎊 -->
+    <script src="newyear-effects.js"></script>
+
     <!-- Audio for answer selection -->
     <audio id="answer-sound" preload="auto">
         <source src="chinhxac.wav" type="audio/wav">
@@ -1030,6 +1095,42 @@
     <audio id="fail-sound" preload="auto">
         <source src="saidapan.wav" type="audio/wav">
     </audio>
+
+    <!-- 🦌🎅 INSTANT GIF INITIALIZATION - NO WAITING -->
+    <script>
+        // Khởi tạo ngay lập tức, không đợi DOM
+        (function initGifsInstantly() {
+            // Hàm init sẽ chạy ngay khi script được parse
+            function tryInit() {
+                const reindeerGif = document.querySelector('.reindeer-on-card');
+                const santaGif = document.querySelector('.santa-on-card');
+
+                if (reindeerGif) {
+                    reindeerGif.style.display = 'block';
+                    reindeerGif.style.visibility = 'visible';
+                    reindeerGif.style.opacity = '1';
+                    reindeerGif.style.animation = 'reindeerContinuousJump 1.5s ease-in-out infinite';
+                    console.log('🦌 Reindeer loaded!');
+                }
+
+                if (santaGif) {
+                    santaGif.style.display = 'block';
+                    santaGif.style.visibility = 'visible';
+                    santaGif.style.opacity = '1';
+                    santaGif.style.animation = 'santaContinuousJump 1.8s ease-in-out infinite';
+                    console.log('🎅 Santa loaded!');
+                }
+
+                // Nếu chưa tìm thấy, thử lại sau 10ms
+                if (!reindeerGif || !santaGif) {
+                    setTimeout(tryInit, 10);
+                }
+            }
+
+            // Bắt đầu init ngay
+            tryInit();
+        })();
+    </script>
 </body>
 
 </html>

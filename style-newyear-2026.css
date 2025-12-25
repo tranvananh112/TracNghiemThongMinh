@@ -1,0 +1,1985 @@
+/* ========================================
+   🎄 THEME NOEL 2026 - TÍM GRADIENT + TEXT ĐỎ XANH 🎄
+   Tông màu: TÍM GRADIENT (nền) + ĐỎ/XANH (text Noel)
+   ======================================== */
+
+:root {
+    /* Màu chủ đạo - TÍM GRADIENT như ban đầu */
+    --primary-color: #667eea;
+    --secondary-color: #764ba2;
+    --success-color: #48bb78;
+    --danger-color: #f56565;
+    --warning-color: #ed8936;
+    --info-color: #4299e1;
+
+    /* Gradient Tím */
+    --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --card-gradient: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+
+    /* Màu nền sáng */
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --text-primary: #333;
+    --text-secondary: #666;
+    --border-color: #e1e5f2;
+
+    /* Shadow với màu tím */
+    --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.3);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.dark-mode {
+    --card-bg: rgba(30, 30, 40, 0.95);
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --border-color: #3a3a4a;
+    --bg-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+/* ========================================
+   HIỆU ỨNG TUYẾT RƠI NHẸ
+   ======================================== */
+.snowflake {
+    position: fixed;
+    top: -10px;
+    z-index: 9999;
+    user-select: none;
+    cursor: default;
+    animation-name: snowfall;
+    animation-duration: 12s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9em;
+    text-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+@keyframes snowfall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0.1;
+    }
+}
+
+/* ========================================
+   BACKGROUND NOEL
+   ======================================== */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(circle at 20% 30%, rgba(102, 126, 234, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(118, 75, 162, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(102, 126, 234, 0.04) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+    animation: festiveGlow 12s ease-in-out infinite;
+}
+
+@keyframes festiveGlow {
+
+    0%,
+    100% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* ========================================
+   HEADER VỚI HIỆU ỨNG ĐÈN NHÁY
+   ======================================== */
+.header {
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 25px 35px;
+    margin-bottom: 30px;
+    box-shadow: var(--shadow-md);
+    border: 2px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: repeating-linear-gradient(90deg,
+            #c41e3a 0px,
+            #c41e3a 20px,
+            #2d5016 20px,
+            #2d5016 40px,
+            #c41e3a 40px,
+            #c41e3a 60px);
+    opacity: 0.8;
+    animation: christmasLights 3s ease-in-out infinite;
+}
+
+@keyframes christmasLights {
+
+    0%,
+    100% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* ========================================
+   LOGO VỚI HIỆU ỨNG SÁNG
+   ======================================== */
+.logo i {
+    font-size: 32px;
+    color: #c41e3a;
+    animation: logoGlow 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 8px rgba(196, 30, 58, 0.4));
+}
+
+@keyframes logoGlow {
+
+    0%,
+    100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 8px rgba(196, 30, 58, 0.4));
+    }
+
+    50% {
+        transform: scale(1.05);
+        filter: drop-shadow(0 0 12px rgba(45, 80, 22, 0.5));
+    }
+}
+
+.logo h1 {
+    background: linear-gradient(135deg, #c41e3a 0%, #2d5016 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ========================================
+   BUTTONS VỚI MÀU NOEL
+   ======================================== */
+.btn-primary {
+    background: var(--bg-gradient);
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--success-color), #38a169);
+    color: white;
+    box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(72, 187, 120, 0.5);
+}
+
+/* ========================================
+   CARDS VỚI VIỀN ĐỎ
+   ======================================== */
+.card {
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    box-shadow: var(--shadow-md);
+    border: 2px solid var(--border-color);
+    overflow: hidden;
+}
+
+.card-header {
+    background: var(--bg-gradient);
+    color: white;
+    padding: 30px 35px;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-header::before {
+    content: '🎄';
+    position: absolute;
+    font-size: 90px;
+    opacity: 0.1;
+    top: 50%;
+    left: 10%;
+    transform: translate(-50%, -50%);
+}
+
+.card-header::after {
+    content: '⭐';
+    position: absolute;
+    font-size: 70px;
+    opacity: 0.1;
+    top: 50%;
+    right: 10%;
+    transform: translate(50%, -50%);
+}
+
+/* ========================================
+   QUIZ ITEMS VỚI HIỆU ỨNG
+   ======================================== */
+.quiz-item {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.03), rgba(118, 75, 162, 0.03));
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    padding: 25px;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.quiz-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 5px;
+    height: 100%;
+    background: var(--bg-gradient);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.quiz-item:hover::before {
+    opacity: 1;
+}
+
+.quiz-item:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(102, 126, 234, 0.2);
+}
+
+/* ========================================
+   OPTIONS VỚI MÀU NOEL
+   ======================================== */
+.option {
+    border: 2px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.option::before {
+    background: var(--bg-gradient);
+}
+
+.option:hover {
+    border-color: var(--primary-color);
+    background: rgba(102, 126, 234, 0.05);
+    transform: translateX(6px);
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.15);
+}
+
+.option.selected {
+    border-color: var(--primary-color);
+    border-width: 3px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.2);
+}
+
+.option input[type="radio"]:checked {
+    border-color: var(--primary-color);
+}
+
+.option input[type="radio"]:checked::before {
+    background: var(--bg-gradient);
+}
+
+/* ========================================
+   STATS CARDS VỚI MÀU NOEL
+   ======================================== */
+.stat-card {
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.stat-card::before {
+    background: linear-gradient(90deg, #1a5f6f 0%, #2d7a4f 100%);
+    height: 4px;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(196, 30, 58, 0.2);
+}
+
+.stat-number {
+    background: linear-gradient(135deg, #c41e3a 0%, #2d5016 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ========================================
+   RESULTS HEADER
+   ======================================== */
+.results-header {
+    background: linear-gradient(135deg, #c41e3a 0%, #dc143c 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.results-header::before {
+    content: '🎄';
+    font-size: 110px;
+    opacity: 0.1;
+}
+
+/* ========================================
+   DECORATIONS - ICON NOEL
+   ======================================== */
+.sidebar-header::before {
+    content: '🎄';
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 22px;
+    opacity: 0.5;
+}
+
+/* ========================================
+   CONFETTI EFFECT
+   ======================================== */
+.confetti {
+    position: fixed;
+    width: 6px;
+    height: 6px;
+    background: #c41e3a;
+    position: fixed;
+    top: -10px;
+    z-index: 9999;
+    animation: confettiFall 5s ease-out infinite;
+    opacity: 0.8;
+}
+
+@keyframes confettiFall {
+    to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* ========================================
+   PROGRESS BAR VỚI MÀU NOEL - DISABLED ANIMATION
+   ======================================== */
+.progress-bar {
+    background: linear-gradient(90deg, #c41e3a 0%, #2d5016 100%);
+    box-shadow: 0 2px 8px rgba(196, 30, 58, 0.3);
+    /* Tắt animation để không có đường kẻ di chuyển */
+    animation: none !important;
+    transition: none !important;
+}
+
+/* ========================================
+   SPECIAL MESSAGE - CHÚC MỪNG NĂM MỚI
+   ======================================== */
+.new-year-banner {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #c41e3a 0%, #2d5016 100%);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: 0 6px 24px rgba(196, 30, 58, 0.3);
+    z-index: 10000;
+    animation: bannerPulse 3s ease-in-out infinite;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+@keyframes bannerPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.03);
+    }
+}
+
+/* ========================================
+   NAV BUTTONS
+   ======================================== */
+.nav-btn.active {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+    color: var(--primary-color);
+}
+
+.nav-btn:hover {
+    background: rgba(102, 126, 234, 0.1);
+    color: var(--primary-color);
+}
+
+/* ========================================
+   THEME TOGGLE BUTTON
+   ======================================== */
+.theme-toggle-btn {
+    background: rgba(102, 126, 234, 0.15);
+    color: var(--primary-color);
+}
+
+.theme-toggle-btn:hover {
+    background: rgba(118, 75, 162, 0.15);
+}
+
+/* ========================================
+   SIDEBAR
+   ======================================== */
+.sidebar {
+    background: var(--card-bg);
+    border-right: 2px solid var(--border-color);
+}
+
+.sidebar .nav-item.active {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.12), rgba(118, 75, 162, 0.12));
+    color: var(--primary-color);
+    border-left: 4px solid var(--primary-color);
+}
+
+.sidebar .nav-item:hover {
+    background: rgba(102, 126, 234, 0.08);
+    color: var(--primary-color);
+}
+
+/* ========================================
+   INPUT FIELDS
+   ======================================== */
+.form-input:focus,
+.form-textarea:focus,
+textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+/* ========================================
+   🎄 TEXT NOEL 3D HIỆN ĐẠI
+   ======================================== */
+.christmas-text-3d {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    margin: 0 20px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, rgba(196, 30, 58, 0.06), rgba(45, 80, 22, 0.06));
+    border-radius: 12px;
+    border: 2px solid rgba(196, 30, 58, 0.3);
+    /* animation: textGlow 3s ease-in-out infinite; */
+    position: relative;
+}
+
+@keyframes textGlow {
+
+    0%,
+    100% {
+        box-shadow: 0 2px 8px rgba(196, 30, 58, 0.15);
+    }
+
+    50% {
+        box-shadow: 0 4px 16px rgba(45, 80, 22, 0.25);
+    }
+}
+
+.christmas-line-1,
+.christmas-line-2 {
+    font-family: 'Inter', 'Arial Black', sans-serif;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    text-align: center;
+    line-height: 1.2;
+    position: relative;
+    overflow: hidden;
+}
+
+.christmas-line-1 {
+    font-size: 16px;
+    background: linear-gradient(135deg, #c41e3a 0%, #dc143c 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(2px 2px 0px rgba(196, 30, 58, 0.3)) drop-shadow(3px 3px 0px rgba(196, 30, 58, 0.2)) drop-shadow(4px 4px 0px rgba(196, 30, 58, 0.1)) drop-shadow(0 2px 4px rgba(196, 30, 58, 0.4));
+}
+
+/* Hiệu ứng ánh sáng quét ngang - Line 1 - DISABLED */
+.christmas-line-1::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.5) 50%,
+            transparent 100%);
+    /* animation: shine-sweep 4s ease-in-out infinite; */
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    /* Ẩn hiệu ứng */
+}
+
+@keyframes shine-sweep {
+    0% {
+        left: -100%;
+    }
+
+    50%,
+    100% {
+        left: 200%;
+    }
+}
+
+.christmas-line-2 {
+    font-size: 14px;
+    background: linear-gradient(135deg, #2d5016 0%, #1e7e34 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(2px 2px 0px rgba(45, 80, 22, 0.3)) drop-shadow(3px 3px 0px rgba(45, 80, 22, 0.2)) drop-shadow(4px 4px 0px rgba(45, 80, 22, 0.1)) drop-shadow(0 2px 4px rgba(45, 80, 22, 0.4));
+}
+
+/* Hiệu ứng ánh sáng quét ngang - Line 2 - DISABLED */
+.christmas-line-2::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.5) 50%,
+            transparent 100%);
+    /* animation: shine-sweep 4s ease-in-out infinite; */
+    /* animation-delay: 0.5s; */
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    /* Ẩn hiệu ứng */
+}
+
+/* Hiệu ứng lấp lánh cho text */
+.christmas-text-3d::before {
+    content: '✨';
+    position: absolute;
+    left: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    animation: sparkle 2s ease-in-out infinite;
+}
+
+.christmas-text-3d::after {
+    content: '✨';
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    animation: sparkle 2s ease-in-out infinite 1s;
+}
+
+@keyframes sparkle {
+
+    0%,
+    100% {
+        opacity: 0.4;
+        transform: translateY(-50%) scale(0.8);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateY(-50%) scale(1.2);
+    }
+}
+
+/* Responsive cho tablet */
+@media (max-width: 1024px) {
+    .christmas-line-1 {
+        font-size: 14px;
+    }
+
+    .christmas-line-2 {
+        font-size: 12px;
+    }
+
+    .christmas-text-3d {
+        padding: 6px 12px;
+        margin: 0 12px;
+    }
+}
+
+/* ========================================
+   🎄 CÂY THÔNG NOEL TRANG TRÍ
+   ======================================== */
+.christmas-tree-decoration {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 180px;
+    height: 220px;
+    z-index: 9998;
+    pointer-events: none;
+    animation: treeFloat 6s ease-in-out infinite;
+}
+
+@keyframes treeFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.christmas-tree {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.tree-layer {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2d5016;
+}
+
+.tree-layer:nth-child(1) {
+    top: 0;
+    width: 60px;
+    height: 50px;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.tree-layer:nth-child(2) {
+    top: 40px;
+    width: 90px;
+    height: 60px;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.tree-layer:nth-child(3) {
+    top: 85px;
+    width: 120px;
+    height: 70px;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.tree-layer:nth-child(4) {
+    top: 140px;
+    width: 150px;
+    height: 80px;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.tree-trunk {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 30px;
+    background: #5d4037;
+    border-radius: 3px;
+}
+
+.tree-star {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    background: #ffd700;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    animation: starTwinkle 2s infinite;
+}
+
+@keyframes starTwinkle {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: translateX(-50%) scale(1.1);
+    }
+}
+
+.tree-ornament {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    animation: ornamentSwing 3s infinite ease-in-out;
+}
+
+.tree-ornament.red {
+    background: #c41e3a;
+}
+
+.tree-ornament.gold {
+    background: #f39c12;
+}
+
+.tree-ornament.blue {
+    background: #3498db;
+}
+
+.tree-ornament:nth-child(5) {
+    top: 50px;
+    left: 50px;
+    animation-delay: 0s;
+}
+
+.tree-ornament:nth-child(6) {
+    top: 60px;
+    right: 45px;
+    animation-delay: 0.5s;
+}
+
+.tree-ornament:nth-child(7) {
+    top: 100px;
+    left: 35px;
+    animation-delay: 1s;
+}
+
+.tree-ornament:nth-child(8) {
+    top: 110px;
+    right: 30px;
+    animation-delay: 1.5s;
+}
+
+.tree-ornament:nth-child(9) {
+    top: 150px;
+    left: 20px;
+    animation-delay: 2s;
+}
+
+.tree-ornament:nth-child(10) {
+    top: 160px;
+    right: 15px;
+    animation-delay: 2.5s;
+}
+
+@keyframes ornamentSwing {
+
+    0%,
+    100% {
+        transform: rotate(-5deg);
+    }
+
+    50% {
+        transform: rotate(5deg);
+    }
+}
+
+.tree-sparkle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: white;
+    border-radius: 50%;
+    animation: sparkleAnim 2s infinite;
+}
+
+.tree-sparkle:nth-child(11) {
+    top: 75px;
+    left: 60px;
+    animation-delay: 0s;
+}
+
+.tree-sparkle:nth-child(12) {
+    top: 90px;
+    right: 50px;
+    animation-delay: 0.3s;
+}
+
+.tree-sparkle:nth-child(13) {
+    top: 125px;
+    left: 45px;
+    animation-delay: 0.6s;
+}
+
+.tree-sparkle:nth-child(14) {
+    top: 140px;
+    right: 40px;
+    animation-delay: 0.9s;
+}
+
+.tree-sparkle:nth-child(15) {
+    top: 175px;
+    left: 30px;
+    animation-delay: 1.2s;
+}
+
+@keyframes sparkleAnim {
+
+    0%,
+    100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.5);
+    }
+}
+
+/* ========================================
+   QUẢ CẦU TREO TRANG TRÍ
+   ======================================== */
+.hanging-ornaments-decoration {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-around;
+    padding: 0 10%;
+    z-index: 9997;
+    pointer-events: none;
+}
+
+.hanging-ornament {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: hangSwing 4s infinite ease-in-out;
+}
+
+.hanging-ornament:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+.hanging-ornament:nth-child(3) {
+    animation-delay: 1s;
+}
+
+.hanging-ornament:nth-child(4) {
+    animation-delay: 1.5s;
+}
+
+.hanging-ornament:nth-child(5) {
+    animation-delay: 2s;
+}
+
+.ornament-string {
+    width: 2px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.ornament-ball {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.ornament-ball.striped {
+    background: repeating-linear-gradient(45deg,
+            #c41e3a,
+            #c41e3a 4px,
+            white 4px,
+            white 8px);
+}
+
+.ornament-ball.solid-red {
+    background: #c41e3a;
+}
+
+.ornament-ball.solid-gold {
+    background: #f39c12;
+}
+
+.ornament-ball.solid-green {
+    background: #2d5016;
+}
+
+.ornament-ball.solid-blue {
+    background: #3498db;
+}
+
+.ornament-ball::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 6px;
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+}
+
+@keyframes hangSwing {
+
+    0%,
+    100% {
+        transform: translateX(-8px) rotate(-5deg);
+    }
+
+    50% {
+        transform: translateX(8px) rotate(5deg);
+    }
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+    .new-year-banner {
+        top: 10px;
+        right: 10px;
+        font-size: 11px;
+        padding: 8px 12px;
+    }
+
+    .snowflake {
+        font-size: 0.7em;
+    }
+
+    .christmas-text-3d {
+        display: none !important;
+    }
+
+    .christmas-tree-decoration {
+        width: 120px;
+        height: 150px;
+        bottom: 10px;
+        right: 10px;
+    }
+
+    .hanging-ornaments-decoration {
+        padding: 0 5%;
+    }
+
+    .ornament-string {
+        height: 30px;
+    }
+
+    .ornament-ball {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+
+/* ========================================
+   🎄 TRANG TRÍ NOEL BẰNG ẢNH
+   ======================================== */
+
+/* Dây trang trí viền trên cùng */
+.christmas-decoration-top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background-image: url('c:/Users/Lenovo/Downloads/trang trí noel/dây trang trí viền.png');
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    background-position: center top;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.9;
+}
+
+/* Dây trang trí viền 2 - góc trái */
+.christmas-decoration-left {
+    position: fixed;
+    top: 100px;
+    left: 0;
+    width: 150px;
+    height: 200px;
+    background-image: url('c:/Users/Lenovo/Downloads/trang trí noel/dây trang trí viền 2.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: left top;
+    z-index: 9998;
+    pointer-events: none;
+    opacity: 0.85;
+    animation: swingLeft 4s ease-in-out infinite;
+}
+
+@keyframes swingLeft {
+
+    0%,
+    100% {
+        transform: rotate(-2deg);
+    }
+
+    50% {
+        transform: rotate(2deg);
+    }
+}
+
+/* Dây trang trí viền 3 - góc phải */
+.christmas-decoration-right {
+    position: fixed;
+    top: 100px;
+    right: 0;
+    width: 150px;
+    height: 200px;
+    background-image: url('c:/Users/Lenovo/Downloads/trang trí noel/dây trang trí viền 3.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: right top;
+    z-index: 9998;
+    pointer-events: none;
+    opacity: 0.85;
+    animation: swingRight 4s ease-in-out infinite 0.5s;
+}
+
+@keyframes swingRight {
+
+    0%,
+    100% {
+        transform: rotate(2deg);
+    }
+
+    50% {
+        transform: rotate(-2deg);
+    }
+}
+
+/* Cây thông trang trí - góc dưới trái */
+.christmas-tree-image {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 200px;
+    height: 250px;
+    background-image: url('c:/Users/Lenovo/Downloads/trang trí noel/cây thông.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center bottom;
+    z-index: 9997;
+    pointer-events: none;
+    opacity: 0.9;
+    animation: treeFloat 6s ease-in-out infinite;
+}
+
+@keyframes treeFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+    .christmas-decoration-top {
+        height: 50px;
+    }
+
+    .christmas-decoration-left,
+    .christmas-decoration-right {
+        width: 80px;
+        height: 120px;
+        top: 60px;
+    }
+
+    .christmas-tree-image {
+        width: 120px;
+        height: 150px;
+        bottom: 10px;
+        left: 10px;
+    }
+}
+
+/* Ẩn trang trí khi in */
+@media print {
+
+    .christmas-decoration-top,
+    .christmas-decoration-left,
+    .christmas-decoration-right,
+    .christmas-tree-image,
+    .christmas-lights-top,
+    .corner-decoration-left,
+    .corner-decoration-right,
+    .tree-decoration-left,
+    .ornament-decoration,
+    .star-decoration {
+        display: none !important;
+    }
+}
+
+/* ========================================
+   🎄 TRANG TRÍ NOEL BẰNG EMOJI
+   ======================================== */
+
+/* Dây đèn trang trí trên cùng */
+.christmas-lights-top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+    z-index: 9999;
+    pointer-events: none;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding: 10px 20px;
+}
+
+.christmas-light {
+    font-size: 28px;
+    animation: lightBlink 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 8px currentColor);
+}
+
+.christmas-light:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.christmas-light:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.christmas-light:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+.christmas-light:nth-child(4) {
+    animation-delay: 0.6s;
+}
+
+.christmas-light:nth-child(5) {
+    animation-delay: 0.8s;
+}
+
+.christmas-light:nth-child(6) {
+    animation-delay: 1s;
+}
+
+.christmas-light:nth-child(7) {
+    animation-delay: 1.2s;
+}
+
+.christmas-light:nth-child(8) {
+    animation-delay: 1.4s;
+}
+
+@keyframes lightBlink {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.6;
+        transform: scale(0.95);
+    }
+}
+
+/* Trang trí góc trái */
+.corner-decoration-left {
+    position: fixed;
+    top: 80px;
+    left: 10px;
+    font-size: 80px;
+    z-index: 9998;
+    pointer-events: none;
+    animation: swingLeft 4s ease-in-out infinite;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+/* Trang trí góc phải */
+.corner-decoration-right {
+    position: fixed;
+    top: 80px;
+    right: 10px;
+    font-size: 80px;
+    z-index: 9998;
+    pointer-events: none;
+    animation: swingRight 4s ease-in-out infinite 0.5s;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+/* Cây thông góc dưới trái */
+.tree-decoration-left {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    font-size: 120px;
+    z-index: 9997;
+    pointer-events: none;
+    animation: treeFloat 6s ease-in-out infinite;
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.3));
+}
+
+/* Quả cầu trang trí góc */
+.ornament-decoration {
+    position: fixed;
+    font-size: 40px;
+    z-index: 9996;
+    pointer-events: none;
+    animation: ornamentSwing 3s ease-in-out infinite;
+}
+
+.ornament-decoration.top-left {
+    top: 150px;
+    left: 50px;
+}
+
+.ornament-decoration.top-right {
+    top: 150px;
+    right: 50px;
+    animation-delay: 0.5s;
+}
+
+.ornament-decoration.bottom-right {
+    bottom: 100px;
+    right: 50px;
+    animation-delay: 1s;
+}
+
+@keyframes ornamentSwing {
+
+    0%,
+    100% {
+        transform: rotate(-10deg);
+    }
+
+    50% {
+        transform: rotate(10deg);
+    }
+}
+
+/* Ngôi sao lấp lánh */
+.star-decoration {
+    position: fixed;
+    font-size: 30px;
+    z-index: 9995;
+    pointer-events: none;
+    animation: starTwinkle 2s ease-in-out infinite;
+}
+
+.star-decoration:nth-child(1) {
+    top: 120px;
+    left: 30%;
+    animation-delay: 0s;
+}
+
+.star-decoration:nth-child(2) {
+    top: 140px;
+    right: 25%;
+    animation-delay: 0.5s;
+}
+
+.star-decoration:nth-child(3) {
+    bottom: 150px;
+    left: 20%;
+    animation-delay: 1s;
+}
+
+.star-decoration:nth-child(4) {
+    bottom: 180px;
+    right: 30%;
+    animation-delay: 1.5s;
+}
+
+@keyframes starTwinkle {
+
+    0%,
+    100% {
+        opacity: 0.4;
+        transform: scale(0.8) rotate(0deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2) rotate(180deg);
+    }
+}
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+    .christmas-lights-top {
+        height: 40px;
+        padding: 5px 10px;
+    }
+
+    .christmas-light {
+        font-size: 20px;
+    }
+
+    .corner-decoration-left,
+    .corner-decoration-right {
+        font-size: 50px;
+        top: 60px;
+    }
+
+    .tree-decoration-left {
+        font-size: 80px;
+        bottom: 10px;
+        left: 10px;
+    }
+
+    .ornament-decoration {
+        font-size: 25px;
+    }
+
+    .star-decoration {
+        font-size: 20px;
+    }
+}
+
+
+/* ========================================
+   🎄 TRANG TRÍ NOEL BẰNG ẢNH THẬT
+   ======================================== */
+
+/* Dây trang trí viền trên cùng */
+.christmas-decoration-top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background-image: url('trang trí noel/dây trang trí viền.png');
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    background-position: center top;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.95;
+    mix-blend-mode: multiply;
+}
+
+/* Dây trang trí viền 2 - góc trái */
+.christmas-decoration-left {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    width: 200px;
+    height: 250px;
+    background-image: url('trang trí noel/dây trang trí viền 2.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: left top;
+    z-index: 9998;
+    pointer-events: none;
+    opacity: 0.9;
+    animation: swingLeft 4s ease-in-out infinite;
+    mix-blend-mode: multiply;
+}
+
+/* Dây trang trí viền 3 - góc phải */
+.christmas-decoration-right {
+    position: fixed;
+    top: 80px;
+    right: 0;
+    width: 200px;
+    height: 250px;
+    background-image: url('trang trí noel/dây trang trí viền 3.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: right top;
+    z-index: 9998;
+    pointer-events: none;
+    opacity: 0.9;
+    animation: swingRight 4s ease-in-out infinite 0.5s;
+    mix-blend-mode: multiply;
+}
+
+/* Cây thông trang trí - góc dưới trái */
+.christmas-tree-image {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 250px;
+    height: 300px;
+    background-image: url('trang trí noel/cây thông.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center bottom;
+    z-index: 9997;
+    pointer-events: none;
+    opacity: 0.95;
+    animation: treeFloat 6s ease-in-out infinite;
+    mix-blend-mode: multiply;
+}
+
+/* ========================================
+   🎅 SANTA CLAUS ANIMATION
+   ======================================== */
+.santa-container {
+    margin-top: 20px;
+    text-align: center;
+    padding: 15px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border-radius: 15px;
+    border: 2px solid rgba(196, 30, 58, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#santa-canvas {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+#santa-canvas:hover {
+    transform: scale(1.05);
+}
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+    .santa-container {
+        margin-top: 15px;
+        padding: 10px;
+    }
+
+    #santa-canvas {
+        width: 150px;
+        height: 112px;
+    }
+}
+
+/* ========================================
+   🎅 SANTA CLAUS CSS ANIMATION
+   ======================================== */
+.santa-css-container {
+    margin-top: 20px;
+    text-align: center;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border-radius: 15px;
+    border: 2px solid rgba(196, 30, 58, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.santa-css-container::before {
+    content: '❄️';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 12px;
+    animation: snowfall 3s infinite linear;
+}
+
+.santa-css-container::after {
+    content: '❄️';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 12px;
+    animation: snowfall 3s infinite linear 1.5s;
+}
+
+.santa-character {
+    position: relative;
+    animation: santaBounce 2s ease-in-out infinite;
+}
+
+.santa-hat {
+    font-size: 60px;
+    margin-bottom: 10px;
+    animation: hatWiggle 1.5s ease-in-out infinite;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.santa-hat:hover {
+    transform: scale(1.2) rotate(10deg);
+}
+
+.santa-message {
+    font-size: 14px;
+    color: #c41e3a;
+    font-weight: bold;
+    margin-top: 10px;
+    opacity: 0;
+    animation: messageAppear 3s ease-in-out infinite;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.santa-gifts {
+    font-size: 20px;
+    margin-top: 15px;
+    animation: giftsShake 2s ease-in-out infinite 0.5s;
+}
+
+@keyframes santaBounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes hatWiggle {
+
+    0%,
+    100% {
+        transform: rotate(-2deg);
+    }
+
+    50% {
+        transform: rotate(2deg);
+    }
+}
+
+@keyframes messageAppear {
+
+    0%,
+    70% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    80%,
+    90% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes giftsShake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-2px);
+    }
+
+    75% {
+        transform: translateX(2px);
+    }
+}
+
+@keyframes snowfall {
+    0% {
+        transform: translateY(-10px) rotate(0deg);
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(100px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Click effect */
+.santa-character:active {
+    transform: scale(0.95);
+}
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+    .santa-css-container {
+        margin-top: 15px;
+        padding: 15px;
+    }
+
+    .santa-hat {
+        font-size: 45px;
+    }
+
+    .santa-message {
+        font-size: 12px;
+    }
+
+    .santa-gifts {
+        font-size: 16px;
+    }
+}
+
+/* ========================================
+   🎄 MERRY CHRISTMAS GIF ANIMATION
+   ======================================== */
+.christmas-gif-container {
+    margin-top: 20px;
+    text-align: center;
+    padding: 15px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border-radius: 15px;
+    border: 2px solid rgba(196, 30, 58, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.christmas-gif-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(196, 30, 58, 0.2);
+    border-color: rgba(196, 30, 58, 0.5);
+}
+
+.christmas-gif {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.christmas-gif:hover {
+    transform: scale(1.05);
+}
+
+.gif-overlay {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.christmas-gif-container:hover .gif-overlay {
+    opacity: 1;
+}
+
+.christmas-greeting {
+    background: rgba(196, 30, 58, 0.9);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    white-space: nowrap;
+    animation: greetingPulse 2s ease-in-out infinite;
+}
+
+@keyframes greetingPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* Hiệu ứng lấp lánh xung quanh GIF */
+.christmas-gif-container::before {
+    content: '✨';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 16px;
+    animation: sparkle 2s ease-in-out infinite;
+}
+
+.christmas-gif-container::after {
+    content: '✨';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 16px;
+    animation: sparkle 2s ease-in-out infinite 1s;
+}
+
+@keyframes sparkle {
+
+    0%,
+    100% {
+        opacity: 0.4;
+        transform: scale(0.8) rotate(0deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2) rotate(180deg);
+    }
+}
+
+/* Click effect */
+.christmas-gif:active {
+    transform: scale(0.98);
+}
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+    .christmas-gif-container {
+        margin-top: 15px;
+        padding: 10px;
+    }
+
+    .christmas-greeting {
+        font-size: 10px;
+        padding: 4px 8px;
+    }
+
+    .christmas-gif-container::before,
+    .christmas-gif-container::after {
+        font-size: 12px;
+    }
+}
+
+/* ========================================
+   🦌 REINDEER ON STREAK CARD - SIMPLE & CONTINUOUS
+   ======================================== */
+/* ========================================
+   🦌 REINDEER ON STREAK CARD - SIMPLE & CONTINUOUS
+   ======================================== */
+.reindeer-on-card {
+    position: absolute;
+    top: -30px;
+    right: 10px;
+    width: 60px;
+    height: auto;
+    z-index: 10;
+    pointer-events: none;
+    animation: reindeerContinuousJump 1.5s ease-in-out infinite;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    /* Đảm bảo GIF loop liên tục */
+    image-rendering: auto;
+    object-fit: contain;
+    /* Hiển thị ngay lập tức */
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+@keyframes reindeerContinuousJump {
+    0% {
+        transform: translateY(0) scale(1);
+    }
+
+    25% {
+        transform: translateY(-8px) scale(1.05);
+    }
+
+    50% {
+        transform: translateY(-15px) scale(1.1);
+    }
+
+    75% {
+        transform: translateY(-8px) scale(1.05);
+    }
+
+    100% {
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Đảm bảo streak card có position relative để chứa reindeer */
+.streak-card {
+    position: relative;
+    overflow: visible !important;
+}
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+    .reindeer-on-card {
+        width: 40px;
+        top: -20px;
+        right: 5px;
+    }
+}
+
+/* Responsive cho tablet */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .reindeer-on-card {
+        width: 50px;
+        top: -25px;
+    }
+}
+
+/* Ẩn khi in */
+@media print {
+    .reindeer-on-card {
+        display: none !important;
+    }
+}
+
+/* ========================================
+   TẮT TẤT CẢ ANIMATION ĐƯỜNG KẺ DI CHUYỂN
+   ======================================== */
+
+/* Tắt feature card hover animation */
+.feature-card::before {
+    transform: scaleX(0) !important;
+    animation: none !important;
+    transition: none !important;
+}
+
+.feature-card:hover::before {
+    transform: scaleX(0) !important;
+    animation: none !important;
+}
+
+/* Tắt shared quiz card animation */
+.shared-quiz-card::before {
+    transform: scaleX(0) !important;
+    animation: none !important;
+    transition: none !important;
+}
+
+.shared-quiz-card:hover::before {
+    transform: scaleX(0) !important;
+    animation: none !important;
+}
+
+/* Tắt progress bar fill animation */
+.progress-bar-fill {
+    animation: none !important;
+    transition: none !important;
+}
+
+/* Tắt tất cả transform scaleX */
+*::before,
+*::after {
+    transform: none !important;
+}
+
+/* Tắt tất cả animation có thể gây đường kẻ di chuyển */
+.progress-bar,
+.progress-bar-fill,
+.feature-card::before,
+.shared-quiz-card::before,
+*[class*="progress"]::before,
+*[class*="bar"]::before {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+}
+
+/* ========================================
+   🎅 SANTA CLAUS ON TOTAL QUIZ CARD
+   ======================================== */
+.santa-on-card {
+    position: absolute;
+    top: -30px;
+    right: 10px;
+    width: 60px;
+    height: auto;
+    z-index: 10;
+    pointer-events: none;
+    animation: santaContinuousJump 1.8s ease-in-out infinite;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    /* Hiển thị ngay lập tức */
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    image-rendering: auto;
+    object-fit: contain;
+}
+
+@keyframes santaContinuousJump {
+    0% {
+        transform: translateY(0) scale(1) rotate(0deg);
+    }
+
+    25% {
+        transform: translateY(-10px) scale(1.05) rotate(-3deg);
+    }
+
+    50% {
+        transform: translateY(-18px) scale(1.1) rotate(0deg);
+    }
+
+    75% {
+        transform: translateY(-10px) scale(1.05) rotate(3deg);
+    }
+
+    100% {
+        transform: translateY(0) scale(1) rotate(0deg);
+    }
+}
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+    .santa-on-card {
+        width: 40px;
+        top: -20px;
+        right: 5px;
+    }
+}
+
+/* Responsive cho tablet */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .santa-on-card {
+        width: 50px;
+        top: -25px;
+    }
+}
+
+/* Ẩn khi in */
+@media print {
+    .santa-on-card {
+        display: none !important;
+    }
+}
