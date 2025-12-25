@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Hiệu Ứng Chào Mừng Con Mèo</title>
+    <link rel="stylesheet" href="style-newyear-2026.css">
+    <link rel="stylesheet" href="cat-welcome.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: var(--shadow-md);
+            border: 2px solid var(--border-color);
+            text-align: center;
+        }
+
+        .demo-title {
+            background: linear-gradient(135deg, #c41e3a 0%, #2d5016 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5em;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+
+        .demo-description {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .reset-button {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .reset-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .reset-button:active {
+            transform: translateY(0);
+        }
+
+        .instructions {
+            background: rgba(255, 107, 107, 0.1);
+            border: 2px solid rgba(255, 107, 107, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .instructions h3 {
+            color: #FF6B6B;
+            margin-top: 0;
+        }
+
+        .instructions ul {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="demo-container">
+        <h1 class="demo-title">🐱 Test Hiệu Ứng Chào Mừng</h1>
+
+        <p class="demo-description">
+            Hiệu ứng con mèo chào mừng chỉ hiện cho người dùng mới vào trang web lần đầu tiên.
+            Sau khi xem xong, hiệu ứng sẽ không hiện lại khi reload trang.
+        </p>
+
+        <button class="reset-button" onclick="resetWelcome()">
+            🔄 Reset & Xem Lại Hiệu Ứng
+        </button>
+
+        <div class="instructions">
+            <h3>🎯 Cách hoạt động:</h3>
+            <ul>
+                <li><strong>Lần đầu vào:</strong> Hiệu ứng sẽ tự động chạy sau 0.8 giây</li>
+                <li><strong>Thả dây:</strong> Sợi dây thả xuống trong 1.5 giây</li>
+                <li><strong>Con mèo xuất hiện:</strong> GIF con mèo trượt xuống theo dây</li>
+                <li><strong>Bubble chào:</strong> Hiện lời chào mừng sau 2 giây</li>
+                <li><strong>Thu dây:</strong> Sau 4.5 giây, dây và mèo thu lên nhanh</li>
+                <li><strong>Biến mất:</strong> Toàn bộ hiệu ứng biến mất sau 6 giây</li>
+                <li><strong>Lần sau:</strong> Không hiện nữa (đã lưu localStorage)</li>
+            </ul>
+        </div>
+
+        <div style="margin-top: 30px; padding: 20px; background: rgba(45, 80, 22, 0.1); border-radius: 10px;">
+            <p style="color: var(--text-secondary); margin: 0;">
+                <strong>Lưu ý:</strong> Đảm bảo file <code>Cat Hello GIF by Mikitti.gif</code>
+                có trong thư mục để hiệu ứng hoạt động đúng.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function resetWelcome() {
+            // Xóa localStorage để có thể xem lại hiệu ứng
+            localStorage.removeItem('catWelcomeShown');
+
+            // Reload trang để hiệu ứng chạy lại
+            location.reload();
+        }
+    </script>
+
+    <!-- Load hiệu ứng chào mừng -->
+    <script src="cat-welcome.js"></script>
+</body>
+
+</html>

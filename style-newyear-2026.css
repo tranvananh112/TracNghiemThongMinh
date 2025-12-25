@@ -485,7 +485,7 @@ textarea:focus {
 }
 
 /* ========================================
-   🎄 TEXT NOEL 3D HIỆN ĐẠI
+   🎄 TEXT NOEL 3D VỚI HIỆU ỨNG ÁNH SÁNG ĐIỆN ẢNH
    ======================================== */
 .christmas-text-3d {
     display: flex;
@@ -498,8 +498,8 @@ textarea:focus {
     background: linear-gradient(135deg, rgba(196, 30, 58, 0.06), rgba(45, 80, 22, 0.06));
     border-radius: 12px;
     border: 2px solid rgba(196, 30, 58, 0.3);
-    /* animation: textGlow 3s ease-in-out infinite; */
     position: relative;
+    animation: textGlow 4s ease-in-out infinite;
 }
 
 @keyframes textGlow {
@@ -510,7 +510,7 @@ textarea:focus {
     }
 
     50% {
-        box-shadow: 0 4px 16px rgba(45, 80, 22, 0.25);
+        box-shadow: 0 4px 16px rgba(45, 80, 22, 0.25), 0 0 20px rgba(255, 215, 0, 0.3);
     }
 }
 
@@ -534,33 +534,46 @@ textarea:focus {
     filter: drop-shadow(2px 2px 0px rgba(196, 30, 58, 0.3)) drop-shadow(3px 3px 0px rgba(196, 30, 58, 0.2)) drop-shadow(4px 4px 0px rgba(196, 30, 58, 0.1)) drop-shadow(0 2px 4px rgba(196, 30, 58, 0.4));
 }
 
-/* Hiệu ứng ánh sáng quét ngang - Line 1 - DISABLED */
+/* 🎬 HIỆU ỨNG ÁNH SÁNG ĐIỆN ẢNH QUÉT NGANG - LINE 1 */
 .christmas-line-1::before {
     content: '';
     position: absolute;
-    top: 0;
+    top: -5px;
     left: -100%;
-    width: 50%;
-    height: 100%;
+    width: 60%;
+    height: calc(100% + 10px);
     background: linear-gradient(90deg,
             transparent 0%,
-            rgba(255, 255, 255, 0.5) 50%,
+            rgba(255, 215, 0, 0.1) 20%,
+            rgba(255, 215, 0, 0.8) 50%,
+            rgba(255, 255, 255, 0.9) 60%,
+            rgba(255, 215, 0, 0.8) 70%,
+            rgba(255, 215, 0, 0.1) 80%,
             transparent 100%);
-    /* animation: shine-sweep 4s ease-in-out infinite; */
+    animation: cinematic-sweep 3s ease-in-out infinite;
     pointer-events: none;
-    z-index: 1;
-    opacity: 0;
-    /* Ẩn hiệu ứng */
+    z-index: 2;
+    border-radius: 4px;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
 }
 
-@keyframes shine-sweep {
+@keyframes cinematic-sweep {
     0% {
         left: -100%;
+        opacity: 0;
     }
 
-    50%,
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
     100% {
-        left: 200%;
+        left: 100%;
+        opacity: 0;
     }
 }
 
@@ -573,27 +586,31 @@ textarea:focus {
     filter: drop-shadow(2px 2px 0px rgba(45, 80, 22, 0.3)) drop-shadow(3px 3px 0px rgba(45, 80, 22, 0.2)) drop-shadow(4px 4px 0px rgba(45, 80, 22, 0.1)) drop-shadow(0 2px 4px rgba(45, 80, 22, 0.4));
 }
 
-/* Hiệu ứng ánh sáng quét ngang - Line 2 - DISABLED */
+/* 🎬 HIỆU ỨNG ÁNH SÁNG ĐIỆN ẢNH QUÉT NGANG - LINE 2 */
 .christmas-line-2::before {
     content: '';
     position: absolute;
-    top: 0;
+    top: -5px;
     left: -100%;
-    width: 50%;
-    height: 100%;
+    width: 60%;
+    height: calc(100% + 10px);
     background: linear-gradient(90deg,
             transparent 0%,
-            rgba(255, 255, 255, 0.5) 50%,
+            rgba(50, 205, 50, 0.1) 20%,
+            rgba(50, 205, 50, 0.8) 50%,
+            rgba(255, 255, 255, 0.9) 60%,
+            rgba(50, 205, 50, 0.8) 70%,
+            rgba(50, 205, 50, 0.1) 80%,
             transparent 100%);
-    /* animation: shine-sweep 4s ease-in-out infinite; */
-    /* animation-delay: 0.5s; */
+    animation: cinematic-sweep 3s ease-in-out infinite;
+    animation-delay: 1.5s;
     pointer-events: none;
-    z-index: 1;
-    opacity: 0;
-    /* Ẩn hiệu ứng */
+    z-index: 2;
+    border-radius: 4px;
+    box-shadow: 0 0 15px rgba(50, 205, 50, 0.6);
 }
 
-/* Hiệu ứng lấp lánh cho text */
+/* 🌟 HIỆU ỨNG LẤP LÁNH NÂNG CAP */
 .christmas-text-3d::before {
     content: '✨';
     position: absolute;
@@ -601,7 +618,8 @@ textarea:focus {
     top: 50%;
     transform: translateY(-50%);
     font-size: 14px;
-    animation: sparkle 2s ease-in-out infinite;
+    animation: enhanced-sparkle 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8));
 }
 
 .christmas-text-3d::after {
@@ -611,21 +629,81 @@ textarea:focus {
     top: 50%;
     transform: translateY(-50%);
     font-size: 14px;
-    animation: sparkle 2s ease-in-out infinite 1s;
+    animation: enhanced-sparkle 2s ease-in-out infinite 1s;
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8));
 }
 
-@keyframes sparkle {
+@keyframes enhanced-sparkle {
 
     0%,
     100% {
         opacity: 0.4;
-        transform: translateY(-50%) scale(0.8);
+        transform: translateY(-50%) scale(0.8) rotate(0deg);
+        filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.5));
     }
 
     50% {
         opacity: 1;
-        transform: translateY(-50%) scale(1.2);
+        transform: translateY(-50%) scale(1.3) rotate(180deg);
+        filter: drop-shadow(0 0 10px rgba(255, 215, 0, 1));
     }
+}
+
+/* 🎭 HIỆU ỨNG PHẢN CHIẾU ÁNH SÁNG */
+.christmas-text-3d::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg,
+            transparent 0%,
+            rgba(255, 215, 0, 0.05) 25%,
+            transparent 50%,
+            rgba(255, 215, 0, 0.05) 75%,
+            transparent 100%);
+    animation: light-reflection 4s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+    border-radius: inherit;
+}
+
+@keyframes light-reflection {
+
+    0%,
+    100% {
+        opacity: 0;
+        transform: rotate(0deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform: rotate(180deg);
+    }
+}
+
+/* 🌟 HIỆU ỨNG LẤP LÁNH CHO TEXT - CẬP NHẬT */
+.christmas-text-3d .sparkle-left {
+    content: '✨';
+    position: absolute;
+    left: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    animation: enhanced-sparkle 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8));
+}
+
+.christmas-text-3d .sparkle-right {
+    content: '✨';
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    animation: enhanced-sparkle 2s ease-in-out infinite 1s;
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8));
 }
 
 /* Responsive cho tablet */

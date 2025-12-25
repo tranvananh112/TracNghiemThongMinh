@@ -1,0 +1,238 @@
+/* ========================================
+   🐱 CSS CHO HIỆU ỨNG CHÀO MỪNG CON MÈO
+   ======================================== */
+
+.cat-welcome-container {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Sợi dây */
+.cat-rope {
+    width: 3px;
+    height: 0;
+    background: linear-gradient(180deg, #8B4513 0%, #A0522D 100%);
+    margin: 0 auto;
+    border-radius: 2px;
+    box-shadow: 1px 0 2px rgba(0, 0, 0, 0.3);
+    transition: height 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transform-origin: top;
+}
+
+.cat-rope.rope-drop {
+    height: 200px;
+}
+
+.cat-rope.rope-retract {
+    height: 0 !important;
+    transition: height 0.8s cubic-bezier(0.55, 0.085, 0.68, 0.53) !important;
+}
+
+/* Con mèo GIF */
+.cat-hello-gif {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: auto;
+    border-radius: 50%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    border: 3px solid rgba(255, 255, 255, 0.8);
+    opacity: 0;
+    transition: all 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.cat-hello-gif.cat-drop {
+    top: 200px;
+    opacity: 1;
+    transform: translateX(-50%) rotate(5deg);
+}
+
+.cat-hello-gif.cat-retract {
+    top: -50px !important;
+    opacity: 0 !important;
+    transform: translateX(-50%) rotate(0deg) scale(0.8) !important;
+    transition: all 0.8s cubic-bezier(0.55, 0.085, 0.68, 0.53) !important;
+}
+
+/* Bubble chào mừng */
+.welcome-bubble {
+    position: absolute;
+    top: 150px;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    min-width: 200px;
+    text-align: center;
+}
+
+.welcome-bubble::before {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #FF6B6B;
+}
+
+.welcome-bubble.bubble-show {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+}
+
+.welcome-bubble.bubble-hide {
+    transform: translateX(-50%) scale(0.8);
+    opacity: 0;
+    transition: all 0.3s ease-out;
+}
+
+.bubble-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.bubble-text strong {
+    font-weight: 700;
+    font-size: 16px;
+    display: block;
+    margin-top: 5px;
+    background: linear-gradient(45deg, #FFE066, #FF6B6B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Hiệu ứng lấp lánh cho bubble */
+.welcome-bubble::after {
+    content: '✨';
+    position: absolute;
+    top: -15px;
+    right: -10px;
+    font-size: 20px;
+    animation: sparkle 1.5s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+
+    0%,
+    100% {
+        opacity: 0.4;
+        transform: scale(0.8) rotate(0deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2) rotate(180deg);
+    }
+}
+
+/* Fade out toàn bộ container */
+.welcome-fade-out {
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.5s ease-out;
+}
+
+/* Hiệu ứng swing nhẹ cho con mèo */
+.cat-hello-gif.cat-drop {
+    animation: catSwing 2s ease-in-out infinite;
+}
+
+@keyframes catSwing {
+
+    0%,
+    100% {
+        transform: translateX(-50%) rotate(3deg);
+    }
+
+    50% {
+        transform: translateX(-50%) rotate(-3deg);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cat-welcome-container {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .cat-hello-gif {
+        width: 60px;
+    }
+
+    .welcome-bubble {
+        min-width: 160px;
+        padding: 12px 16px;
+        font-size: 12px;
+    }
+
+    .bubble-text strong {
+        font-size: 14px;
+    }
+
+    .cat-rope.rope-drop {
+        height: 150px;
+    }
+
+    .cat-hello-gif.cat-drop {
+        top: 150px;
+    }
+
+    .welcome-bubble {
+        top: 110px;
+    }
+}
+
+@media (max-width: 480px) {
+    .cat-welcome-container {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .cat-hello-gif {
+        width: 50px;
+    }
+
+    .welcome-bubble {
+        min-width: 140px;
+        padding: 10px 14px;
+        font-size: 11px;
+    }
+
+    .bubble-text strong {
+        font-size: 13px;
+    }
+}
+
+/* Ẩn khi in */
+@media print {
+    .cat-welcome-container {
+        display: none !important;
+    }
+}
+
+/* Tối ưu performance */
+.cat-welcome-container * {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+}
