@@ -77,7 +77,9 @@ class SmartQuestionParser {
                     // Nối vào lựa chọn cuối cùng
                     const lastOption = currentOptions[currentOptions.length - 1];
                     const cleanLine = this.cleanOptionText(line);
-                    if (cleanLine) {
+
+                    // Chỉ nối nếu không phải từ "Câu" đơn lẻ hoặc số câu hỏi
+                    if (cleanLine && !this.isQuestionKeyword(cleanLine)) {
                         lastOption.text += ' ' + cleanLine;
                     }
                 }
@@ -364,9 +366,21 @@ class SmartQuestionParser {
     cleanOptionText(text) {
         if (!text) return text;
 
-        // Loại bỏ từ "Câu" đơn lẻ
-        text = text.replace(/\s+câu\s*$/gi, '');
-        text = text.replace(/^câu\s*$/gim, '');
+        // Loại bỏ từ "Câu" ở cuối (có thể có dấu cách hoặc không)
+        text = text.replace(/\s*câu\s*$/gi, '');
+        text = text.replace(/\s*cau\s*$/gi, '');
+
+        // Loại bỏ từ "Câu" đơn lẻ ở đầu
+        text = text.replace(/^câu\s+/gi, '');
+        text = text.replace(/^cau\s+/gi, '');
+
+        // Loại bỏ từ "Câu" đơn lẻ (toàn bộ dòng)
+        text = text.replace(/^\s*câu\s*$/gim, '');
+        text = text.replace(/^\s*cau\s*$/gim, '');
+
+        // Loại bỏ số câu hỏi thừa ở cuối (ví dụ: "text. Câu 2")
+        text = text.replace(/\.\s*câu\s*\d*\s*$/gi, '.');
+        text = text.replace(/\.\s*cau\s*\d*\s*$/gi, '.');
 
         // Loại bỏ khoảng trắng thừa
         text = text.replace(/\s+/g, ' ').trim();
@@ -476,4 +490,27 @@ Câu 1: B, 2. A, C, D
 // Export để sử dụng
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = SmartQuestionParser;
+}
+/**
+ * Kiểm tra xem text có phải từ khóa câu hỏi không
+ */
+isQuestionKeyword(text) {
+    if (!text) return false;
+
+    const cleanText = text.toLowerCase().trim();
+
+    // Kiểm tra từ khóa câu hỏi đơn lẻ
+    if (this.questionKeywords.includes(cleanText)) {
+        return true;
+    }
+
+    // Kiểm tra pattern "Câu [số]"
+    for (let keyword of this.questionKeywords) {
+        const pattern = new RegExp(`^${keyword}\\s*\\d*\\s*$`, 'i');
+        if (pattern.test(cleanText)) {
+            return true;
+        }
+    }
+
+    return false;
 }
