@@ -423,6 +423,27 @@ class SmartQuestionParser {
     }
 
     /**
+     * Kiểm tra xem có phải từ khóa câu hỏi không
+     */
+    isQuestionKeyword(text) {
+        if (!text) return false;
+
+        const cleanText = text.toLowerCase().trim();
+
+        // Kiểm tra từ "Câu" đơn lẻ
+        if (cleanText === 'câu' || cleanText === 'cau') {
+            return true;
+        }
+
+        // Kiểm tra pattern "Câu [số]"
+        if (/^(câu|cau)\s*\d*\s*$/i.test(cleanText)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Lấy ví dụ format
      */
     getExamples() {
@@ -490,27 +511,4 @@ Câu 1: B, 2. A, C, D
 // Export để sử dụng
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = SmartQuestionParser;
-}
-/**
- * Kiểm tra xem text có phải từ khóa câu hỏi không
- */
-isQuestionKeyword(text) {
-    if (!text) return false;
-
-    const cleanText = text.toLowerCase().trim();
-
-    // Kiểm tra từ khóa câu hỏi đơn lẻ
-    if (this.questionKeywords.includes(cleanText)) {
-        return true;
-    }
-
-    // Kiểm tra pattern "Câu [số]"
-    for (let keyword of this.questionKeywords) {
-        const pattern = new RegExp(`^${keyword}\\s*\\d*\\s*$`, 'i');
-        if (pattern.test(cleanText)) {
-            return true;
-        }
-    }
-
-    return false;
 }

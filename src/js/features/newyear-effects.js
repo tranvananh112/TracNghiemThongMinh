@@ -300,6 +300,38 @@ class NewYearEffects {
         }
     }
 
+    /**
+     * 🦌 REINDEER GIF CONTINUOUS ANIMATION
+     * Đảm bảo GIF con hưu luôn chạy liên tục không bị dừng
+     */
+    ensureReindeerContinuous() {
+        const reindeerGif = document.querySelector('.reindeer-on-card');
+        if (reindeerGif) {
+            // Thêm thuộc tính loop cho GIF để tự động lặp lại
+            reindeerGif.style.animationIterationCount = 'infinite';
+
+            // Đảm bảo GIF luôn được load và không bị cache
+            const originalSrc = reindeerGif.src;
+
+            // Thêm timestamp để tránh cache và đảm bảo GIF luôn fresh
+            const refreshGif = () => {
+                const timestamp = new Date().getTime();
+                reindeerGif.src = originalSrc + '?t=' + timestamp;
+            };
+
+            // Refresh GIF mỗi 30 giây để đảm bảo không bị stuck
+            setInterval(refreshGif, 30000);
+
+            // Click để refresh ngay lập tức
+            reindeerGif.addEventListener('click', refreshGif);
+
+            // Đảm bảo GIF được load đúng cách
+            reindeerGif.addEventListener('error', () => {
+                setTimeout(refreshGif, 100);
+            });
+        }
+    }
+
     toggle() {
         this.isActive = !this.isActive;
 
@@ -353,34 +385,3 @@ window.toggleNewYearEffects = () => {
         console.log('🎄 Hiệu ứng Noel:', window.newYearEffects.isActive ? 'BẬT ✅' : 'TẮT ❌');
     }
 };
-/**
- * 🦌 REINDEER GIF CONTINUOUS ANIMATION
- * Đảm bảo GIF con hưu luôn chạy liên tục không bị dừng
- */
-ensureReindeerContinuous() {
-    const reindeerGif = document.querySelector('.reindeer-on-card');
-    if (reindeerGif) {
-        // Thêm thuộc tính loop cho GIF để tự động lặp lại
-        reindeerGif.style.animationIterationCount = 'infinite';
-
-        // Đảm bảo GIF luôn được load và không bị cache
-        const originalSrc = reindeerGif.src;
-
-        // Thêm timestamp để tránh cache và đảm bảo GIF luôn fresh
-        const refreshGif = () => {
-            const timestamp = new Date().getTime();
-            reindeerGif.src = originalSrc + '?t=' + timestamp;
-        };
-
-        // Refresh GIF mỗi 30 giây để đảm bảo không bị stuck
-        setInterval(refreshGif, 30000);
-
-        // Click để refresh ngay lập tức
-        reindeerGif.addEventListener('click', refreshGif);
-
-        // Đảm bảo GIF được load đúng cách
-        reindeerGif.addEventListener('error', () => {
-            setTimeout(refreshGif, 100);
-        });
-    }
-}
