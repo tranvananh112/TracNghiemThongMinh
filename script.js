@@ -984,7 +984,7 @@ class QuizManager {
 
         try {
             const parser = new SmartQuestionParser();
-            const formatted = parser.preprocessText(text);
+            const formatted = parser.cleanText(text);
 
             textarea.value = formatted;
             this.previewQuestions();
