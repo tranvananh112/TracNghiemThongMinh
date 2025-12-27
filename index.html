@@ -10,36 +10,36 @@
         href="https://anhtran.id.vn/wp-content/uploads/2025/09/cropped-Generated-Image-September-18-2025-8_04PM-1.png">
 
     <!-- 🦌🎅 PRELOAD GIFS WITH HIGH PRIORITY FOR INSTANT LOADING -->
-    <link rel="preload" href="hưu nhảy.gif" as="image" fetchpriority="high">
-    <link rel="preload" href="ông già noel.gif" as="image" fetchpriority="high">
+    <link rel="preload" href="assets/images/hưu nhảy.gif" as="image" fetchpriority="high">
+    <link rel="preload" href="assets/images/ông già noel.gif" as="image" fetchpriority="high">
 
     <!-- Preload script để load GIFs ngay lập tức -->
     <script>
         // Load GIFs ngay lập tức, không đợi DOM
         (function () {
             const reindeer = new Image();
-            reindeer.src = 'hưu nhảy.gif';
+            reindeer.src = 'assets/images/hưu nhảy.gif';
             const santa = new Image();
-            santa.src = 'ông già noel.gif';
+            santa.src = 'assets/images/ông già noel.gif';
         })();
     </script>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="style-modern-quiz.css">
-    <link rel="stylesheet" href="style-updated.css">
-    <link rel="stylesheet" href="style-ai-quiz.css">
-    <link rel="stylesheet" href="style-responsive-enhanced.css">
-    <link rel="stylesheet" href="style-mobile-enhanced.css">
-    <link rel="stylesheet" href="style-mobile-optimized.css">
-    <link rel="stylesheet" href="style-streak.css">
-    <link rel="stylesheet" href="style-explore.css">
-    <link rel="stylesheet" href="style-analytics.css">
-    <link rel="stylesheet" href="style-room.css">
+    <link rel="stylesheet" href="src/css/style.css">
+    <link rel="stylesheet" href="src/css/components/style-modern-quiz.css">
+    <link rel="stylesheet" href="src/css/components/style-updated.css">
+    <link rel="stylesheet" href="src/css/components/style-ai-quiz.css">
+    <link rel="stylesheet" href="src/css/responsive/style-responsive-enhanced.css">
+    <link rel="stylesheet" href="src/css/responsive/style-mobile-enhanced.css">
+    <link rel="stylesheet" href="src/css/responsive/style-mobile-optimized.css">
+    <link rel="stylesheet" href="src/css/components/style-streak.css">
+    <link rel="stylesheet" href="src/css/components/style-explore.css">
+    <link rel="stylesheet" href="src/css/components/style-analytics.css">
+    <link rel="stylesheet" href="src/css/components/style-room.css">
     <!-- 🎄 THEME NOEL & TẾT 2026 🎊 -->
-    <link rel="stylesheet" href="style-newyear-2026.css">
+    <link rel="stylesheet" href="src/css/style-newyear-2026.css">
     <!-- 🐱 HIỆU ỨNG CHÀO MỪNG CON MÈO -->
-    <link rel="stylesheet" href="cat-welcome.css">
+    <link rel="stylesheet" href="src/css/components/cat-welcome.css">
     <!-- 🎯 GIAO DIỆN LÀM BÀI MƯỢT MÀ -->
-    <link rel="stylesheet" href="style-smooth-quiz.css">
+    <link rel="stylesheet" href="src/css/components/style-smooth-quiz.css">
 
     <!-- 🚫 TẮT ĐƯỜNG KẺ DI CHUYỂN -->
     <style>
@@ -153,7 +153,7 @@
 
                     <!-- 🎄 MERRY CHRISTMAS GIF ANIMATION -->
                     <div class="christmas-gif-container">
-                        <img src="Merry Christmas GIF.gif" alt="Merry Christmas" class="christmas-gif">
+                        <img src="assets/images/Merry Christmas GIF.gif" alt="Merry Christmas" class="christmas-gif">
                         <div class="gif-overlay">
                             <div class="christmas-greeting">🎄 Giáng Sinh An Lành! 🎄</div>
                         </div>
@@ -220,8 +220,8 @@
                         <div class="stats-grid">
                             <div class="stat-card" style="position: relative; overflow: visible;">
                                 <!-- 🎅 SANTA CLAUS GIF ON TOP -->
-                                <img src="ông già noel.gif" alt="Santa Claus" class="santa-on-card" loading="eager"
-                                    fetchpriority="high" decoding="async"
+                                <img src="assets/images/ông già noel.gif" alt="Santa Claus" class="santa-on-card"
+                                    loading="eager" fetchpriority="high" decoding="async"
                                     style="position: absolute; top: -30px; right: 10px; width: 60px; z-index: 10;">
 
                                 <div class="stat-icon blue">
@@ -256,8 +256,8 @@
                             <div class="stat-card streak-card" onclick="quizManager.showStreakDetails()"
                                 style="position: relative; overflow: visible;">
                                 <!-- 🦌 JUMPING REINDEER ON TOP -->
-                                <img src="hưu nhảy.gif" alt="Jumping Reindeer" class="reindeer-on-card" loading="eager"
-                                    fetchpriority="high" decoding="async"
+                                <img src="assets/images/hưu nhảy.gif" alt="Jumping Reindeer" class="reindeer-on-card"
+                                    loading="eager" fetchpriority="high" decoding="async"
                                     style="position: absolute; top: -30px; right: 10px; width: 60px; z-index: 10;">
 
                                 <div class="stat-icon red">
@@ -999,7 +999,7 @@
         </div>
     </div>
 
-    <script src="cloud-storage.js"></script>
+    <script src="src/js/config/cloud-storage.js"></script>
     <script>
         window.firebaseQuizManager = new CloudQuizManager();
         window.isFirebaseInitialized = true;
@@ -1008,44 +1008,44 @@
     </script>
 
     <!-- Community Sharing - Không cần server, không cần cùng mạng -->
-    <script src="community-share.js"></script>
+    <script src="src/js/features/community-share.js"></script>
 
     <!-- Supabase Integration - Cloud sharing -->
-    <script type="module" src="supabase-config.js"></script>
+    <script type="module" src="src/js/config/supabase-config.js"></script>
 
     <!-- Smart Question Parser - Nhận diện tự động nhiều format -->
-    <script src="smart-question-parser.js"></script>
+    <script src="src/js/core/smart-question-parser.js"></script>
 
     <!-- Sound Manager - Quản lý âm thanh (MUST BE BEFORE script.js) -->
-    <script src="sound-manager.js"></script>
+    <script src="src/js/features/sound-manager.js"></script>
 
-    <script src="script.js"></script>
-    <script src="script-modern.js"></script>
+    <script src="src/js/core/script.js"></script>
+    <script src="archive/old-versions/script-modern.js"></script>
     <!-- PATCH: Fix updateAnswerModern - MUST BE RIGHT AFTER script-modern.js -->
-    <script src="PATCH_UPDATE_ANSWER.js"></script>
-    <script src="script-updated.js"></script>
-    <script src="ai-quiz.js"></script>
-    <script src="ai-file-handler.js"></script>
-    <script src="mobile-menu.js"></script>
-    <script src="streak-tracker.js"></script>
-    <script src="explore-quiz.js"></script>
+    <script src="archive/fixes/PATCH_UPDATE_ANSWER.js"></script>
+    <script src="archive/old-versions/script-updated.js"></script>
+    <script src="src/js/features/ai-quiz.js"></script>
+    <script src="src/js/features/ai-file-handler.js"></script>
+    <script src="src/js/features/mobile-menu.js"></script>
+    <script src="src/js/features/streak-tracker.js"></script>
+    <script src="src/js/features/explore-quiz.js"></script>
 
     <!-- FORCE SUPABASE FIX V2 - MUST BE RIGHT AFTER explore-quiz.js -->
-    <script src="FIX_FORCE_SUPABASE_V2.js"></script>
+    <script src="archive/fixes/FIX_FORCE_SUPABASE_V2.js"></script>
 
-    <script src="admin-manager.js"></script>
+    <script src="src/js/admin/admin-manager.js"></script>
 
     <!-- Analytics Tracker -->
-    <script src="analytics-tracker.js"></script>
+    <script src="src/js/admin/analytics-tracker.js"></script>
 
     <!-- Admin Analytics Dashboard -->
-    <script src="admin-analytics.js"></script>
+    <script src="src/js/admin/admin-analytics.js"></script>
 
     <!-- Room Manager -->
-    <script src="room-manager.js"></script>
+    <script src="src/js/room/room-manager.js"></script>
 
     <!-- FINAL ABSOLUTE FIX: Chặn PATCH request, bảo vệ currentQuiz 100% -->
-    <script src="FINAL_ABSOLUTE_FIX.js"></script>
+    <script src="archive/fixes/FINAL_ABSOLUTE_FIX.js"></script>
 
     <script>
         // Override renderQuiz with modern version for 3-column layout
@@ -1076,25 +1076,25 @@
     </script>
 
     <!-- ROOM QUIZ VALIDATION & UPGRADE - MUST BE AFTER ROOM MANAGER -->
-    <script src="room-quiz-validation-upgrade.js"></script>
+    <script src="src/js/room/room-quiz-validation-upgrade.js"></script>
 
     <!-- COMPLETE PROTECTION FOR ROOM QUIZ - MUST BE ABSOLUTE LAST -->
-    <script src="fix-room-quiz-complete-protection.js"></script>
+    <script src="archive/fixes/fix-room-quiz-complete-protection.js"></script>
 
     <!-- ABSOLUTE QUIZ PROTECTION - MUST BE VERY LAST -->
-    <script src="ABSOLUTE_QUIZ_PROTECTION.js"></script>
+    <script src="src/js/core/ABSOLUTE_QUIZ_PROTECTION.js"></script>
 
     <!-- 🎄 HIỆU ỨNG NOEL & TẾT 2026 🎊 -->
-    <script src="newyear-effects.js"></script>
+    <script src="src/js/features/newyear-effects.js"></script>
 
     <!-- 🎄 HIỆU ỨNG TUYẾT RƠI ĐỚN GIẢN -->
-    <script src="simple-snow.js"></script>
+    <script src="archive/deprecated/simple-snow.js"></script>
 
     <!-- 🐱 HIỆU ỨNG CHÀO MỪNG CON MÈO -->
-    <script src="cat-welcome.js"></script>
+    <script src="src/js/features/cat-welcome.js"></script>
 
     <!-- 🎯 GIAO DIỆN LÀM BÀI MƯỢT MÀ -->
-    <script src="smooth-quiz-effects.js"></script>
+    <script src="src/js/core/smooth-quiz-effects.js"></script>
 
     <!-- Audio for answer selection -->
     <audio id="answer-sound" preload="auto">
