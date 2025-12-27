@@ -1,0 +1,2 @@
+Force update to trigger GitHub Pages rebuild - Fix JavaScript syntax errors
+Timestamp: 2025-12-27 14:30:00
