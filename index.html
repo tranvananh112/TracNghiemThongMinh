@@ -546,66 +546,156 @@
                     </div>
                 </section>
 
+                <!-- Explore Tab - REDESIGNED ADAPTIVE LAYOUT -->
                 <!-- Explore Tab -->
                 <section id="explore-tab" class="tab-content">
-                    <div class="page-header">
-                        <h2 class="page-title">
-                            <i class="fas fa-compass"></i>
-                            Khám Phá Đề Thi
-                        </h2>
-                        <p style="margin-top: 10px; opacity: 0.9;">
-                            Khám phá và làm bài các đề thi được chia sẻ bởi cộng đồng
-                        </p>
-                    </div>
-
-                    <!-- User Name Section -->
-                    <div class="user-name-section">
-                        <label>
-                            <i class="fas fa-user-circle"></i>
-                            Tên của bạn (để chia sẻ đề thi)
-                        </label>
-                        <input type="text" id="user-name-input" placeholder="Nhập tên của bạn..." class="form-input">
-                        <small>Tên này sẽ hiển thị khi bạn chia sẻ đề thi</small>
-                    </div>
-
-                    <!-- Join Room Section -->
-                    <div class="room-join-section">
-                        <div class="room-join-header">
-                            <h2><i class="fas fa-sign-in-alt"></i> Nhập Phòng Thi</h2>
-                            <p>Nhập mã phòng 6 số để tham gia phòng thi</p>
+                    <!-- 🎯 ADAPTIVE HEADER & CONTROLS - Chỉ sửa phần trên -->
+                    <div class="explore-top-section">
+                        <!-- 📱 DEVICE-AWARE HEADER -->
+                        <div class="explore-header-adaptive">
+                            <div class="explore-title-section">
+                                <div class="explore-icon-wrapper">
+                                    <i class="fas fa-compass"></i>
+                                </div>
+                                <div class="explore-title-content">
+                                    <h2>Khám Phá Đề Thi</h2>
+                                    <p class="explore-subtitle">Khám phá và làm bài các đề thi từ cộng đồng</p>
+                                </div>
+                            </div>
+                            <div class="explore-device-indicator" id="device-indicator">
+                                <i class="fas fa-desktop"></i>
+                                <span>Desktop</span>
+                            </div>
                         </div>
-                        <div class="room-join-form">
-                            <div class="room-join-input-group">
-                                <input type="text" id="join-room-code-input" placeholder="Nhập mã phòng..."
-                                    maxlength="6" class="form-input">
-                                <button class="btn-join-room" id="btn-join-room">
-                                    <i class="fas fa-sign-in-alt"></i>
-                                    Vào Phòng
+
+                        <!-- 🎨 SMART CONTROL PANEL - Bố cục thông minh -->
+                        <div class="smart-control-panel" id="smart-control-panel">
+
+                            <!-- User Identity Card -->
+                            <div class="control-card user-identity-card">
+                                <div class="card-icon">
+                                    <i class="fas fa-user-circle"></i>
+                                </div>
+                                <div class="card-content">
+                                    <label>Tên hiển thị</label>
+                                    <input type="text" id="user-name-input" placeholder="Nhập tên của bạn..."
+                                        class="smart-input">
+                                </div>
+                            </div>
+
+                            <!-- Room Access Card -->
+                            <div class="control-card room-access-card">
+                                <div class="card-icon">
+                                    <i class="fas fa-door-open"></i>
+                                </div>
+                                <div class="card-content">
+                                    <label>Vào Phòng Thi</label>
+                                    <div class="room-input-group">
+                                        <input type="text" id="join-room-code-input" placeholder="Mã 6 số" maxlength="6"
+                                            class="smart-input room-code">
+                                        <button class="smart-btn primary" id="btn-join-room">
+                                            <i class="fas fa-arrow-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Category Filter Card -->
+                            <div class="control-card category-filter-card">
+                                <div class="card-icon">
+                                    <i class="fas fa-filter"></i>
+                                </div>
+                                <div class="card-content">
+                                    <label>Lọc theo môn</label>
+                                    <select id="category-filter-select" class="smart-select">
+                                        <option value="all">🎯 Tất cả môn học</option>
+                                        <option value="toan-cao-cap">📐 Toán cao cấp</option>
+                                        <option value="vat-ly-dai-cuong">⚗️ Vật lý đại cương</option>
+                                        <option value="hoa-dai-cuong">🧪 Hóa đại cương</option>
+                                        <option value="sinh-hoc-dai-cuong">🧬 Sinh học đại cương</option>
+                                        <option value="tieng-anh">🌍 Tiếng Anh</option>
+                                        <option value="tin-hoc-dai-cuong">💻 Tin học đại cương</option>
+                                        <option value="kinh-te-hoc">💰 Kinh tế học</option>
+                                        <option value="quan-tri-kinh-doanh">📊 Quản trị kinh doanh</option>
+                                        <option value="ke-toan">📋 Kế toán</option>
+                                        <option value="marketing">📈 Marketing</option>
+                                        <option value="luat-hoc">⚖️ Luật học</option>
+                                        <option value="tam-ly-hoc">🧠 Tâm lý học</option>
+                                        <option value="giao-duc-hoc">🎓 Giáo dục học</option>
+                                        <option value="ngoai-ngu">🗣️ Ngoại ngữ</option>
+                                        <option value="cong-nghe-thong-tin">🔧 Công nghệ thông tin</option>
+                                        <option value="dien-tu-vien-thong">📡 Điện tử viễn thông</option>
+                                        <option value="co-khi">⚙️ Cơ khí</option>
+                                        <option value="xay-dung">🏗️ Xây dựng</option>
+                                        <option value="y-hoc">🏥 Y học</option>
+                                        <option value="duoc-hoc">💊 Dược học</option>
+                                        <option value="nong-nghiep">🌾 Nông nghiệp</option>
+                                        <option value="thuy-san">🐟 Thủy sản</option>
+                                        <option value="lam-nghiep">🌲 Lâm nghiệp</option>
+                                        <option value="moi-truong">🌍 Môi trường</option>
+                                        <option value="khac">📚 Khác</option>
+                                    </select>
+                                    <div class="filter-result" id="filter-result-text">
+                                        Hiển thị tất cả tài liệu
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Action Card -->
+                            <div class="control-card action-card">
+                                <button class="smart-btn secondary full-width" id="refresh-shared-quizzes">
+                                    <i class="fas fa-sync-alt"></i>
+                                    <span>Làm mới</span>
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Refresh Button -->
-                    <div class="explore-header" style="margin-top: 20px;">
-                        <button class="btn-refresh" id="refresh-shared-quizzes">
-                            <i class="fas fa-sync-alt"></i>
-                            Làm mới danh sách
-                        </button>
-                    </div>
-
+                    <!-- 🎯 ORIGINAL QUIZ DISPLAY AREA - Giữ nguyên như cũ -->
                     <!-- Loading State -->
                     <div id="explore-loading" class="explore-loading">
                         <div class="explore-loading-spinner"></div>
                         <div class="explore-loading-text">Đang tải đề thi...</div>
                     </div>
 
-                    <!-- Shared Quizzes Grid -->
-                    <div class="shared-quizzes-grid" id="shared-quizzes-grid">
-                        <div class="empty-state-card">
-                            <i class="fas fa-compass"></i>
-                            <h3>Đang tải đề thi...</h3>
-                            <p>Vui lòng đợi trong giây lát</p>
+                    <!-- Shared Quizzes Section - New Horizontal Layout -->
+                    <div class="shared-quizzes-section" id="shared-quizzes-section">
+                        <!-- Trending Quizzes -->
+                        <div class="quiz-section">
+                            <div class="section-header">
+                                <h3><i class="fas fa-fire"></i> Đề thi lên xu hướng</h3>
+                                <button class="btn-see-more" onclick="exploreQuizManager.showAllQuizzes('trending')">
+                                    <span>Xem thêm</span>
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                            <div class="quiz-container-wrapper">
+                                <div class="quiz-horizontal-scroll" id="trending-quizzes">
+                                    <div class="quiz-loading">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        <span>Đang tải đề thi xu hướng...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Latest Quizzes -->
+                        <div class="quiz-section">
+                            <div class="section-header">
+                                <h3><i class="fas fa-clock"></i> Đề thi mới nhất</h3>
+                                <button class="btn-see-more" onclick="exploreQuizManager.showAllQuizzes('latest')">
+                                    <span>Xem thêm</span>
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                            <div class="quiz-container-wrapper">
+                                <div class="quiz-horizontal-scroll" id="latest-quizzes">
+                                    <div class="quiz-loading">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        <span>Đang tải đề thi mới nhất...</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -961,6 +1051,44 @@
 
                 <div class="form-group">
                     <label>
+                        <i class="fas fa-tags"></i>
+                        Danh mục <span style="color: red;">*</span>
+                    </label>
+                    <select id="share-quiz-category" class="modal-select">
+                        <option value="">-- Chọn môn học --</option>
+                        <option value="toan-cao-cap">📐 Toán cao cấp</option>
+                        <option value="vat-ly-dai-cuong">⚗️ Vật lý đại cương</option>
+                        <option value="hoa-dai-cuong">🧪 Hóa đại cương</option>
+                        <option value="sinh-hoc-dai-cuong">🧬 Sinh học đại cương</option>
+                        <option value="tieng-anh">🌍 Tiếng Anh</option>
+                        <option value="tin-hoc-dai-cuong">💻 Tin học đại cương</option>
+                        <option value="kinh-te-hoc">💰 Kinh tế học</option>
+                        <option value="quan-tri-kinh-doanh">📊 Quản trị kinh doanh</option>
+                        <option value="ke-toan">📋 Kế toán</option>
+                        <option value="marketing">📈 Marketing</option>
+                        <option value="luat-hoc">⚖️ Luật học</option>
+                        <option value="tam-ly-hoc">🧠 Tâm lý học</option>
+                        <option value="giao-duc-hoc">🎓 Giáo dục học</option>
+                        <option value="ngoai-ngu">🗣️ Ngoại ngữ</option>
+                        <option value="cong-nghe-thong-tin">🔧 Công nghệ thông tin</option>
+                        <option value="dien-tu-vien-thong">📡 Điện tử viễn thông</option>
+                        <option value="co-khi">⚙️ Cơ khí</option>
+                        <option value="xay-dung">🏗️ Xây dựng</option>
+                        <option value="y-hoc">🏥 Y học</option>
+                        <option value="duoc-hoc">💊 Dược học</option>
+                        <option value="nong-nghiep">🌾 Nông nghiệp</option>
+                        <option value="thuy-san">🐟 Thủy sản</option>
+                        <option value="lam-nghiep">🌲 Lâm nghiệp</option>
+                        <option value="moi-truong">🌍 Môi trường</option>
+                        <option value="khac">📚 Khác</option>
+                    </select>
+                    <small style="display: block; margin-top: 5px; color: var(--text-secondary);">
+                        Chọn danh mục phù hợp để người khác dễ tìm thấy
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label>
                         <i class="fas fa-align-left"></i>
                         Mô tả đề thi
                     </label>
@@ -1109,6 +1237,1428 @@
         <source src="assets/audio/saidapan.wav" type="audio/wav">
     </audio>
 
+    <!-- CSS cho hệ thống danh mục -->
+    <style>
+        /* Modal Select Styling */
+        .modal-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color, #e1e5e9);
+            border-radius: 8px;
+            background: var(--bg-color, #ffffff);
+            color: var(--text-color, #2d3748);
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 12px center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        .modal-select:focus {
+            outline: none;
+            border-color: var(--primary-color, #4f46e5);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        /* Category Filter Section - Compact Design */
+        .category-filter-compact {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            padding: 0 20px;
+        }
+
+        .filter-compact-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: 280px;
+        }
+
+        .category-select-compact {
+            padding: 10px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: var(--text-color, #2d3748);
+            font-size: 14px;
+            font-family: inherit;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23667eea' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 10px center;
+            background-repeat: no-repeat;
+            background-size: 14px;
+            padding-right: 35px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-select-compact:focus {
+            outline: none;
+            border-color: var(--primary-color, #667eea);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .category-select-compact:hover {
+            border-color: var(--primary-color, #667eea);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .filter-result-compact {
+            text-align: right;
+            font-size: 12px;
+            color: var(--text-secondary, #64748b);
+            font-weight: 500;
+        }
+
+        .filter-result-compact span {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .category-filter-compact {
+                justify-content: center;
+            }
+
+            .filter-compact-wrapper {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .filter-result-compact {
+                text-align: center;
+            }
+        }
+
+        /* Dark theme support */
+        @media (prefers-color-scheme: dark) {
+            .category-select-compact {
+                background: rgba(45, 55, 72, 0.8);
+                border-color: rgba(255, 255, 255, 0.1);
+                color: #e2e8f0;
+            }
+
+            .filter-result-compact span {
+                background: rgba(45, 55, 72, 0.8);
+                border-color: rgba(255, 255, 255, 0.1);
+                color: #e2e8f0;
+            }
+        }
+
+        /* Shared Quiz Category */
+        .shared-quiz-category {
+            background: var(--primary-color, #4f46e5);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: auto;
+        }
+
+        .shared-quiz-category i {
+            font-size: 10px;
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            .category-filter-section {
+                background: #1a202c;
+                border-color: #2d3748;
+            }
+
+            .category-select {
+                background: #2d3748;
+                border-color: #4a5568;
+                color: #e2e8f0;
+            }
+
+            .filter-result-count span {
+                background: #2d3748;
+                border-color: #4a5568;
+                color: #e2e8f0;
+            }
+
+            .modal-select {
+                background: #2d3748;
+                border-color: #4a5568;
+                color: #e2e8f0;
+            }
+        }
+
+        /* Shared Quizzes Section - Horizontal Layout */
+        .shared-quizzes-section {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+        }
+
+        .quiz-section {
+            margin-bottom: 40px;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding: 0 8px;
+        }
+
+        .section-header h3 {
+            color: var(--text-color, #2d3748);
+            font-size: 22px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0;
+        }
+
+        .section-header h3 i {
+            color: var(--primary-color, #667eea);
+            font-size: 20px;
+        }
+
+        .btn-see-more {
+            background: rgba(102, 126, 234, 0.08);
+            border: 2px solid rgba(102, 126, 234, 0.15);
+            color: var(--primary-color, #667eea);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-see-more:hover {
+            background: var(--primary-color, #667eea);
+            color: white;
+            border-color: var(--primary-color, #667eea);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        /* CRITICAL: Container wrapper to prevent layout stretching */
+        .quiz-container-wrapper {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 450px !important;
+            overflow: hidden !important;
+            position: relative;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+            contain: layout style !important;
+        }
+
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        contain: layout style !important;
+        }
+
+        .quiz-horizontal-scroll {
+            display: flex !important;
+            gap: 28px;
+            overflow-x: auto !important;
+            overflow-y: hidden !important;
+            padding: 24px;
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            flex-wrap: nowrap !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        .quiz-horizontal-scroll::-webkit-scrollbar {
+            height: 10px;
+        }
+
+        .quiz-horizontal-scroll::-webkit-scrollbar-track {
+            background: rgba(102, 126, 234, 0.08);
+            border-radius: 12px;
+        }
+
+        .quiz-horizontal-scroll::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary-color, #667eea), var(--secondary-color, #764ba2));
+            border-radius: 12px;
+            border: 2px solid transparent;
+            background-clip: content-box;
+        }
+
+        .quiz-horizontal-scroll::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--primary-dark, #5a67d8), var(--secondary-dark, #6b46c1));
+            background-clip: content-box;
+        }
+
+        .quiz-card-horizontal {
+            min-width: 340px !important;
+            max-width: 340px !important;
+            width: 340px !important;
+            height: auto !important;
+            min-height: 390px !important;
+            flex-shrink: 0 !important;
+            background: var(--card-bg, #ffffff);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid var(--border-color, #e1e5e9);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            backdrop-filter: blur(10px);
+        }
+
+        .quiz-card-horizontal:hover {
+            transform: translateY(-12px) scale(1.03);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.2);
+            border-color: var(--primary-color, #667eea);
+        }
+
+        .quiz-card-horizontal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(135deg, var(--primary-color, #667eea), var(--secondary-color, #764ba2));
+            border-radius: 20px 20px 0 0;
+        }
+
+        .quiz-card-horizontal::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transition: all 0.4s ease;
+            opacity: 0;
+        }
+
+        .quiz-card-horizontal:hover::after {
+            opacity: 1;
+            transform: scale(1.5);
+        }
+
+        /* 🎯 ENHANCED STYLES FOR LONG TEXT CARDS */
+        .quiz-card-long-text {
+            border-left: 4px solid #667eea !important;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.02), rgba(255, 255, 255, 0.98)) !important;
+        }
+
+        .quiz-card-long-text .quiz-card-title {
+            font-weight: 600 !important;
+            color: #2d3748 !important;
+        }
+
+        .quiz-card-long-text::before {
+            background: linear-gradient(135deg, #667eea, #764ba2, #48bb78) !important;
+            height: 5px !important;
+        }
+
+        /* 🔧 ENSURE BUTTON VISIBILITY */
+        .quiz-card-practice-action,
+        .quiz-card-actions {
+            margin-top: auto !important;
+            flex-shrink: 0 !important;
+            position: relative !important;
+            z-index: 10 !important;
+            padding-top: 8px !important;
+        }
+
+        .quiz-card-content {
+            display: flex !important;
+            flex-direction: column !important;
+            height: 100% !important;
+            justify-content: space-between !important;
+        }
+
+        /* 📱 RESPONSIVE IMPROVEMENTS FOR LONG TEXT */
+        @media (max-width: 480px) {
+            .quiz-card-long-text .quiz-card-title {
+                font-size: 13px !important;
+                line-height: 1.25 !important;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .quiz-card-long-text .quiz-card-title {
+                font-size: 12px !important;
+                line-height: 1.2 !important;
+            }
+        }
+
+        .quiz-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .quiz-card-category {
+            background: linear-gradient(135deg, var(--primary-color, #667eea), var(--secondary-color, #764ba2));
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .quiz-card-stats {
+            display: flex;
+            gap: 12px;
+            font-size: 13px;
+            color: var(--text-secondary, #64748b);
+        }
+
+        .quiz-card-stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--bg-secondary, #f8fafc);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .quiz-card-stat i {
+            color: var(--primary-color, #667eea);
+        }
+
+        .quiz-card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-color, #2d3748);
+            margin-bottom: 14px;
+            line-height: 1.25;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: auto;
+            min-height: 48px;
+            max-height: 72px;
+            position: relative;
+            z-index: 2;
+            word-wrap: break-word;
+            word-break: break-word;
+            hyphens: auto;
+        }
+
+        .quiz-card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .quiz-card-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: var(--text-secondary, #64748b);
+        }
+
+        .quiz-card-meta-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .quiz-card-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .quiz-card-meta-item i {
+            color: var(--primary-color, #667eea);
+            width: 16px;
+        }
+
+        .quiz-card-actions {
+            display: flex;
+            gap: 12px;
+            position: relative;
+            z-index: 2;
+            margin-bottom: 8px;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .quiz-card-actions-secondary {
+            display: flex;
+            gap: 12px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .quiz-card-practice-action {
+            margin-top: 6px;
+            position: relative;
+            z-index: 2;
+            flex-shrink: 0;
+        }
+
+        .btn-quiz-practice-full {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            color: white;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            border-radius: 25px;
+            font-size: 15px;
+            font-weight: 700;
+            padding: 14px 20px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-quiz-practice-full:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-quiz-practice-full::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn-quiz-practice-full:hover::before {
+            left: 100%;
+        }
+
+        .btn-quiz-practice-full i {
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-quiz-action {
+            flex: 1;
+            padding: 14px 18px;
+            border: none;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-quiz-primary {
+            background: linear-gradient(135deg, var(--primary-color, #667eea), var(--secondary-color, #764ba2));
+            color: white;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.35);
+        }
+
+        .btn-quiz-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.45);
+        }
+
+        .btn-quiz-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-quiz-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-quiz-secondary {
+            background: rgba(102, 126, 234, 0.08);
+            color: var(--primary-color, #667eea);
+            border: 2px solid rgba(102, 126, 234, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            min-width: 120px;
+        }
+
+        .btn-quiz-secondary:hover {
+            background: rgba(102, 126, 234, 0.12);
+            border-color: var(--primary-color, #667eea);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .quiz-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 40px;
+            color: var(--text-secondary, #64748b);
+            font-size: 14px;
+        }
+
+        .quiz-loading i {
+            color: var(--primary-color, #667eea);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary, #64748b);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            color: var(--border-color, #e1e5e9);
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: var(--text-color, #2d3748);
+        }
+
+        /* CRITICAL: Override any conflicting styles */
+        #trending-quizzes,
+        #latest-quizzes {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            overflow-x: auto !important;
+            overflow-y: hidden !important;
+        }
+
+        #trending-quizzes .quiz-card-horizontal,
+        #latest-quizzes .quiz-card-horizontal {
+            flex: 0 0 340px !important;
+            width: 340px !important;
+            height: 390px !important;
+        }
+
+        /* CRITICAL: Prevent explore tab from stretching */
+        #explore-tab {
+            width: 100% !important;
+            max-width: 100vw !important;
+            overflow: hidden !important;
+            contain: layout style !important;
+        }
+
+        #explore-tab .tab-content {
+            width: 100% !important;
+            max-width: 100vw !important;
+            overflow: hidden !important;
+        }
+
+        /* CRITICAL: Force all sections to stay within viewport */
+        .user-name-section,
+        .room-join-section,
+        .category-filter-compact,
+        .explore-header,
+        .shared-quizzes-section {
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        /* CRITICAL: Force main layout constraints */
+        .main-content-area {
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow: hidden !important;
+        }
+
+        .tab-content {
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow: hidden !important;
+        }
+
+        /* Responsive - Adaptive Layout System */
+        @media (max-width: 360px) {
+            .quiz-container-wrapper {
+                height: 360px !important;
+                max-width: 100% !important;
+                margin: 0 8px;
+            }
+
+            .quiz-card-horizontal {
+                min-width: 260px !important;
+                max-width: 260px !important;
+                width: 260px !important;
+                height: 320px !important;
+                padding: 14px !important;
+            }
+
+            .quiz-card-title {
+                font-size: 14px !important;
+                line-height: 1.2 !important;
+                max-height: 67px !important;
+                -webkit-line-clamp: 4 !important;
+                height: auto !important;
+                margin-bottom: 10px;
+            }
+
+            .quiz-card-meta {
+                font-size: 11px;
+                gap: 6px;
+            }
+
+            .btn-quiz-secondary {
+                padding: 6px 12px;
+                font-size: 11px;
+                min-width: 80px;
+            }
+
+            .btn-quiz-practice-full {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .btn-quiz-practice-full i {
+                width: 20px;
+                height: 20px;
+                font-size: 10px;
+            }
+        }
+
+        @media (min-width: 361px) and (max-width: 414px) {
+            .quiz-container-wrapper {
+                height: 380px !important;
+                max-width: 100% !important;
+                margin: 0 10px;
+            }
+
+            .quiz-card-horizontal {
+                min-width: 280px !important;
+                max-width: 280px !important;
+                width: 280px !important;
+                height: 340px !important;
+                padding: 16px !important;
+            }
+
+            .quiz-card-title {
+                font-size: 15px !important;
+                line-height: 1.25 !important;
+                max-height: 75px !important;
+                -webkit-line-clamp: 4 !important;
+                height: auto !important;
+                margin-bottom: 12px;
+            }
+
+            .quiz-card-meta {
+                font-size: 12px;
+                gap: 7px;
+            }
+
+            .btn-quiz-secondary {
+                padding: 8px 14px;
+                font-size: 12px;
+                min-width: 90px;
+            }
+
+            .btn-quiz-practice-full {
+                padding: 10px 14px;
+                font-size: 13px;
+            }
+
+            .btn-quiz-practice-full i {
+                width: 22px;
+                height: 22px;
+                font-size: 11px;
+            }
+        }
+
+        @media (min-width: 415px) and (max-width: 768px) {
+            .quiz-container-wrapper {
+                height: 400px !important;
+                max-width: 100% !important;
+                margin: 0 15px;
+            }
+
+            .quiz-card-horizontal {
+                min-width: 320px !important;
+                max-width: 320px !important;
+                width: 320px !important;
+                height: 360px !important;
+                padding: 18px !important;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .section-header h3 {
+                font-size: 18px;
+            }
+
+            .quiz-card-title {
+                font-size: 17px;
+                height: 46px;
+            }
+
+            .quiz-card-meta {
+                gap: 8px;
+                margin-bottom: 14px;
+                font-size: 13px;
+            }
+
+            .btn-quiz-action {
+                padding: 10px 14px;
+                font-size: 13px;
+            }
+
+            .btn-quiz-practice-full {
+                padding: 12px 18px;
+                font-size: 14px;
+            }
+
+            .btn-quiz-practice-full i {
+                width: 26px;
+                height: 26px;
+                font-size: 13px;
+            }
+        }
+
+        padding: 4px 8px;
+        }
+
+        .btn-quiz-action {
+            padding: 8px 10px;
+            font-size: 12px;
+        }
+        }
+    </style>
+
+    <script>
+        // 🔧 DEBUG: Force horizontal layout
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('🔧 Applying horizontal layout fixes...');
+
+            // Force horizontal scroll containers
+            const containers = document.querySelectorAll('#trending-quizzes, #latest-quizzes');
+            containers.forEach(container => {
+                if (container) {
+                    container.style.display = 'flex';
+                    container.style.flexDirection = 'row';
+                    container.style.flexWrap = 'nowrap';
+                    container.style.overflowX = 'auto';
+                    container.style.overflowY = 'hidden';
+                    container.style.gap = '24px';
+                    console.log('✅ Fixed container:', container.id);
+                }
+            });
+
+            // Force card dimensions
+            const cards = document.querySelectorAll('.quiz-card-horizontal');
+            // Apply responsive card dimensions
+            const applyResponsiveCardDimensions = (card) => {
+                const screenWidth = window.innerWidth;
+
+                if (screenWidth <= 480) {
+                    // Mobile small
+                    card.style.flex = '0 0 280px';
+                    card.style.width = '280px';
+                    card.style.height = '320px';
+                    card.style.minWidth = '280px';
+                    card.style.maxWidth = '280px';
+                } else if (screenWidth <= 768) {
+                    // Mobile/Tablet
+                    card.style.flex = '0 0 300px';
+                    card.style.width = '300px';
+                    card.style.height = '360px';
+                    card.style.minWidth = '300px';
+                    card.style.maxWidth = '300px';
+                } else {
+                    // Desktop
+                    card.style.flex = '0 0 340px';
+                    card.style.width = '340px';
+                    card.style.height = '390px';
+                    card.style.minWidth = '340px';
+                    card.style.maxWidth = '340px';
+                }
+            };
+
+            cards.forEach(card => {
+                applyResponsiveCardDimensions(card);
+            });
+
+            console.log('✅ Applied fixes to', cards.length, 'cards');
+
+            // 🎯 ADAPTIVE LAYOUT SYSTEM - Tự động nhận diện và điều chỉnh
+            const initAdaptiveLayout = () => {
+                const screenWidth = window.innerWidth;
+                const screenHeight = window.innerHeight;
+                const devicePixelRatio = window.devicePixelRatio || 1;
+
+                console.log(`📱 Device Info: ${screenWidth}x${screenHeight}, DPR: ${devicePixelRatio}`);
+
+                // Tính toán kích thước tối ưu dựa trên màn hình
+                const calculateOptimalCardSize = () => {
+                    const availableWidth = screenWidth - 60; // Trừ padding và margin
+                    let cardWidth, cardHeight, containerHeight;
+
+                    if (screenWidth <= 360) {
+                        // Điện thoại rất nhỏ (iPhone SE, Galaxy S5)
+                        cardWidth = Math.min(260, availableWidth - 40);
+                        cardHeight = 300;
+                        containerHeight = 340;
+                    } else if (screenWidth <= 414) {
+                        // Điện thoại nhỏ (iPhone 6/7/8, Galaxy S8)
+                        cardWidth = Math.min(280, availableWidth - 40);
+                        cardHeight = 320;
+                        containerHeight = 360;
+                    } else if (screenWidth <= 768) {
+                        // Điện thoại lớn/Tablet nhỏ
+                        cardWidth = Math.min(320, availableWidth - 40);
+                        cardHeight = 360;
+                        containerHeight = 400;
+                    } else if (screenWidth <= 1024) {
+                        // Tablet
+                        cardWidth = 340;
+                        cardHeight = 380;
+                        containerHeight = 420;
+                    } else {
+                        // Desktop
+                        cardWidth = 340;
+                        cardHeight = 390;
+                        containerHeight = 450;
+                    }
+
+                    return { cardWidth, cardHeight, containerHeight };
+                };
+
+                const { cardWidth, cardHeight, containerHeight } = calculateOptimalCardSize();
+
+                // Áp dụng kích thước container
+                const containers = document.querySelectorAll('.quiz-container-wrapper');
+                containers.forEach(container => {
+                    container.style.height = `${containerHeight}px`;
+                    container.style.maxWidth = `calc(100vw - 20px)`;
+                });
+
+                // Áp dụng kích thước card
+                const allCards = document.querySelectorAll('.quiz-card-horizontal');
+                allCards.forEach(card => {
+                    card.style.flex = `0 0 ${cardWidth}px`;
+                    card.style.width = `${cardWidth}px`;
+                    card.style.height = `${cardHeight}px`;
+                    card.style.minWidth = `${cardWidth}px`;
+                    card.style.maxWidth = `${cardWidth}px`;
+
+                    // Điều chỉnh padding dựa trên kích thước
+                    if (cardWidth <= 260) {
+                        card.style.padding = '14px';
+                    } else if (cardWidth <= 280) {
+                        card.style.padding = '16px';
+                    } else {
+                        card.style.padding = '18px';
+                    }
+                });
+
+                // Điều chỉnh scroll padding
+                const scrollContainers = document.querySelectorAll('.quiz-horizontal-scroll');
+                scrollContainers.forEach(scroll => {
+                    if (screenWidth <= 414) {
+                        scroll.style.padding = '12px 8px 16px 8px';
+                        scroll.style.gap = '12px';
+                    } else if (screenWidth <= 768) {
+                        scroll.style.padding = '16px 12px 20px 12px';
+                        scroll.style.gap = '16px';
+                    } else {
+                        scroll.style.padding = '20px 16px 24px 16px';
+                        scroll.style.gap = '20px';
+                    }
+                });
+
+                // 📝 ENHANCED DYNAMIC CONTENT-AWARE LAYOUT SYSTEM - Tự động điều chỉnh theo nội dung
+                const optimizeContentAwareLayout = () => {
+                    const cards = document.querySelectorAll('.quiz-card-horizontal');
+                    if (cards.length === 0) return;
+
+                    console.log(`🔧 Optimizing ${cards.length} cards for screen width: ${screenWidth}px`);
+
+                    cards.forEach((card, index) => {
+                        const title = card.querySelector('.quiz-card-title');
+                        const originalText = title ? (title.textContent || title.innerText).trim() : '';
+
+                        if (!originalText) return;
+
+                        // 🎯 SMART TEXT ANALYSIS - Phân tích thông minh độ dài text
+                        const analyzeTextComplexity = (text, screenWidth) => {
+                            // Tính toán font size và card width dựa trên thiết bị
+                            let fontSize, cardWidth, baseHeight;
+
+                            if (screenWidth <= 360) {
+                                fontSize = 14;
+                                cardWidth = 260;
+                                baseHeight = 320;
+                            } else if (screenWidth <= 414) {
+                                fontSize = 15;
+                                cardWidth = 280;
+                                baseHeight = 340;
+                            } else if (screenWidth <= 768) {
+                                fontSize = 16;
+                                cardWidth = 320;
+                                baseHeight = 380;
+                            } else {
+                                fontSize = 17;
+                                cardWidth = 340;
+                                baseHeight = 390;
+                            }
+
+                            // Tính toán chính xác số ký tự trên mỗi dòng
+                            const charWidth = fontSize * 0.55; // Ước tính width của 1 ký tự
+                            const availableWidth = cardWidth - 40; // Trừ padding
+                            const charsPerLine = Math.floor(availableWidth / charWidth);
+
+                            // Tính số dòng thực tế cần thiết
+                            const words = text.split(' ');
+                            let currentLineLength = 0;
+                            let lines = 1;
+
+                            words.forEach(word => {
+                                if (currentLineLength + word.length + 1 > charsPerLine) {
+                                    lines++;
+                                    currentLineLength = word.length;
+                                } else {
+                                    currentLineLength += word.length + 1;
+                                }
+                            });
+
+                            // Giới hạn tối đa 6 dòng để không quá dài
+                            const maxLines = Math.min(lines, 6);
+
+                            // Tính chiều cao title
+                            const lineHeight = fontSize * 1.3;
+                            const titleHeight = maxLines * lineHeight + 8; // Thêm margin
+
+                            // Tính tổng chiều cao card
+                            const headerHeight = 45; // Category + stats
+                            const metaHeight = 65;    // User info + questions
+                            const actionsHeight = 50; // Buttons
+                            const padding = 40;       // Top + bottom padding
+
+                            const totalCardHeight = Math.max(
+                                baseHeight,
+                                headerHeight + titleHeight + metaHeight + actionsHeight + padding
+                            );
+
+                            return {
+                                cardHeight: totalCardHeight,
+                                titleHeight: titleHeight,
+                                fontSize: fontSize,
+                                lines: maxLines,
+                                isLongText: lines > 2,
+                                complexity: text.length > 50 ? 'high' : text.length > 30 ? 'medium' : 'low'
+                            };
+                        };
+
+                        const analysis = analyzeTextComplexity(originalText, screenWidth);
+
+                        // 🎨 APPLY DYNAMIC STYLING - Áp dụng style động
+                        card.style.height = `${analysis.cardHeight}px`;
+                        card.style.minHeight = `${analysis.cardHeight}px`;
+
+                        if (title) {
+                            // Reset tất cả styles trước
+                            title.style.fontSize = `${analysis.fontSize}px`;
+                            title.style.lineHeight = '1.3';
+                            title.style.height = 'auto';
+                            title.style.maxHeight = `${analysis.titleHeight}px`;
+                            title.style.minHeight = `${analysis.fontSize * 1.3 * 2}px`; // Tối thiểu 2 dòng
+                            title.style.webkitLineClamp = analysis.lines.toString();
+                            title.style.lineClamp = analysis.lines.toString();
+                            title.style.display = '-webkit-box';
+                            title.style.webkitBoxOrient = 'vertical';
+                            title.style.overflow = 'hidden';
+                            title.style.wordBreak = 'break-word';
+                            title.style.hyphens = 'auto';
+
+                            // Thêm visual indicator cho text dài
+                            if (analysis.isLongText) {
+                                title.setAttribute('title', `📖 ${originalText}`);
+                                title.style.cursor = 'help';
+                                card.classList.add('quiz-card-long-text');
+                            } else {
+                                card.classList.remove('quiz-card-long-text');
+                            }
+                        }
+
+                        // 🔍 ENSURE BUTTON VISIBILITY - Đảm bảo nút luôn hiển thị
+                        const actions = card.querySelector('.quiz-card-practice-action, .quiz-card-actions');
+                        if (actions) {
+                            actions.style.marginTop = 'auto';
+                            actions.style.flexShrink = '0';
+                            actions.style.position = 'relative';
+                            actions.style.zIndex = '10';
+                        }
+
+                        console.log(`📏 Card ${index + 1}: "${originalText.substring(0, 25)}..." -> ${analysis.cardHeight}px (${analysis.lines} lines, ${analysis.complexity} complexity)`);
+                    });
+
+                    // 📦 ADJUST CONTAINER HEIGHT - Điều chỉnh chiều cao container
+                    const cardHeights = Array.from(cards).map(card => {
+                        const height = parseInt(card.style.height) || parseInt(getComputedStyle(card).height) || 390;
+                        return height;
+                    });
+
+                    const maxCardHeight = Math.max(...cardHeights);
+                    const containerPadding = 40;
+                    const requiredContainerHeight = maxCardHeight + containerPadding;
+
+                    const containers = document.querySelectorAll('.quiz-container-wrapper');
+                    containers.forEach(container => {
+                        container.style.height = `${requiredContainerHeight}px`;
+                        container.style.minHeight = `${requiredContainerHeight}px`;
+                    });
+
+                    console.log(`📦 Container optimized: ${requiredContainerHeight}px (max card: ${maxCardHeight}px, ${cards.length} cards)`);
+
+                    // 🎯 PERFORMANCE OPTIMIZATION - Trigger reflow once
+                    cards[0]?.offsetHeight; // Force reflow
+                };
+
+                // Áp dụng layout thông minh
+                optimizeContentAwareLayout();
+
+                console.log(`🎯 Applied adaptive layout: ${cardWidth}x${cardHeight}px cards, ${containerHeight}px container`);
+            };
+
+            // 🌐 EXPOSE FUNCTIONS TO GLOBAL SCOPE for external access
+            window.optimizeContentAwareLayout = optimizeContentAwareLayout;
+            window.initAdaptiveLayout = initAdaptiveLayout;
+
+            // Khởi tạo adaptive layout
+            initAdaptiveLayout();
+
+            // Lắng nghe thay đổi kích thước màn hình
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    initAdaptiveLayout();
+                }, 250);
+            });
+
+            // Lắng nghe thay đổi orientation
+            window.addEventListener('orientationchange', () => {
+                setTimeout(() => {
+                    initAdaptiveLayout();
+                }, 500);
+            });
+
+            // 🧪 Add sample quiz data if no quizzes are loaded after 3 seconds
+            setTimeout(() => {
+                const trendingContainer = document.getElementById('trending-quizzes');
+                const latestContainer = document.getElementById('latest-quizzes');
+
+                if (trendingContainer && trendingContainer.querySelector('.quiz-loading')) {
+                    console.log('🧪 Loading sample quiz data...');
+
+                    const sampleQuizHTML = `
+                        <div class="quiz-card-horizontal" data-quiz-id="sample1">
+                            <div class="quiz-card-header">
+                                <div class="quiz-card-category">
+                                    <i class="fas fa-calculator"></i>
+                                    Toán cao cấp
+                                </div>
+                                <div class="quiz-card-stats">
+                                    <div class="quiz-card-stat">
+                                        <i class="fas fa-eye"></i>
+                                        <span>125</span>
+                                    </div>
+                                    <div class="quiz-card-stat">
+                                        <i class="fas fa-fire"></i>
+                                        <span>89</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="quiz-card-content">
+                                <div class="quiz-card-title">Giải tích 1 - Giới hạn và Liên tục</div>
+                                
+                                <div class="quiz-card-meta">
+                                    <div class="quiz-card-meta-row">
+                                        <div class="quiz-card-meta-item">
+                                            <i class="fas fa-user"></i>
+                                            <span>Nguyễn Văn A</span>
+                                        </div>
+                                        <div class="quiz-card-meta-item">
+                                            <i class="fas fa-question-circle"></i>
+                                            <span>25 câu</span>
+                                        </div>
+                                    </div>
+                                    <div class="quiz-card-meta-row">
+                                        <div class="quiz-card-meta-item">
+                                            <i class="fas fa-clock"></i>
+                                            <span>2 giờ trước</span>
+                                        </div>
+                                        <div class="quiz-card-meta-item">
+                                            <i class="fas fa-calendar"></i>
+                                            <span>03/01/2026</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="quiz-card-actions">
+                                    <button class="btn-quiz-action btn-quiz-primary">
+                                        <i class="fas fa-play"></i>
+                                        <span>Vào thi</span>
+                                    </button>
+                                    <button class="btn-quiz-action btn-quiz-secondary">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span>Chi tiết</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="quiz-card-horizontal" data-quiz-id="sample2">
+                            <div class="quiz-card-header">
+                                <div class="quiz-card-category">
+                                    <i class="fas fa-code"></i>
+                                    Công nghệ thông tin
+                                </div>
+                                <div class="quiz-card-stats">
+                                    <div class="quiz-card-stat">
+                                        <i class="fas fa-eye"></i>
+                                        <span>98</span>
+                                    </div>
+                                    <div class="quiz-card-stat">
+                                        <i class="fas fa-fire"></i>
+                                        <span>67</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="quiz-card-content">
+                                <div class="quiz-card-title">Lập trình hướng đối tượng với Java</div>
+                                
+                                <div class="quiz-card-meta">
+                                    <div class="quiz-card-meta-row">
+                                        <div class="quiz-card-meta-item">
+                                            <i class="fas fa-user"></i>
+                                            <span>Trần Thị B</span>
+                                        </div>
+                                        <div class="quiz-card-meta-item">
+                                            <i class="fas fa-question-circle"></i>
+                                            <span>30 câu</span>
+                                        </div>
+                                    </div>
+                                    <div class="quiz-card-meta-row">
+                                        <div class="quiz-card-meta-item">
+                                            <i class="fas fa-clock"></i>
+                                            <span>4 giờ trước</span>
+                                        </div>
+                                        <div class="quiz-card-meta-item">
+                                            <i class="fas fa-calendar"></i>
+                                            <span>03/01/2026</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="quiz-card-actions">
+                                    <button class="btn-quiz-action btn-quiz-primary">
+                                        <i class="fas fa-play"></i>
+                                        <span>Vào thi</span>
+                                    </button>
+                                    <button class="btn-quiz-action btn-quiz-secondary">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span>Chi tiết</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="quiz-card-horizontal" data-quiz-id="sample3">
+                            <div class="quiz-card-header">
+                                <div class="quiz-card-category">
+                                    <i class="fas fa-chart-line"></i>
+                                    Kinh tế học
+                                </div>
+                                <div class="quiz-card-stats">
+                                    <div class="quiz-card-stat">
+                                        <i class="fas fa-eye"></i>
+                                        <span>76</span>
+                                    </div>
+                                    <div class="quiz-card-stat">
+                                        <i class="fas fa-fire"></i>
+                                        <span>45</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="quiz-card-content">
+                                <div class="quiz-card-title">Kinh tế vi mô - Cơ bản</div>
+                                
+                                <div class="quiz-card-meta">
+                                    <div class="quiz-card-meta-row">
+                                        <div class="quiz-card-meta-item">
+                                            <i class="fas fa-user"></i>
+                                            <span>Lê Văn C</span>
+                                        </div>
+                                        <div class="quiz-card-meta-item">
+                                            <i class="fas fa-question-circle"></i>
+                                            <span>20 câu</span>
+                                        </div>
+                                    </div>
+                                    <div class="quiz-card-meta-row">
+                                        <div class="quiz-card-meta-item">
+                                            <i class="fas fa-clock"></i>
+                                            <span>6 giờ trước</span>
+                                        </div>
+                                        <div class="quiz-card-meta-item">
+                                            <i class="fas fa-calendar"></i>
+                                            <span>02/01/2026</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="quiz-card-actions">
+                                    <button class="btn-quiz-action btn-quiz-primary">
+                                        <i class="fas fa-play"></i>
+                                        <span>Vào thi</span>
+                                    </button>
+                                    <button class="btn-quiz-action btn-quiz-secondary">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span>Chi tiết</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    trendingContainer.innerHTML = sampleQuizHTML;
+                    latestContainer.innerHTML = sampleQuizHTML;
+
+                    // Apply fixes to new cards
+                    const newCards = document.querySelectorAll('.quiz-card-horizontal');
+                    newCards.forEach(card => {
+                        card.style.flex = '0 0 340px';
+                        card.style.width = '340px';
+                        card.style.height = '390px';
+                        card.style.minWidth = '340px';
+                        card.style.maxWidth = '340px';
+                    });
+
+                    console.log('✅ Loaded sample quiz data');
+                }
+            }, 3000);
+        });
+
+        // 🔧 Apply fixes when new content is loaded
+        const observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                if (mutation.type === 'childList') {
+                    const containers = document.querySelectorAll('#trending-quizzes, #latest-quizzes');
+                    containers.forEach(container => {
+                        if (container && container.children.length > 0) {
+                            container.style.display = 'flex';
+                            container.style.flexDirection = 'row';
+                            container.style.flexWrap = 'nowrap';
+                            container.style.overflowX = 'auto';
+                            container.style.overflowY = 'hidden';
+
+                            // Fix cards
+                            const cards = container.querySelectorAll('.quiz-card-horizontal');
+                            cards.forEach(card => {
+                                card.style.flex = '0 0 340px';
+                                card.style.width = '340px';
+                                card.style.height = '390px';
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    </script>
+
     <!-- 🦌🎅 INSTANT GIF INITIALIZATION - NO WAITING -->
     <script>
         // Khởi tạo ngay lập tức, không đợi DOM
@@ -1143,6 +2693,1162 @@
             // Bắt đầu init ngay
             tryInit();
         })();
+    </script>
+
+    <!-- 🎯 ADAPTIVE EXPLORE LAYOUT SYSTEM CSS -->
+    <style>
+        /* 🎯 DEVICE DETECTION & ADAPTIVE VARIABLES */
+        :root {
+            --adaptive-primary: #667eea;
+            --adaptive-secondary: #764ba2;
+            --adaptive-success: #48bb78;
+            --adaptive-warning: #ed8936;
+            --adaptive-danger: #f56565;
+            --adaptive-info: #4299e1;
+
+            --adaptive-bg-primary: #ffffff;
+            --adaptive-bg-secondary: #f7fafc;
+            --adaptive-bg-tertiary: #edf2f7;
+
+            --adaptive-text-primary: #2d3748;
+            --adaptive-text-secondary: #4a5568;
+            --adaptive-text-muted: #718096;
+
+            --adaptive-border: #e2e8f0;
+            --adaptive-border-light: #f1f5f9;
+
+            --adaptive-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --adaptive-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+            --adaptive-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+
+            --adaptive-radius-sm: 8px;
+            --adaptive-radius-md: 12px;
+            --adaptive-radius-lg: 16px;
+
+            --adaptive-spacing-xs: 8px;
+            --adaptive-spacing-sm: 12px;
+            --adaptive-spacing-md: 16px;
+            --adaptive-spacing-lg: 24px;
+            --adaptive-spacing-xl: 32px;
+        }
+
+        /* 🎯 TOP SECTION ONLY - Chỉ áp dụng cho phần trên */
+        .explore-top-section {
+            width: 100% !important;
+            max-width: 1200px !important;
+            margin: 0 auto 24px auto !important;
+            padding: 20px !important;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            overflow: hidden !important;
+            box-sizing: border-box !important;
+            border-radius: 16px;
+            contain: layout style;
+            left: auto !important;
+            right: auto !important;
+            transform: none !important;
+        }
+
+        /* 📱 DEVICE-AWARE HEADER */
+        .explore-header-adaptive {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--adaptive-primary), var(--adaptive-secondary));
+            border-radius: 12px;
+            color: white;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .explore-title-section {
+            display: flex;
+            align-items: center;
+            gap: var(--adaptive-spacing-md);
+        }
+
+        .explore-icon-wrapper {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: var(--adaptive-radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .explore-title-content h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 0 4px 0;
+        }
+
+        .explore-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .explore-device-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--adaptive-spacing-xs);
+            background: rgba(255, 255, 255, 0.15);
+            padding: var(--adaptive-spacing-xs) var(--adaptive-spacing-sm);
+            border-radius: var(--adaptive-radius-sm);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* 🎨 SMART CONTROL PANEL */
+        .smart-control-panel {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 0;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            justify-items: center;
+        }
+
+        .control-card {
+            background: var(--adaptive-bg-primary);
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--adaptive-border-light);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            width: 100%;
+            max-width: 320px;
+            box-sizing: border-box;
+            justify-self: center;
+        }
+
+        .control-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--adaptive-shadow-lg);
+            border-color: var(--adaptive-primary);
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--adaptive-primary), var(--adaptive-secondary));
+            border-radius: var(--adaptive-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .card-content {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .card-content label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--adaptive-text-primary);
+            margin-bottom: var(--adaptive-spacing-xs);
+        }
+
+        .smart-input,
+        .smart-select {
+            width: 100%;
+            max-width: 100%;
+            padding: var(--adaptive-spacing-sm) var(--adaptive-spacing-md);
+            border: 2px solid var(--adaptive-border);
+            border-radius: var(--adaptive-radius-sm);
+            background: var(--adaptive-bg-secondary);
+            color: var(--adaptive-text-primary);
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            min-width: 0;
+        }
+
+        .smart-input:focus,
+        .smart-select:focus {
+            outline: none;
+            border-color: var(--adaptive-primary);
+            background: var(--adaptive-bg-primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .room-input-group {
+            display: flex;
+            gap: var(--adaptive-spacing-xs);
+            align-items: center;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .room-code {
+            text-align: center;
+            letter-spacing: 1px;
+            font-weight: 600;
+            max-width: 120px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .smart-btn {
+            padding: var(--adaptive-spacing-sm) var(--adaptive-spacing-md);
+            border: none;
+            border-radius: var(--adaptive-radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--adaptive-spacing-xs);
+        }
+
+        .smart-btn.primary {
+            background: linear-gradient(135deg, var(--adaptive-primary), var(--adaptive-secondary));
+            color: white;
+            width: 40px;
+            height: 40px;
+        }
+
+        .smart-btn.secondary {
+            background: var(--adaptive-bg-tertiary);
+            color: var(--adaptive-text-primary);
+            border: 1px solid var(--adaptive-border);
+        }
+
+        .smart-btn.full-width {
+            width: 100%;
+        }
+
+        .smart-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--adaptive-shadow-md);
+        }
+
+        .smart-btn.primary:hover {
+            background: linear-gradient(135deg, #5a67d8, #6b46c1);
+        }
+
+        .smart-btn.secondary:hover {
+            background: var(--adaptive-bg-primary);
+            border-color: var(--adaptive-primary);
+        }
+
+        .filter-result {
+            font-size: 12px;
+            color: var(--adaptive-text-muted);
+            margin-top: var(--adaptive-spacing-xs);
+            font-weight: 500;
+        }
+
+        /* 🎯 ADAPTIVE QUIZ DISPLAY AREA */
+        .adaptive-quiz-display {
+            background: var(--adaptive-bg-primary);
+            border-radius: var(--adaptive-radius-lg);
+            box-shadow: var(--adaptive-shadow-md);
+            overflow: hidden;
+        }
+
+        .adaptive-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--adaptive-spacing-xl);
+            gap: var(--adaptive-spacing-md);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--adaptive-border);
+            border-top: 3px solid var(--adaptive-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-text {
+            color: var(--adaptive-text-muted);
+            font-weight: 500;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* 🎯 QUIZ SECTIONS */
+        .quiz-sections-container {
+            display: flex;
+            flex-direction: column;
+            gap: var(--adaptive-spacing-xl);
+        }
+
+        .adaptive-quiz-section {
+            padding: var(--adaptive-spacing-lg);
+        }
+
+        .section-header-adaptive {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--adaptive-spacing-lg);
+            padding-bottom: var(--adaptive-spacing-md);
+            border-bottom: 2px solid var(--adaptive-border-light);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: var(--adaptive-spacing-sm);
+        }
+
+        .section-title i {
+            font-size: 20px;
+            color: var(--adaptive-primary);
+        }
+
+        .section-title h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--adaptive-text-primary);
+            margin: 0;
+        }
+
+        .section-action-btn {
+            background: transparent;
+            border: 2px solid var(--adaptive-border);
+            color: var(--adaptive-text-secondary);
+            padding: var(--adaptive-spacing-xs) var(--adaptive-spacing-md);
+            border-radius: var(--adaptive-radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: var(--adaptive-spacing-xs);
+        }
+
+        .section-action-btn:hover {
+            background: var(--adaptive-primary);
+            color: white;
+            border-color: var(--adaptive-primary);
+            transform: translateY(-1px);
+        }
+
+        .adaptive-quiz-container {
+            background: var(--adaptive-bg-secondary);
+            border-radius: var(--adaptive-radius-md);
+            padding: var(--adaptive-spacing-md);
+        }
+
+        .quiz-scroll-area {
+            display: flex;
+            gap: var(--adaptive-spacing-lg);
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: var(--adaptive-spacing-md);
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+        }
+
+        .quiz-scroll-area::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .quiz-scroll-area::-webkit-scrollbar-track {
+            background: var(--adaptive-border-light);
+            border-radius: 3px;
+        }
+
+        .quiz-scroll-area::-webkit-scrollbar-thumb {
+            background: var(--adaptive-primary);
+            border-radius: 3px;
+        }
+
+        .quiz-loading-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--adaptive-spacing-sm);
+            padding: var(--adaptive-spacing-xl);
+            color: var(--adaptive-text-muted);
+            font-weight: 500;
+            min-width: 200px;
+        }
+
+        /* 📱 RESPONSIVE BREAKPOINTS */
+
+        /* Large Desktop (1200px+) */
+        @media (min-width: 1200px) {
+            .smart-control-panel {
+                grid-template-columns: repeat(4, 1fr);
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            .explore-top-section {
+                padding: 24px;
+                max-width: 1200px;
+            }
+        }
+
+        /* Desktop (992px - 1199px) */
+        @media (max-width: 1199px) and (min-width: 992px) {
+            .smart-control-panel {
+                grid-template-columns: repeat(3, 1fr);
+                max-width: 960px;
+                margin: 0 auto;
+            }
+
+            .explore-top-section {
+                max-width: 960px;
+                padding: 20px;
+            }
+        }
+
+        /* Tablet (768px - 991px) */
+        @media (max-width: 991px) and (min-width: 768px) {
+            .smart-control-panel {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 720px;
+                margin: 0 auto;
+            }
+
+            .explore-top-section {
+                max-width: 720px;
+                padding: 16px;
+            }
+
+            .explore-header-adaptive {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+                padding: 16px;
+            }
+
+            .explore-title-content h2 {
+                font-size: 24px;
+            }
+        }
+
+        /* Mobile Large (576px - 767px) */
+        @media (max-width: 767px) and (min-width: 576px) {
+            .smart-control-panel {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                max-width: 540px;
+                margin: 0 auto;
+            }
+
+            .explore-top-section {
+                padding: 16px;
+                max-width: 100%;
+                margin: 0 auto 20px auto;
+            }
+
+            .explore-header-adaptive {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+                padding: 16px;
+            }
+
+            .explore-title-content h2 {
+                font-size: 22px;
+            }
+
+            .control-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 12px;
+                padding: 16px;
+                max-width: 100%;
+            }
+
+            .room-input-group {
+                flex-direction: column;
+                gap: 8px;
+                width: 100%;
+            }
+
+            .room-code {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .smart-btn.primary {
+                width: 100%;
+                height: 40px;
+            }
+        }
+
+        /* Mobile Small (320px - 575px) */
+        @media (max-width: 575px) {
+            .explore-top-section {
+                padding: 12px;
+                max-width: 100%;
+                margin: 0 auto 16px auto;
+            }
+
+            .explore-header-adaptive {
+                padding: 12px;
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+
+            .explore-title-content h2 {
+                font-size: 20px;
+            }
+
+            .explore-subtitle {
+                font-size: 12px;
+            }
+
+            .smart-control-panel {
+                grid-template-columns: 1fr;
+                gap: 8px;
+                max-width: 100%;
+            }
+
+            .control-card {
+                padding: 12px;
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+                max-width: 100%;
+            }
+
+            .card-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+
+            .room-input-group {
+                flex-direction: column;
+                gap: 8px;
+                width: 100%;
+            }
+
+            .room-code {
+                max-width: 100%;
+                width: 100%;
+            }
+
+            .smart-btn.primary {
+                width: 100%;
+                height: 40px;
+            }
+
+            .section-header-adaptive {
+                flex-direction: column;
+                gap: 8px;
+                align-items: flex-start;
+            }
+
+            .section-title h3 {
+                font-size: 18px;
+            }
+        }
+
+        /* 🎯 DEVICE-SPECIFIC OPTIMIZATIONS */
+
+        /* CRITICAL: Prevent horizontal overflow on all devices */
+        #explore-tab {
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow-x: hidden !important;
+            box-sizing: border-box !important;
+            padding: 0 !important;
+        }
+
+        #explore-tab * {
+            box-sizing: border-box !important;
+        }
+
+        /* Ensure main content area doesn't overflow */
+        .main-content-area {
+            overflow-x: hidden !important;
+            padding: 0 !important;
+        }
+
+        .tab-content {
+            overflow-x: hidden !important;
+            padding: 20px !important;
+        }
+
+        /* Specific for explore tab */
+        #explore-tab.tab-content {
+            padding: 20px !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            transform: none !important;
+        }
+
+        /* 🎯 FORCE CENTER ALIGNMENT */
+        body #explore-tab .explore-top-section {
+            width: 100% !important;
+            max-width: 1200px !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            left: auto !important;
+            right: auto !important;
+            transform: none !important;
+            position: relative !important;
+        }
+
+        /* Force center for main wrapper */
+        .main-wrapper {
+            overflow-x: hidden !important;
+        }
+
+        .app-layout {
+            overflow-x: hidden !important;
+        }
+
+        /* 🎯 ENSURE QUIZ DISPLAY AREA IS SEPARATE */
+        .shared-quizzes-section {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+            clear: both;
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+        }
+
+        /* 🔧 ENSURE EXPLORE TAB LAYOUT ISOLATION */
+        #explore-tab {
+            width: 100% !important;
+            max-width: 100% !important;
+            overflow-x: hidden !important;
+            box-sizing: border-box !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            transform: none !important;
+        }
+
+        #explore-tab .explore-top-section {
+            flex-shrink: 0 !important;
+            width: 100% !important;
+            max-width: 1200px !important;
+            margin: 0 auto 24px auto !important;
+            left: auto !important;
+            right: auto !important;
+            transform: none !important;
+        }
+
+        #explore-tab .shared-quizzes-section {
+            flex: 1 !important;
+            margin-top: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+
+        /* Touch Device Optimizations */
+        @media (hover: none) and (pointer: coarse) {
+
+            .smart-btn,
+            .section-action-btn {
+                min-height: 44px;
+                min-width: 44px;
+            }
+
+            .smart-input,
+            .smart-select {
+                min-height: 44px;
+            }
+
+            .control-card:hover {
+                transform: none;
+            }
+        }
+
+        /* High DPI Display Optimizations */
+        @media (-webkit-min-device-pixel-ratio: 2),
+        (min-resolution: 192dpi) {
+
+            .explore-icon-wrapper,
+            .card-icon {
+                border: 0.5px solid rgba(255, 255, 255, 0.1);
+            }
+        }
+
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --adaptive-bg-primary: #1a202c;
+                --adaptive-bg-secondary: #2d3748;
+                --adaptive-bg-tertiary: #4a5568;
+                --adaptive-text-primary: #f7fafc;
+                --adaptive-text-secondary: #e2e8f0;
+                --adaptive-text-muted: #a0aec0;
+                --adaptive-border: #4a5568;
+                --adaptive-border-light: #2d3748;
+            }
+        }
+
+        /* Reduced Motion Support */
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* 🔧 GLOBAL LAYOUT FIX - Ngăn chặn overflow và lệch layout */
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        .tab-content {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        /* Fix cho tất cả containers */
+        .explore-adaptive-container,
+        .smart-control-panel,
+        .control-card,
+        .adaptive-quiz-display,
+        .quiz-sections-container {
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+            overflow-x: hidden !important;
+        }
+
+        /* Fix cho mobile */
+        @media (max-width: 768px) {
+            .explore-adaptive-container {
+                padding-left: 12px !important;
+                padding-right: 12px !important;
+                margin: 0 !important;
+            }
+
+            .smart-control-panel {
+                grid-template-columns: 1fr !important;
+                gap: 12px !important;
+            }
+
+            .control-card {
+                margin: 0 !important;
+                width: 100% !important;
+            }
+
+            .explore-header-adaptive {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                padding-left: 12px !important;
+                padding-right: 12px !important;
+            }
+        }
+
+        /* Fix cho mobile nhỏ */
+        @media (max-width: 480px) {
+            .explore-adaptive-container {
+                padding: 8px !important;
+            }
+
+            .explore-header-adaptive {
+                padding: 8px !important;
+                margin: 0 !important;
+            }
+
+            .smart-control-panel {
+                gap: 8px !important;
+            }
+
+            .control-card {
+                padding: 12px !important;
+            }
+        }
+    </style>
+
+    <!-- 🎯 DEVICE DETECTION & ADAPTIVE LAYOUT JAVASCRIPT -->
+    <script>
+        // 🎯 Advanced Device Detection System
+        class DeviceDetector {
+            constructor() {
+                this.deviceInfo = this.detectDevice();
+                this.init();
+            }
+
+            detectDevice() {
+                const userAgent = navigator.userAgent;
+                const screenWidth = window.innerWidth;
+                const screenHeight = window.innerHeight;
+                const pixelRatio = window.devicePixelRatio || 1;
+                const touchSupport = 'ontouchstart' in window;
+
+                // Device type detection
+                let deviceType = 'desktop';
+                let deviceSize = 'large';
+                let deviceIcon = 'fas fa-desktop';
+
+                if (screenWidth <= 575) {
+                    deviceType = 'mobile';
+                    deviceSize = 'small';
+                    deviceIcon = 'fas fa-mobile-alt';
+                } else if (screenWidth <= 767) {
+                    deviceType = 'mobile';
+                    deviceSize = 'medium';
+                    deviceIcon = 'fas fa-mobile-alt';
+                } else if (screenWidth <= 991) {
+                    deviceType = 'tablet';
+                    deviceSize = 'medium';
+                    deviceIcon = 'fas fa-tablet-alt';
+                } else if (screenWidth <= 1199) {
+                    deviceType = 'desktop';
+                    deviceSize = 'medium';
+                    deviceIcon = 'fas fa-laptop';
+                } else {
+                    deviceType = 'desktop';
+                    deviceSize = 'large';
+                    deviceIcon = 'fas fa-desktop';
+                }
+
+                // OS Detection
+                let os = 'unknown';
+                if (userAgent.includes('Windows')) os = 'windows';
+                else if (userAgent.includes('Mac')) os = 'macos';
+                else if (userAgent.includes('Linux')) os = 'linux';
+                else if (userAgent.includes('Android')) os = 'android';
+                else if (userAgent.includes('iOS') || userAgent.includes('iPhone') || userAgent.includes('iPad')) os = 'ios';
+
+                // Browser Detection
+                let browser = 'unknown';
+                if (userAgent.includes('Chrome')) browser = 'chrome';
+                else if (userAgent.includes('Firefox')) browser = 'firefox';
+                else if (userAgent.includes('Safari')) browser = 'safari';
+                else if (userAgent.includes('Edge')) browser = 'edge';
+
+                return {
+                    type: deviceType,
+                    size: deviceSize,
+                    icon: deviceIcon,
+                    width: screenWidth,
+                    height: screenHeight,
+                    pixelRatio: pixelRatio,
+                    touchSupport: touchSupport,
+                    os: os,
+                    browser: browser,
+                    isHighDPI: pixelRatio > 1.5,
+                    isRetina: pixelRatio >= 2,
+                    orientation: screenWidth > screenHeight ? 'landscape' : 'portrait'
+                };
+            }
+
+            init() {
+                this.updateDeviceIndicator();
+                this.applyDeviceOptimizations();
+                this.setupEventListeners();
+
+                console.log('🎯 Device Detection:', this.deviceInfo);
+            }
+
+            updateDeviceIndicator() {
+                const indicator = document.getElementById('device-indicator');
+                if (indicator) {
+                    const deviceName = `${this.deviceInfo.type.charAt(0).toUpperCase() + this.deviceInfo.type.slice(1)} (${this.deviceInfo.width}x${this.deviceInfo.height})`;
+
+                    indicator.innerHTML = `
+                        <i class="${this.deviceInfo.icon}"></i>
+                        <span>${deviceName}</span>
+                    `;
+                }
+            }
+
+            applyDeviceOptimizations() {
+                const container = document.getElementById('explore-adaptive-container');
+                if (!container) return;
+
+                // Add device-specific classes
+                container.classList.add(`device-${this.deviceInfo.type}`);
+                container.classList.add(`device-${this.deviceInfo.size}`);
+                container.classList.add(`os-${this.deviceInfo.os}`);
+
+                if (this.deviceInfo.touchSupport) {
+                    container.classList.add('touch-device');
+                }
+
+                if (this.deviceInfo.isHighDPI) {
+                    container.classList.add('high-dpi');
+                }
+
+                // Apply layout optimizations
+                this.optimizeControlPanel();
+                this.optimizeQuizDisplay();
+            }
+
+            optimizeControlPanel() {
+                const panel = document.getElementById('smart-control-panel');
+                if (!panel) return;
+
+                // Adjust grid based on device
+                let columns;
+                switch (this.deviceInfo.type) {
+                    case 'mobile':
+                        columns = '1fr';
+                        break;
+                    case 'tablet':
+                        columns = 'repeat(2, 1fr)';
+                        break;
+                    case 'desktop':
+                        columns = this.deviceInfo.size === 'large'
+                            ? 'repeat(4, 1fr)'
+                            : 'repeat(3, 1fr)';
+                        break;
+                    default:
+                        columns = 'repeat(auto-fit, minmax(280px, 1fr))';
+                }
+
+                panel.style.gridTemplateColumns = columns;
+            }
+
+            optimizeQuizDisplay() {
+                const display = document.getElementById('adaptive-quiz-display');
+                if (!display) return;
+
+                // Adjust quiz card sizes based on device
+                const cards = display.querySelectorAll('.quiz-card-horizontal');
+                cards.forEach(card => {
+                    if (this.deviceInfo.type === 'mobile') {
+                        card.style.minWidth = this.deviceInfo.size === 'small' ? '260px' : '280px';
+                        card.style.maxWidth = this.deviceInfo.size === 'small' ? '260px' : '280px';
+                    } else if (this.deviceInfo.type === 'tablet') {
+                        card.style.minWidth = '320px';
+                        card.style.maxWidth = '320px';
+                    } else {
+                        card.style.minWidth = '340px';
+                        card.style.maxWidth = '340px';
+                    }
+                });
+            }
+
+            setupEventListeners() {
+                // Handle orientation change
+                window.addEventListener('orientationchange', () => {
+                    setTimeout(() => {
+                        this.deviceInfo = this.detectDevice();
+                        this.updateDeviceIndicator();
+                        this.applyDeviceOptimizations();
+                    }, 100);
+                });
+
+                // Handle resize with debounce
+                let resizeTimeout;
+                window.addEventListener('resize', () => {
+                    clearTimeout(resizeTimeout);
+                    resizeTimeout = setTimeout(() => {
+                        this.deviceInfo = this.detectDevice();
+                        this.updateDeviceIndicator();
+                        this.applyDeviceOptimizations();
+                    }, 250);
+                });
+            }
+        }
+
+        // 🎯 Smart Input Handlers
+        class SmartInputHandlers {
+            constructor() {
+                this.init();
+            }
+
+            init() {
+                this.setupRoomCodeInput();
+                this.setupCategoryFilter();
+                this.setupRefreshButton();
+            }
+
+            setupRoomCodeInput() {
+                const input = document.getElementById('join-room-code-input');
+                const button = document.getElementById('btn-join-room');
+
+                if (!input || !button) return;
+
+                // Input validation
+                input.addEventListener('input', (e) => {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.length > 6) value = value.substring(0, 6);
+                    e.target.value = value;
+
+                    // Visual feedback
+                    if (value.length === 6) {
+                        input.style.borderColor = 'var(--adaptive-success)';
+                        button.style.background = 'linear-gradient(135deg, var(--adaptive-success), #38a169)';
+                    } else if (value.length > 0) {
+                        input.style.borderColor = 'var(--adaptive-warning)';
+                        button.style.background = 'linear-gradient(135deg, var(--adaptive-warning), #dd6b20)';
+                    } else {
+                        input.style.borderColor = 'var(--adaptive-border)';
+                        button.style.background = 'linear-gradient(135deg, var(--adaptive-primary), var(--adaptive-secondary))';
+                    }
+                });
+
+                // Enter key support
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && e.target.value.length === 6) {
+                        this.joinRoom();
+                    }
+                });
+
+                // Button click
+                button.addEventListener('click', () => {
+                    if (input.value.length === 6) {
+                        this.joinRoom();
+                    } else {
+                        this.shakeElement(input.closest('.control-card'));
+                        input.focus();
+                    }
+                });
+            }
+
+            setupCategoryFilter() {
+                const select = document.getElementById('category-filter-select');
+                const result = document.getElementById('filter-result-text');
+
+                if (!select || !result) return;
+
+                select.addEventListener('change', (e) => {
+                    const value = e.target.value;
+                    const text = e.target.options[e.target.selectedIndex].text;
+
+                    if (value === 'all') {
+                        result.textContent = 'Hiển thị tất cả tài liệu';
+                    } else {
+                        result.textContent = `Lọc theo: ${text}`;
+                    }
+
+                    // Trigger filter (if exploreQuizManager exists)
+                    if (window.exploreQuizManager && window.exploreQuizManager.filterByCategory) {
+                        window.exploreQuizManager.filterByCategory(value);
+                    }
+                });
+            }
+
+            setupRefreshButton() {
+                const button = document.getElementById('refresh-shared-quizzes');
+                if (!button) return;
+
+                button.addEventListener('click', () => {
+                    // Add loading state
+                    const originalHTML = button.innerHTML;
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Đang tải...</span>';
+                    button.disabled = true;
+
+                    // Simulate refresh (replace with actual logic)
+                    setTimeout(() => {
+                        button.innerHTML = originalHTML;
+                        button.disabled = false;
+
+                        // Trigger refresh (if exploreQuizManager exists)
+                        if (window.exploreQuizManager && window.exploreQuizManager.loadSharedQuizzes) {
+                            window.exploreQuizManager.loadSharedQuizzes();
+                        }
+                    }, 1500);
+                });
+            }
+
+            joinRoom() {
+                const input = document.getElementById('join-room-code-input');
+                const roomCode = input.value.trim();
+
+                if (roomCode.length !== 6) {
+                    alert('⚠️ Vui lòng nhập đúng 6 số!');
+                    return;
+                }
+
+                // Show success feedback
+                const card = input.closest('.control-card');
+                const originalBg = card.style.background;
+                card.style.background = 'linear-gradient(135deg, var(--adaptive-success), #38a169)';
+                card.style.color = 'white';
+
+                setTimeout(() => {
+                    card.style.background = originalBg;
+                    card.style.color = '';
+                }, 2000);
+
+                alert(`🎯 Đang vào phòng thi: ${roomCode}`);
+                input.value = '';
+            }
+
+            shakeElement(element) {
+                element.style.animation = 'shake 0.5s ease-in-out';
+                setTimeout(() => {
+                    element.style.animation = '';
+                }, 500);
+            }
+        }
+
+        // 🎯 Initialize Adaptive System
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('🎯 Initializing Adaptive Explore Layout System...');
+
+            // Initialize device detection
+            window.deviceDetector = new DeviceDetector();
+
+            // Initialize smart input handlers
+            window.smartInputHandlers = new SmartInputHandlers();
+
+            console.log('✅ Adaptive Explore Layout System initialized');
+        });
+
+        // Add shake animation CSS
+        const shakeCSS = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                20%, 40%, 60%, 80% { transform: translateX(5px); }
+            }
+        `;
+
+        const style = document.createElement('style');
+        style.textContent = shakeCSS;
+        document.head.appendChild(style);
     </script>
 </body>
 

@@ -8,7 +8,7 @@ class CommunityShareManager {
         this.communityQuizzes = [];
         this.isLoading = false;
         this.lastSync = null;
-        
+
         // Cache trong localStorage
         this.CACHE_KEY = 'communityQuizzesCache';
         this.CACHE_TIME_KEY = 'communityQuizzesCacheTime';
@@ -25,13 +25,13 @@ class CommunityShareManager {
     async loadCommunityQuizzes() {
         try {
             this.isLoading = true;
-            
+
             // Kiểm tra cache trước
             const cachedData = this.getCachedData();
             if (cachedData) {
                 this.communityQuizzes = cachedData;
                 console.log('✅ Loaded from cache:', this.communityQuizzes.length, 'quizzes');
-                
+
                 // Load từ server trong background để cập nhật
                 this.loadFromServerInBackground();
                 return this.communityQuizzes;
@@ -39,7 +39,7 @@ class CommunityShareManager {
 
             // Load từ server
             const response = await fetch(this.COMMUNITY_FILE + '?t=' + Date.now());
-            
+
             if (!response.ok) {
                 throw new Error('Cannot load community quizzes');
             }
@@ -56,7 +56,7 @@ class CommunityShareManager {
 
         } catch (error) {
             console.error('❌ Error loading community quizzes:', error);
-            
+
             // Fallback: dùng cache cũ nếu có
             const oldCache = localStorage.getItem(this.CACHE_KEY);
             if (oldCache) {
@@ -67,7 +67,7 @@ class CommunityShareManager {
                     this.communityQuizzes = [];
                 }
             }
-            
+
             return this.communityQuizzes;
         } finally {
             this.isLoading = false;
@@ -121,13 +121,14 @@ class CommunityShareManager {
     }
 
     // Chia sẻ quiz lên cộng đồng
-    async shareQuiz(quiz, userName) {
+    async shareQuiz(quiz, userName, category = 'khac') {
         try {
             // Tạo quiz mới
             const newQuiz = {
                 id: 'quiz_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
                 title: quiz.title,
                 description: quiz.description || 'Không có mô tả',
+                category: category, // Thêm danh mục
                 questions: quiz.questions,
                 totalQuestions: quiz.questions.length,
                 userName: userName,
@@ -276,7 +277,7 @@ class CommunityShareManager {
         textarea.style.opacity = '0';
         document.body.appendChild(textarea);
         textarea.select();
-        
+
         try {
             document.execCommand('copy');
             this.showToast('✅ Đã copy dữ liệu! Paste vào file community-quizzes.json', 'success');
@@ -285,7 +286,7 @@ class CommunityShareManager {
             // Hiển thị modal với text để copy thủ công
             this.showManualCopyModal(text);
         }
-        
+
         document.body.removeChild(textarea);
     }
 
@@ -347,7 +348,7 @@ class CommunityShareManager {
     // Tìm kiếm quiz
     searchQuizzes(keyword) {
         const keywordLower = keyword.toLowerCase();
-        return this.communityQuizzes.filter(quiz => 
+        return this.communityQuizzes.filter(quiz =>
             quiz.title.toLowerCase().includes(keywordLower) ||
             quiz.description.toLowerCase().includes(keywordLower) ||
             quiz.userName.toLowerCase().includes(keywordLower)
@@ -386,7 +387,7 @@ class CommunityShareManager {
         // Xóa cache
         localStorage.removeItem(this.CACHE_KEY);
         localStorage.removeItem(this.CACHE_TIME_KEY);
-        
+
         // Load lại
         return await this.loadCommunityQuizzes();
     }
@@ -398,6 +399,76 @@ class CommunityShareManager {
         } else {
             alert(message);
         }
+    }
+
+    // Lọc quiz theo danh mục
+    getQuizzesByCategory(category) {
+        if (category === 'all') {
+            return this.communityQuizzes;
+        }
+        return this.communityQuizzes.filter(quiz => quiz.category === category);
+    }
+
+    // Đếm số quiz theo danh mục
+    getCategoryCounts() {
+        const counts = {
+            all: this.communityQuizzes.length,
+            toan: 0,
+            ly: 0,
+            hoa: 0,
+            sinh: 0,
+            van: 0,
+            anh: 0,
+            su: 0,
+            dia: 0,
+            gdcd: 0,
+            tin: 0,
+            khac: 0
+        };
+
+        this.communityQuizzes.forEach(quiz => {
+            const category = quiz.category || 'khac';
+            if (counts.hasOwnProperty(category)) {
+                counts[category]++;
+            } else {
+                counts.khac++;
+            }
+        });
+
+        return counts;
+    }
+
+    // Lấy tên danh mục
+    getCategoryName(category) {
+        const categoryNames = {
+            all: 'Tất cả',
+            'toan-cao-cap': 'Toán cao cấp',
+            'vat-ly-dai-cuong': 'Vật lý đại cương',
+            'hoa-dai-cuong': 'Hóa đại cương',
+            'sinh-hoc-dai-cuong': 'Sinh học đại cương',
+            'tieng-anh': 'Tiếng Anh',
+            'tin-hoc-dai-cuong': 'Tin học đại cương',
+            'kinh-te-hoc': 'Kinh tế học',
+            'quan-tri-kinh-doanh': 'Quản trị kinh doanh',
+            'ke-toan': 'Kế toán',
+            'marketing': 'Marketing',
+            'luat-hoc': 'Luật học',
+            'tam-ly-hoc': 'Tâm lý học',
+            'giao-duc-hoc': 'Giáo dục học',
+            'ngoai-ngu': 'Ngoại ngữ',
+            'cong-nghe-thong-tin': 'Công nghệ thông tin',
+            'dien-tu-vien-thong': 'Điện tử viễn thông',
+            'co-khi': 'Cơ khí',
+            'xay-dung': 'Xây dựng',
+            'y-hoc': 'Y học',
+            'duoc-hoc': 'Dược học',
+            'nong-nghiep': 'Nông nghiệp',
+            'thuy-san': 'Thủy sản',
+            'lam-nghiep': 'Lâm nghiệp',
+            'moi-truong': 'Môi trường',
+            'khac': 'Khác'
+        };
+        return categoryNames[category] || 'Khác';
     }
 
     // Escape HTML

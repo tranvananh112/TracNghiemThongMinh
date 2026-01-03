@@ -41,7 +41,6 @@ class ExploreQuizManager {
         console.log('✅ Đã lưu Server URL:', url);
     }
 
-    // Cho phép người dùng thay đổi server URL
     showServerURLDialog() {
         const currentURL = this.API_BASE_URL.replace('/api', '');
 
@@ -303,6 +302,9 @@ class ExploreQuizManager {
 
         // Load quiz trước
         await this.loadSharedQuizzes();
+
+        // Khởi tạo bộ lọc danh mục
+        this.initializeCategoryFilter();
 
         // Bật Realtime/Polling sau khi load xong
         this.setupRealtimeUpdates();
@@ -1061,18 +1063,35 @@ class ExploreQuizManager {
         }
     }
 
-    // Hiển thị danh sách quiz
+    // Hiển thị danh sách quiz với layout ngang
     renderSharedQuizzes(quizzes) {
-        const container = document.getElementById('shared-quizzes-grid');
+        console.log('🎨 Rendering quizzes with horizontal layout:', quizzes.length);
 
+        // Phân loại quiz
+        const trendingQuizzes = this.getTrendingQuizzes(quizzes);
+        const latestQuizzes = this.getLatestQuizzes(quizzes);
+
+        // Render trending quizzes
+        this.renderQuizSection('trending-quizzes', trendingQuizzes.slice(0, 10));
+
+        // Render latest quizzes
+        this.renderQuizSection('latest-quizzes', latestQuizzes.slice(0, 10));
+
+        // Cập nhật số lượng danh mục
+        this.updateCategoryCounts();
+    }
+
+    // Render một section quiz
+    renderQuizSection(containerId, quizzes) {
+        const container = document.getElementById(containerId);
         if (!container) return;
 
         if (quizzes.length === 0) {
             container.innerHTML = `
-                <div class="empty-state-card">
-                    <i class="fas fa-search"></i>
-                    <h3>Chưa có đề thi nào được chia sẻ</h3>
-                    <p>Hãy là người đầu tiên chia sẻ đề thi của bạn!</p>
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <h3>Chưa có đề thi</h3>
+                    <p>Hãy là người đầu tiên chia sẻ đề thi!</p>
                 </div>
             `;
             return;
@@ -1081,74 +1100,271 @@ class ExploreQuizManager {
         const quizzesHTML = quizzes.map(quiz => {
             const timeAgo = this.getTimeAgo(quiz.sharedAt);
             const date = new Date(quiz.sharedAt).toLocaleDateString('vi-VN');
+            const categoryName = this.getCategoryName(quiz.category || 'khac');
+            const categoryIcon = this.getCategoryIcon(quiz.category || 'khac');
 
             return `
-                <div class="shared-quiz-card" data-quiz-id="${quiz.id}">
-                    <div class="shared-quiz-header">
-                        <div class="shared-quiz-icon">
-                            <i class="fas fa-file-alt"></i>
+                <div class="quiz-card-horizontal" data-quiz-id="${quiz.id}" data-category="${quiz.category || 'khac'}">
+                    <div class="quiz-card-header">
+                        <div class="quiz-card-category">
+                            <i class="${categoryIcon}"></i>
+                            ${categoryName}
                         </div>
-                        <div class="shared-quiz-badge">
-                            <i class="fas fa-share-alt"></i>
-                            Chia sẻ
-                        </div>
-                    </div>
-                    
-                    <div class="shared-quiz-content">
-                        <h3 class="shared-quiz-title">${this.escapeHtml(quiz.title)}</h3>
-                        <p class="shared-quiz-description">${this.escapeHtml(quiz.description)}</p>
-                        
-                        <div class="shared-quiz-meta">
-                            <div class="meta-item">
-                                <i class="fas fa-user"></i>
-                                <span>${this.escapeHtml(quiz.userName)}</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-calendar"></i>
-                                <span>${date}</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-clock"></i>
-                                <span>${timeAgo}</span>
-                            </div>
-                        </div>
-                        
-                        <div class="shared-quiz-stats">
-                            <div class="stat-item">
-                                <i class="fas fa-question-circle"></i>
-                                <span>${quiz.totalQuestions} câu</span>
-                            </div>
-                            <div class="stat-item stat-views">
+                        <div class="quiz-card-stats">
+                            <div class="quiz-card-stat">
                                 <i class="fas fa-eye"></i>
-                                <span class="views-count" data-quiz-id="${quiz.id}">${quiz.views || 0} lượt xem</span>
+                                <span>${quiz.views || 0}</span>
                             </div>
-                            <div class="stat-item">
-                                <i class="fas fa-pen"></i>
-                                <span>${quiz.attempts || 0} lượt làm</span>
+                            <div class="quiz-card-stat">
+                                <i class="fas fa-fire"></i>
+                                <span>${quiz.attempts || 0}</span>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="shared-quiz-actions">
-                        <button class="btn-start-shared-quiz" onclick="exploreQuizManager.startSharedQuiz('${quiz.id}')">
-                            <i class="fas fa-play"></i>
-                            Vào Ôn Thi
-                        </button>
-                        <button class="btn-view-details" onclick="exploreQuizManager.viewQuizDetails('${quiz.id}')">
-                            <i class="fas fa-info-circle"></i>
-                            Xem chi tiết bài
-                        </button>
-                        ${this.isQuizOwner(quiz) ? `
-                            <button class="btn-edit-quiz" onclick="exploreQuizManager.showEditDeleteMenu('${quiz.id}', event)">
-                                <i class="fas fa-ellipsis-v"></i>
+                    <div class="quiz-card-content">
+                        <div class="quiz-card-title">${this.escapeHtml(quiz.title)}</div>
+                        
+                        <div class="quiz-card-meta">
+                            <div class="quiz-card-meta-row">
+                                <div class="quiz-card-meta-item">
+                                    <i class="fas fa-user"></i>
+                                    <span>${this.escapeHtml(quiz.userName)}</span>
+                                </div>
+                                <div class="quiz-card-meta-item">
+                                    <i class="fas fa-question-circle"></i>
+                                    <span>${quiz.totalQuestions} câu</span>
+                                </div>
+                            </div>
+                            <div class="quiz-card-meta-row">
+                                <div class="quiz-card-meta-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>${timeAgo}</span>
+                                </div>
+                                <div class="quiz-card-meta-item">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>${date}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="quiz-card-actions">
+                            <button class="btn-quiz-action btn-quiz-secondary" onclick="exploreQuizManager.viewQuizDetails('${quiz.id}')">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Chi tiết</span>
                             </button>
-                        ` : ''}
+                        </div>
+                        <div class="quiz-card-practice-action">
+                            <button class="btn-quiz-practice-full" onclick="exploreQuizManager.startPracticeMode('${quiz.id}')">
+                                <i class="fas fa-play"></i>
+                                <span>Vào ôn thi</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             `;
         }).join('');
 
         container.innerHTML = quizzesHTML;
+
+        // 🎯 APPLY DYNAMIC CONTENT-AWARE LAYOUT after rendering
+        setTimeout(() => {
+            if (window.optimizeContentAwareLayout) {
+                window.optimizeContentAwareLayout();
+            }
+        }, 100);
+    }
+
+    // Lấy quiz xu hướng (sắp xếp theo views + attempts)
+    getTrendingQuizzes(quizzes) {
+        return [...quizzes].sort((a, b) => {
+            const scoreA = (a.views || 0) + (a.attempts || 0) * 2;
+            const scoreB = (b.views || 0) + (b.attempts || 0) * 2;
+            return scoreB - scoreA;
+        });
+    }
+
+    // Lấy quiz mới nhất (sắp xếp theo thời gian)
+    getLatestQuizzes(quizzes) {
+        return [...quizzes].sort((a, b) => {
+            return new Date(b.sharedAt) - new Date(a.sharedAt);
+        });
+    }
+
+    // Hiển thị tất cả quiz của một loại
+    showAllQuizzes(type) {
+        console.log('📋 Showing all quizzes of type:', type);
+
+        let quizzes;
+        if (type === 'trending') {
+            quizzes = this.getTrendingQuizzes(this.sharedQuizzes);
+        } else if (type === 'latest') {
+            quizzes = this.getLatestQuizzes(this.sharedQuizzes);
+        } else {
+            quizzes = this.sharedQuizzes;
+        }
+
+        this.showQuizModal(type, quizzes);
+    }
+
+    // Hiển thị modal với tất cả quiz
+    showQuizModal(type, quizzes) {
+        const typeName = type === 'trending' ? 'Xu hướng' : 'Mới nhất';
+        const typeIcon = type === 'trending' ? 'fas fa-fire' : 'fas fa-clock';
+
+        const modal = document.createElement('div');
+        modal.className = 'quiz-modal';
+        modal.innerHTML = `
+            <div class="quiz-modal-overlay" onclick="this.closest('.quiz-modal').remove()"></div>
+            <div class="quiz-modal-content">
+                <div class="quiz-modal-header">
+                    <h3><i class="${typeIcon}"></i> Đề thi ${typeName}</h3>
+                    <button class="quiz-modal-close" onclick="this.closest('.quiz-modal').remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="quiz-modal-body">
+                    <div class="quiz-grid">
+                        ${quizzes.map(quiz => {
+            const categoryName = this.getCategoryName(quiz.category || 'khac');
+            const categoryIcon = this.getCategoryIcon(quiz.category || 'khac');
+            const timeAgo = this.getTimeAgo(quiz.sharedAt);
+
+            return `
+                                <div class="quiz-modal-card" data-quiz-id="${quiz.id}">
+                                    <div class="quiz-modal-card-header">
+                                        <div class="quiz-card-category">
+                                            <i class="${categoryIcon}"></i>
+                                            ${categoryName}
+                                        </div>
+                                    </div>
+                                    <div class="quiz-modal-card-title">${this.escapeHtml(quiz.title)}</div>
+                                    <div class="quiz-modal-card-meta">
+                                        <span><i class="fas fa-user"></i> ${this.escapeHtml(quiz.userName)}</span>
+                                        <span><i class="fas fa-question-circle"></i> ${quiz.totalQuestions} câu</span>
+                                        <span><i class="fas fa-clock"></i> ${timeAgo}</span>
+                                    </div>
+                                    <div class="quiz-modal-card-actions">
+                                        <button class="btn-quiz-action btn-quiz-primary" onclick="exploreQuizManager.startSharedQuiz('${quiz.id}'); this.closest('.quiz-modal').remove();">
+                                            <i class="fas fa-play"></i> Vào thi
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+        }).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // Add modal styles
+        if (!document.getElementById('quiz-modal-styles')) {
+            const styles = document.createElement('style');
+            styles.id = 'quiz-modal-styles';
+            styles.textContent = `
+                .quiz-modal {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    z-index: 1000;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .quiz-modal-overlay {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.5);
+                    backdrop-filter: blur(4px);
+                }
+                .quiz-modal-content {
+                    position: relative;
+                    background: white;
+                    border-radius: 16px;
+                    max-width: 90vw;
+                    max-height: 90vh;
+                    overflow: hidden;
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+                }
+                .quiz-modal-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 20px 24px;
+                    border-bottom: 1px solid #e1e5e9;
+                }
+                .quiz-modal-header h3 {
+                    margin: 0;
+                    font-size: 20px;
+                    color: #2d3748;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+                .quiz-modal-close {
+                    background: none;
+                    border: none;
+                    font-size: 18px;
+                    color: #64748b;
+                    cursor: pointer;
+                    padding: 8px;
+                    border-radius: 6px;
+                    transition: all 0.3s ease;
+                }
+                .quiz-modal-close:hover {
+                    background: #f1f5f9;
+                    color: #2d3748;
+                }
+                .quiz-modal-body {
+                    padding: 24px;
+                    max-height: 70vh;
+                    overflow-y: auto;
+                }
+                .quiz-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                    gap: 20px;
+                }
+                .quiz-modal-card {
+                    background: #f8fafc;
+                    border-radius: 12px;
+                    padding: 16px;
+                    border: 1px solid #e1e5e9;
+                    transition: all 0.3s ease;
+                }
+                .quiz-modal-card:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                }
+                .quiz-modal-card-title {
+                    font-size: 16px;
+                    font-weight: 600;
+                    color: #2d3748;
+                    margin: 12px 0 8px 0;
+                    line-height: 1.4;
+                }
+                .quiz-modal-card-meta {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                    font-size: 13px;
+                    color: #64748b;
+                    margin-bottom: 12px;
+                }
+                .quiz-modal-card-actions {
+                    display: flex;
+                    gap: 8px;
+                }
+            `;
+            document.head.appendChild(styles);
+        }
     }
 
     // Chia sẻ quiz - Mở modal
@@ -1238,6 +1454,7 @@ class ExploreQuizManager {
         const userName = document.getElementById('share-user-name').value.trim();
         const title = document.getElementById('share-quiz-title').value.trim();
         const description = document.getElementById('share-quiz-description').value.trim();
+        const category = document.getElementById('share-quiz-category').value;
 
         // Validate
         if (!userName) {
@@ -1249,6 +1466,12 @@ class ExploreQuizManager {
         if (!title) {
             quizManager.showToast('Vui lòng nhập tên đề thi!', 'warning');
             document.getElementById('share-quiz-title').focus();
+            return;
+        }
+
+        if (!category) {
+            quizManager.showToast('Vui lòng chọn danh mục!', 'warning');
+            document.getElementById('share-quiz-category').focus();
             return;
         }
 
@@ -1266,7 +1489,8 @@ class ExploreQuizManager {
         const sharedQuiz = {
             ...quiz,
             title: title,
-            description: description || 'Không có mô tả'
+            description: description || 'Không có mô tả',
+            category: category
         };
 
         // KIỂM TRA LẠI Supabase mỗi lần chia sẻ (fix timing issue)
@@ -1391,11 +1615,14 @@ class ExploreQuizManager {
 
     // Chia sẻ quiz offline
     shareQuizOffline(sharedQuiz, userName) {
+        console.log('💾 Sharing quiz offline with category:', sharedQuiz.category);
+
         const offlineQuiz = {
             id: Date.now().toString(),
             originalId: sharedQuiz.id,
             title: sharedQuiz.title,
             description: sharedQuiz.description || 'Không có mô tả',
+            category: sharedQuiz.category || 'khac', // Thêm danh mục
             questions: sharedQuiz.questions,
             totalQuestions: sharedQuiz.questions.length,
             userName: userName,
@@ -1405,6 +1632,7 @@ class ExploreQuizManager {
             isOffline: true
         };
 
+        console.log('✅ Offline quiz created with category:', offlineQuiz.category);
         this.saveToOfflineStorage(offlineQuiz);
 
         quizManager.showToast('💾 Đã lưu quiz offline trên máy này!', 'success');
@@ -1869,6 +2097,124 @@ class ExploreQuizManager {
     async retryStartQuiz(quizId) {
         await this.checkServerStatus();
         await this.startSharedQuiz(quizId);
+    }
+
+    // Bắt đầu chế độ ôn thi (practice mode)
+    async startPracticeMode(quizId) {
+        try {
+            // Thử Supabase trước
+            if (this.isSupabaseAvailable && window.supabaseQuizManager) {
+                try {
+                    const result = await window.supabaseQuizManager.getQuizById(quizId);
+                    if (result.success) {
+                        const quiz = result.quiz;
+
+                        // Tăng số lượt xem (không tăng attempts cho practice mode)
+                        await window.supabaseQuizManager.incrementViews(quizId);
+
+                        this.saveToOfflineStorage(quiz);
+                        quizManager.currentQuiz = {
+                            id: quiz.id,
+                            title: quiz.title + ' (Chế độ ôn thi)',
+                            description: quiz.description,
+                            questions: quiz.questions,
+                            totalQuestions: quiz.totalQuestions,
+                            isShared: true,
+                            sharedBy: quiz.userName,
+                            isPracticeMode: true
+                        };
+                        quizManager.currentAnswers = {};
+                        quizManager.switchTab('quiz');
+                        quizManager.renderQuiz();
+                        quizManager.showToast('📚 Bắt đầu ôn thi! Bạn có thể xem đáp án ngay lập tức.', 'info');
+                        return;
+                    }
+                } catch (error) {
+                    console.warn('Supabase practice mode failed, trying local server:', error);
+                }
+            }
+
+            // Fallback sang Local server
+            if (!this.isServerOnline) {
+                const isOnline = await this.checkServerStatus();
+                if (!isOnline) {
+                    const offlineQuiz = this.getOfflineQuiz(quizId);
+                    if (offlineQuiz) {
+                        this.startOfflinePractice(offlineQuiz);
+                        return;
+                    }
+                    quizManager.showToast('❌ Không thể kết nối. Vui lòng cấu hình server URL.', 'error');
+                    this.showServerURLDialog();
+                    return;
+                }
+            }
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+            const response = await fetch(`${this.API_BASE_URL}/shared-quizzes/${quizId}`, {
+                signal: controller.signal
+            });
+
+            clearTimeout(timeoutId);
+            const data = await response.json();
+
+            if (data.success) {
+                const quiz = data.quiz;
+
+                // Tăng views cho practice mode
+                try {
+                    await fetch(`${this.API_BASE_URL}/shared-quizzes/${quizId}/view`, {
+                        method: 'POST'
+                    });
+                } catch (err) {
+                    console.warn('Could not update view count:', err);
+                }
+
+                this.saveToOfflineStorage(quiz);
+                quizManager.currentQuiz = {
+                    id: quiz.id,
+                    title: quiz.title + ' (Chế độ ôn thi)',
+                    description: quiz.description,
+                    questions: quiz.questions,
+                    totalQuestions: quiz.totalQuestions,
+                    isShared: true,
+                    sharedBy: quiz.userName,
+                    isPracticeMode: true
+                };
+                quizManager.currentAnswers = {};
+                quizManager.switchTab('quiz');
+                quizManager.renderQuiz();
+                quizManager.showToast('📚 Bắt đầu ôn thi! Bạn có thể xem đáp án ngay lập tức.', 'info');
+            } else {
+                throw new Error(data.message || 'Không thể tải quiz');
+            }
+        } catch (error) {
+            console.error('Error starting practice mode:', error);
+            if (error.name === 'AbortError') {
+                quizManager.showToast('⏱️ Kết nối quá chậm. Vui lòng thử lại.', 'error');
+            } else {
+                quizManager.showToast('❌ Lỗi khi bắt đầu ôn thi: ' + error.message, 'error');
+            }
+        }
+    }
+
+    // Bắt đầu ôn thi offline
+    startOfflinePractice(quiz) {
+        quizManager.currentQuiz = {
+            id: quiz.id,
+            title: quiz.title + ' (Chế độ ôn thi - Offline)',
+            description: quiz.description,
+            questions: quiz.questions,
+            totalQuestions: quiz.totalQuestions,
+            isShared: true,
+            sharedBy: quiz.userName,
+            isPracticeMode: true
+        };
+        quizManager.currentAnswers = {};
+        quizManager.switchTab('quiz');
+        quizManager.renderQuiz();
+        quizManager.showToast('📚 Bắt đầu ôn thi offline! Bạn có thể xem đáp án ngay lập tức.', 'info');
     }
 
     // Chuyển sang tab khám phá
@@ -2364,6 +2710,147 @@ class ExploreQuizManager {
             console.error('Error deleting quiz:', error);
             quizManager.showToast('❌ Lỗi khi xóa bài thi!', 'error');
         }
+    }
+
+    // ===== CATEGORY SUPPORT METHODS =====
+
+    // Lấy tên danh mục
+    getCategoryName(category) {
+        const categoryNames = {
+            all: 'Tất cả',
+            'toan-cao-cap': 'Toán cao cấp',
+            'vat-ly-dai-cuong': 'Vật lý đại cương',
+            'hoa-dai-cuong': 'Hóa đại cương',
+            'sinh-hoc-dai-cuong': 'Sinh học đại cương',
+            'tieng-anh': 'Tiếng Anh',
+            'tin-hoc-dai-cuong': 'Tin học đại cương',
+            'kinh-te-hoc': 'Kinh tế học',
+            'quan-tri-kinh-doanh': 'Quản trị kinh doanh',
+            'ke-toan': 'Kế toán',
+            'marketing': 'Marketing',
+            'luat-hoc': 'Luật học',
+            'tam-ly-hoc': 'Tâm lý học',
+            'giao-duc-hoc': 'Giáo dục học',
+            'ngoai-ngu': 'Ngoại ngữ',
+            'cong-nghe-thong-tin': 'Công nghệ thông tin',
+            'dien-tu-vien-thong': 'Điện tử viễn thông',
+            'co-khi': 'Cơ khí',
+            'xay-dung': 'Xây dựng',
+            'y-hoc': 'Y học',
+            'duoc-hoc': 'Dược học',
+            'nong-nghiep': 'Nông nghiệp',
+            'thuy-san': 'Thủy sản',
+            'lam-nghiep': 'Lâm nghiệp',
+            'moi-truong': 'Môi trường',
+            'khac': 'Khác'
+        };
+        return categoryNames[category] || 'Khác';
+    }
+
+    // Lấy icon danh mục
+    getCategoryIcon(category) {
+        const categoryIcons = {
+            'toan-cao-cap': 'fas fa-calculator',
+            'vat-ly-dai-cuong': 'fas fa-atom',
+            'hoa-dai-cuong': 'fas fa-flask',
+            'sinh-hoc-dai-cuong': 'fas fa-dna',
+            'tieng-anh': 'fas fa-globe-americas',
+            'tin-hoc-dai-cuong': 'fas fa-laptop-code',
+            'kinh-te-hoc': 'fas fa-chart-line',
+            'quan-tri-kinh-doanh': 'fas fa-briefcase',
+            'ke-toan': 'fas fa-calculator',
+            'marketing': 'fas fa-bullhorn',
+            'luat-hoc': 'fas fa-balance-scale',
+            'tam-ly-hoc': 'fas fa-brain',
+            'giao-duc-hoc': 'fas fa-graduation-cap',
+            'ngoai-ngu': 'fas fa-language',
+            'cong-nghe-thong-tin': 'fas fa-code',
+            'dien-tu-vien-thong': 'fas fa-broadcast-tower',
+            'co-khi': 'fas fa-cogs',
+            'xay-dung': 'fas fa-hammer',
+            'y-hoc': 'fas fa-user-md',
+            'duoc-hoc': 'fas fa-pills',
+            'nong-nghiep': 'fas fa-seedling',
+            'thuy-san': 'fas fa-fish',
+            'lam-nghiep': 'fas fa-tree',
+            'moi-truong': 'fas fa-leaf',
+            'khac': 'fas fa-book'
+        };
+        return categoryIcons[category] || 'fas fa-book';
+    }
+
+    // Khởi tạo bộ lọc danh mục
+    initializeCategoryFilter() {
+        console.log('🔧 Initializing category filter...');
+
+        // Thêm event listener cho dropdown
+        const categorySelect = document.getElementById('category-filter-select');
+        if (categorySelect) {
+            categorySelect.addEventListener('change', (e) => {
+                const selectedCategory = e.target.value;
+                console.log('📂 Category selected:', selectedCategory);
+                this.filterByCategory(selectedCategory);
+            });
+            console.log('✅ Category dropdown initialized');
+        } else {
+            console.warn('⚠️ Category dropdown not found');
+        }
+
+        // Cập nhật số lượng ban đầu
+        this.updateCategoryCounts();
+    }
+
+    // Lọc quiz theo danh mục
+    filterByCategory(category) {
+        console.log('🔍 Filtering by category:', category);
+        console.log('📊 Total quizzes:', this.sharedQuizzes.length);
+
+        // Lọc và hiển thị quiz
+        let filteredQuizzes;
+        if (category === 'all') {
+            filteredQuizzes = this.sharedQuizzes;
+        } else {
+            filteredQuizzes = this.sharedQuizzes.filter(quiz => {
+                const quizCategory = quiz.category || 'khac';
+                console.log(`📝 Quiz "${quiz.title}" - Category: ${quizCategory}`);
+                return quizCategory === category;
+            });
+        }
+
+        console.log('✅ Filtered quizzes:', filteredQuizzes.length);
+
+        this.renderSharedQuizzes(filteredQuizzes);
+
+        // Cập nhật text hiển thị kết quả
+        this.updateFilterResultText(category, filteredQuizzes.length);
+    }
+
+    // Cập nhật text kết quả lọc
+    updateFilterResultText(category, count) {
+        const resultText = document.getElementById('filter-result-text');
+        if (resultText) {
+            if (category === 'all') {
+                resultText.textContent = `Hiển thị tất cả ${count} tài liệu`;
+            } else {
+                const categoryName = this.getCategoryName(category);
+                resultText.textContent = `${categoryName}: ${count} tài liệu`;
+            }
+        }
+    }
+
+    // Cập nhật số lượng quiz theo danh mục
+    updateCategoryCounts() {
+        console.log('📊 Updating category counts...');
+
+        // Chỉ cập nhật text hiển thị tổng số
+        const totalCount = this.sharedQuizzes.length;
+        this.updateFilterResultText('all', totalCount);
+
+        // Debug: Log tất cả quiz và danh mục của chúng
+        console.log('📋 Quiz categories:');
+        this.sharedQuizzes.forEach((quiz, index) => {
+            console.log(`${index + 1}. "${quiz.title}" - Category: ${quiz.category || 'khac'}`);
+        });
     }
 }
 
