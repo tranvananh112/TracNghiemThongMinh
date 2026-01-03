@@ -8,13 +8,40 @@ class QuizManager {
 
         this.initializeTheme();
         this.initializeEventListeners();
+        this.migrateOldQuizzes(); // Migrate quiz cũ
         this.loadQuizList();
+        this.loadHomeQuizGrid(); // Thêm load home quiz grid
         this.updateQuizSelector();
 
         // Initialize AI Generator after DOM is ready
         setTimeout(() => {
             this.loadAISettings();
         }, 100);
+    }
+
+    migrateOldQuizzes() {
+        // Migrate quiz cũ không có description hoặc có description = "Không có mô tả"
+        let needSave = false;
+        this.quizzes.forEach(quiz => {
+            if (!quiz.description || quiz.description === 'Không có mô tả') {
+                quiz.description = ''; // Set thành empty string thay vì "Không có mô tả"
+                needSave = true;
+            }
+        });
+
+        if (needSave) {
+            this.saveQuizzes();
+            console.log('✅ Migrated old quizzes descriptions');
+        }
+    }
+
+    // Debug function - có thể xóa sau
+    debugQuizzes() {
+        console.log('📊 Current quizzes:', this.quizzes.map(q => ({
+            title: q.title,
+            description: q.description,
+            hasDescription: !!q.description && q.description.trim() !== ''
+        })));
     }
 
     initializeTheme() {
@@ -180,6 +207,8 @@ class QuizManager {
             this.loadQuizList();
         } else if (tabName === 'quiz') {
             this.updateQuizSelector();
+        } else if (tabName === 'home') {
+            this.loadHomeQuizGrid();
         }
     }
 
@@ -212,7 +241,7 @@ class QuizManager {
             const quiz = {
                 id: Date.now().toString(),
                 title: title,
-                description: description || 'Không có mô tả',
+                description: description, // Không set default ở đây
                 questions: questions.map((q, index) => ({
                     ...q,
                     correctAnswer: answers[index]
@@ -224,6 +253,7 @@ class QuizManager {
             // Save quiz
             this.quizzes.push(quiz);
             this.saveQuizzes();
+            this.loadHomeQuizGrid(); // Cập nhật home tab
 
             this.showToast(`✨ Tạo bài quiz "${title}" thành công với ${questions.length} câu hỏi!`, 'success');
             this.clearInputs();
@@ -282,7 +312,7 @@ class QuizManager {
                 <div class="quiz-item-header">
                     <div class="quiz-item-info">
                         <h3>${quiz.title}</h3>
-                        <p>${quiz.description}</p>
+                        <p>${quiz.description && quiz.description.trim() ? quiz.description : 'Không có mô tả'}</p>
                         <div class="quiz-item-meta">
                             <span><i class="fas fa-question-circle"></i> ${quiz.totalQuestions} câu</span>
                             <span><i class="fas fa-calendar"></i> ${new Date(quiz.createdAt).toLocaleDateString('vi-VN')}</span>
@@ -311,6 +341,120 @@ class QuizManager {
         `).join('');
 
         quizList.innerHTML = quizHTML;
+    }
+
+    loadHomeQuizGrid() {
+        const homeQuizGrid = document.getElementById('home-quiz-grid');
+        if (!homeQuizGrid) {
+            console.warn('❌ Không tìm thấy home-quiz-grid element');
+            return;
+        }
+
+        console.log('🏠 Loading home quiz grid...', this.quizzes.length, 'quizzes');
+
+        if (this.quizzes.length === 0) {
+            homeQuizGrid.innerHTML = `
+                <div class="empty-state-card">
+                    <i class="fas fa-folder-open"></i>
+                    <h3>Chưa có quiz nào</h3>
+                    <p>Hãy tạo quiz đầu tiên của bạn!</p>
+                    <button class="btn-primary" data-tab="input">
+                        <i class="fas fa-plus"></i>
+                        Tạo quiz mới
+                    </button>
+                </div>
+            `;
+            return;
+        }
+
+        // Hiển thị tối đa 6 quiz gần nhất ở trang chủ
+        const recentQuizzes = this.quizzes.slice(-6).reverse();
+        console.log('📋 Recent quizzes:', recentQuizzes.map(q => q.title));
+
+        const quizHTML = recentQuizzes.map(quiz => {
+            const description = quiz.description && quiz.description.trim() ? quiz.description : 'Không có mô tả';
+            const createdDate = new Date(quiz.createdAt).toLocaleDateString('vi-VN');
+
+            return `
+            <div class="quiz-card" data-quiz-id="${quiz.id}">
+                <div class="quiz-card-header">
+                    <div class="quiz-card-title">${quiz.title}</div>
+                    <div class="quiz-card-description">${description}</div>
+                    <div class="quiz-card-meta">
+                        <span><i class="fas fa-question-circle"></i> ${quiz.totalQuestions} câu</span>
+                        <span><i class="fas fa-calendar"></i> ${createdDate}</span>
+                    </div>
+                </div>
+                <div class="quiz-card-actions">
+                    <button class="btn btn-primary quiz-start-btn" data-quiz-id="${quiz.id}">
+                        <i class="fas fa-play"></i>
+                        Làm bài
+                    </button>
+                    <button class="btn btn-secondary quiz-edit-btn" data-quiz-id="${quiz.id}">
+                        <i class="fas fa-edit"></i>
+                        Sửa
+                    </button>
+                    <button class="btn btn-share-quiz quiz-share-btn" data-quiz-id="${quiz.id}">
+                        <i class="fas fa-share-alt"></i>
+                        Chia sẻ
+                    </button>
+                </div>
+            </div>
+            `;
+        }).join('');
+
+        homeQuizGrid.innerHTML = quizHTML;
+        console.log('✅ Home quiz grid loaded successfully');
+
+        // Thêm event listeners cho các nút
+        this.attachHomeQuizEventListeners();
+    }
+
+    attachHomeQuizEventListeners() {
+        const homeQuizGrid = document.getElementById('home-quiz-grid');
+        if (!homeQuizGrid) return;
+
+        // Event listeners cho nút "Làm bài"
+        homeQuizGrid.querySelectorAll('.quiz-start-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const quizId = btn.getAttribute('data-quiz-id');
+                console.log('🎮 Starting quiz:', quizId);
+                this.startQuizById(quizId);
+            });
+        });
+
+        // Event listeners cho nút "Sửa"
+        homeQuizGrid.querySelectorAll('.quiz-edit-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const quizId = btn.getAttribute('data-quiz-id');
+                console.log('✏️ Editing quiz:', quizId);
+                this.editQuiz(quizId);
+            });
+        });
+
+        // Event listeners cho nút "Chia sẻ"
+        homeQuizGrid.querySelectorAll('.quiz-share-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const quizId = btn.getAttribute('data-quiz-id');
+                console.log('🔗 Sharing quiz:', quizId);
+                if (window.exploreQuizManager && window.exploreQuizManager.shareQuiz) {
+                    window.exploreQuizManager.shareQuiz(quizId);
+                } else {
+                    this.showToast('Tính năng chia sẻ chưa sẵn sàng', 'warning');
+                }
+            });
+        });
+
+        // Event listeners cho nút "Tạo quiz mới"
+        homeQuizGrid.querySelectorAll('[data-tab="input"]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.switchTab('input');
+            });
+        });
     }
 
     updateQuizSelector() {
@@ -396,6 +540,7 @@ class QuizManager {
         this.saveQuizzes();
         this.closeEditModal();
         this.loadQuizList();
+        this.loadHomeQuizGrid(); // Cập nhật home tab
         this.updateQuizSelector();
 
         this.showToast('✅ Cập nhật quiz thành công!', 'success');
@@ -419,6 +564,7 @@ class QuizManager {
         this.quizzes.push(duplicatedQuiz);
         this.saveQuizzes();
         this.loadQuizList();
+        this.loadHomeQuizGrid(); // Cập nhật home tab
         this.updateQuizSelector();
 
         this.showToast('📋 Sao chép quiz thành công!', 'success');
@@ -430,6 +576,7 @@ class QuizManager {
         this.quizzes = this.quizzes.filter(q => q.id !== quizId);
         this.saveQuizzes();
         this.loadQuizList();
+        this.loadHomeQuizGrid(); // Cập nhật home tab
         this.updateQuizSelector();
 
         this.showToast('🗑️ Xóa quiz thành công!', 'success');
@@ -481,6 +628,40 @@ class QuizManager {
             this.showToast('Không đủ câu hỏi để xáo trộn.', 'warning');
         }
 
+        this.renderQuiz();
+        this.showToast('🚀 Bắt đầu làm bài!', 'success');
+    }
+
+    startQuizById(quizId) {
+        const quiz = this.quizzes.find(q => q.id === quizId);
+        if (!quiz) {
+            this.showToast('Không tìm thấy quiz!', 'error');
+            return;
+        }
+
+        const questionsClone = (quiz.questions || []).map(q => ({
+            question: q.question,
+            options: (q.options || []).map(o => ({ letter: o.letter, text: o.text })),
+            correctAnswer: q.correctAnswer
+        }));
+
+        this.currentQuiz = {
+            ...quiz,
+            questions: questionsClone,
+            totalQuestions: questionsClone.length
+        };
+        this.currentAnswers = {};
+
+        // Backup current quiz
+        try {
+            this._quizBackup = JSON.parse(JSON.stringify(this.currentQuiz));
+            localStorage.setItem('quizBackup', JSON.stringify(this.currentQuiz));
+        } catch (e) {
+            console.warn('Backup currentQuiz failed:', e);
+        }
+
+        // Chuyển sang tab quiz và render
+        this.switchTab('quiz');
         this.renderQuiz();
         this.showToast('🚀 Bắt đầu làm bài!', 'success');
     }

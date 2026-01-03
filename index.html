@@ -1487,17 +1487,17 @@
         }
 
         .quiz-horizontal-scroll {
-            display: flex !important;
-            gap: 28px;
-            overflow-x: auto !important;
-            overflow-y: hidden !important;
-            padding: 24px;
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 20px;
             scroll-behavior: smooth;
             scrollbar-width: thin;
-            flex-wrap: nowrap !important;
-            width: 100% !important;
-            max-width: 100% !important;
-            box-sizing: border-box !important;
+            flex-wrap: nowrap;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
         }
 
         .quiz-horizontal-scroll::-webkit-scrollbar {
@@ -1522,18 +1522,18 @@
         }
 
         .quiz-card-horizontal {
-            min-width: 340px !important;
-            max-width: 340px !important;
-            width: 340px !important;
-            height: auto !important;
-            min-height: 390px !important;
-            flex-shrink: 0 !important;
+            min-width: 320px;
+            max-width: 320px;
+            width: 320px;
+            height: auto;
+            min-height: 360px;
+            flex-shrink: 0;
             background: var(--card-bg, #ffffff);
-            border-radius: 20px;
+            border-radius: 16px;
             padding: 20px;
             border: 1px solid var(--border-color, #e1e5e9);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             position: relative;
             overflow: hidden;
@@ -1544,8 +1544,8 @@
         }
 
         .quiz-card-horizontal:hover {
-            transform: translateY(-12px) scale(1.03);
-            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.2);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.15);
             border-color: var(--primary-color, #667eea);
         }
 
@@ -1580,49 +1580,49 @@
 
         /* 🎯 ENHANCED STYLES FOR LONG TEXT CARDS */
         .quiz-card-long-text {
-            border-left: 4px solid #667eea !important;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.02), rgba(255, 255, 255, 0.98)) !important;
+            border-left: 4px solid #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.02), rgba(255, 255, 255, 0.98));
         }
 
         .quiz-card-long-text .quiz-card-title {
-            font-weight: 600 !important;
-            color: #2d3748 !important;
+            font-weight: 600;
+            color: #2d3748;
         }
 
         .quiz-card-long-text::before {
-            background: linear-gradient(135deg, #667eea, #764ba2, #48bb78) !important;
-            height: 5px !important;
+            background: linear-gradient(135deg, #667eea, #764ba2, #48bb78);
+            height: 5px;
         }
 
         /* 🔧 ENSURE BUTTON VISIBILITY */
         .quiz-card-practice-action,
         .quiz-card-actions {
-            margin-top: auto !important;
-            flex-shrink: 0 !important;
-            position: relative !important;
-            z-index: 10 !important;
-            padding-top: 8px !important;
+            margin-top: auto;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 10;
+            padding-top: 8px;
         }
 
         .quiz-card-content {
-            display: flex !important;
-            flex-direction: column !important;
-            height: 100% !important;
-            justify-content: space-between !important;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: space-between;
         }
 
         /* 📱 RESPONSIVE IMPROVEMENTS FOR LONG TEXT */
         @media (max-width: 480px) {
             .quiz-card-long-text .quiz-card-title {
-                font-size: 13px !important;
-                line-height: 1.25 !important;
+                font-size: 13px;
+                line-height: 1.25;
             }
         }
 
         @media (max-width: 360px) {
             .quiz-card-long-text .quiz-card-title {
-                font-size: 12px !important;
-                line-height: 1.2 !important;
+                font-size: 12px;
+                line-height: 1.2;
             }
         }
 
@@ -1900,32 +1900,23 @@
         /* CRITICAL: Override any conflicting styles */
         #trending-quizzes,
         #latest-quizzes {
-            display: flex !important;
-            flex-direction: row !important;
-            flex-wrap: nowrap !important;
-            overflow-x: auto !important;
-            overflow-y: hidden !important;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            overflow-y: hidden;
         }
 
         #trending-quizzes .quiz-card-horizontal,
         #latest-quizzes .quiz-card-horizontal {
-            flex: 0 0 340px !important;
-            width: 340px !important;
-            height: 390px !important;
+            flex: 0 0 320px;
+            width: 320px;
+            height: 360px;
         }
 
-        /* CRITICAL: Prevent explore tab from stretching */
+        /* CRITICAL: Prevent explore tab from stretching - MINIMAL CSS */
         #explore-tab {
-            width: 100% !important;
-            max-width: 100vw !important;
-            overflow: hidden !important;
-            contain: layout style !important;
-        }
-
-        #explore-tab .tab-content {
-            width: 100% !important;
-            max-width: 100vw !important;
-            overflow: hidden !important;
+            overflow-x: hidden;
         }
 
         /* CRITICAL: Force all sections to stay within viewport */
@@ -1939,18 +1930,7 @@
             box-sizing: border-box !important;
         }
 
-        /* CRITICAL: Force main layout constraints */
-        .main-content-area {
-            width: 100% !important;
-            max-width: 100% !important;
-            overflow: hidden !important;
-        }
-
-        .tab-content {
-            width: 100% !important;
-            max-width: 100% !important;
-            overflow: hidden !important;
-        }
+        /* MINIMAL: Force main layout constraints - ONLY FOR EXPLORE */
 
         /* Responsive - Adaptive Layout System */
         @media (max-width: 360px) {
@@ -2734,18 +2714,15 @@
 
         /* 🎯 TOP SECTION ONLY - Chỉ áp dụng cho phần trên */
         .explore-top-section {
-            width: 100% !important;
-            max-width: 1200px !important;
-            margin: 0 auto 24px auto !important;
-            padding: 20px !important;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto 24px auto;
+            padding: 20px;
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            overflow: hidden !important;
-            box-sizing: border-box !important;
+            overflow: hidden;
+            box-sizing: border-box;
             border-radius: 16px;
             contain: layout style;
-            left: auto !important;
-            right: auto !important;
-            transform: none !important;
         }
 
         /* 📱 DEVICE-AWARE HEADER */
@@ -3276,60 +3253,39 @@
 
         /* 🎯 DEVICE-SPECIFIC OPTIMIZATIONS */
 
-        /* CRITICAL: Prevent horizontal overflow on all devices */
+        /* MINIMAL: Prevent horizontal overflow on all devices */
         #explore-tab {
-            width: 100% !important;
-            max-width: 100% !important;
-            overflow-x: hidden !important;
-            box-sizing: border-box !important;
-            padding: 0 !important;
+            overflow-x: hidden;
         }
 
         #explore-tab * {
-            box-sizing: border-box !important;
+            box-sizing: border-box;
         }
 
         /* Ensure main content area doesn't overflow */
         .main-content-area {
-            overflow-x: hidden !important;
-            padding: 0 !important;
+            overflow-x: hidden;
         }
 
-        .tab-content {
-            overflow-x: hidden !important;
-            padding: 20px !important;
-        }
-
-        /* Specific for explore tab */
+        /* Specific for explore tab only */
         #explore-tab.tab-content {
-            padding: 20px !important;
-            width: 100% !important;
-            max-width: 100% !important;
-            margin: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            transform: none !important;
+            padding: 20px;
         }
 
-        /* 🎯 FORCE CENTER ALIGNMENT */
-        body #explore-tab .explore-top-section {
-            width: 100% !important;
-            max-width: 1200px !important;
-            margin-left: auto !important;
-            margin-right: auto !important;
-            left: auto !important;
-            right: auto !important;
-            transform: none !important;
-            position: relative !important;
+        /* 🎯 MINIMAL CENTER ALIGNMENT */
+        .explore-top-section {
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        /* Force center for main wrapper */
+        /* MINIMAL: Force center for main wrapper */
         .main-wrapper {
-            overflow-x: hidden !important;
+            overflow-x: hidden;
         }
 
         .app-layout {
-            overflow-x: hidden !important;
+            overflow-x: hidden;
         }
 
         /* 🎯 ENSURE QUIZ DISPLAY AREA IS SEPARATE */
@@ -3342,34 +3298,163 @@
             overflow: hidden;
         }
 
-        /* 🔧 ENSURE EXPLORE TAB LAYOUT ISOLATION */
-        #explore-tab {
-            width: 100% !important;
-            max-width: 100% !important;
-            overflow-x: hidden !important;
-            box-sizing: border-box !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            transform: none !important;
-        }
-
+        /* 🔧 MINIMAL EXPLORE TAB LAYOUT */
         #explore-tab .explore-top-section {
-            flex-shrink: 0 !important;
-            width: 100% !important;
-            max-width: 1200px !important;
-            margin: 0 auto 24px auto !important;
-            left: auto !important;
-            right: auto !important;
-            transform: none !important;
+            max-width: 1200px;
+            margin: 0 auto 24px auto;
         }
 
         #explore-tab .shared-quizzes-section {
-            flex: 1 !important;
-            margin-top: 0 !important;
-            width: 100% !important;
-            max-width: 100% !important;
+            margin-top: 0;
+        }
+
+        /* 🔧 KHÔI PHỤC QUIZ CARDS GỐC - Giao diện gốc cho quiz của người dùng */
+        .quiz-list {
+            display: grid;
+            gap: 25px;
+        }
+
+        .quiz-item {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.03), rgba(118, 75, 162, 0.03));
+            border: 2px solid var(--border-color, #e1e5f2);
+            border-radius: 16px;
+            padding: 25px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: scaleY(0);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .quiz-item:hover {
+            border-color: var(--primary-color, #667eea);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .quiz-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .quiz-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .quiz-item-info {
+            flex: 1;
+        }
+
+        .quiz-item-info h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary, #333);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quiz-item-info h3::before {
+            content: '📝';
+            font-size: 24px;
+        }
+
+        .quiz-item-info p {
+            color: var(--text-secondary, #666);
+            font-size: 15px;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .quiz-item-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+            color: var(--text-secondary, #666);
+            flex-wrap: wrap;
+        }
+
+        .quiz-item-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 8px;
+        }
+
+        .quiz-item-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Đảm bảo quiz cards hiển thị đúng trong tất cả tabs */
+        #home-tab .quiz-item,
+        #manage-tab .quiz-item,
+        .quiz-manage-list .quiz-item {
+            display: block;
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Empty State */
+        .empty-state,
+        .quiz-placeholder,
+        .results-placeholder {
+            text-align: center;
+            padding: 80px 30px;
+            color: var(--text-secondary, #666);
+        }
+
+        .empty-state i,
+        .quiz-placeholder i,
+        .results-placeholder i {
+            font-size: 64px;
+            color: var(--border-color, #e1e5f2);
+            margin-bottom: 25px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .empty-state h3,
+        .quiz-placeholder h3,
+        .results-placeholder h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary, #333);
+        }
+
+        .empty-state p,
+        .quiz-placeholder p,
+        .results-placeholder p {
+            font-size: 16px;
+            opacity: 0.8;
         }
 
         /* Touch Device Optimizations */
@@ -3448,61 +3533,199 @@
             box-sizing: border-box;
         }
 
-        /* Fix cho tất cả containers */
-        .explore-adaptive-container,
-        .smart-control-panel,
-        .control-card,
-        .adaptive-quiz-display,
-        .quiz-sections-container {
-            width: 100% !important;
-            max-width: 100% !important;
-            box-sizing: border-box !important;
-            overflow-x: hidden !important;
+        /* 🏠 CSS CHỈ CHO TRANG CHỦ - KHÔNG ẢNH HƯỞNG TAB EXPLORE */
+        #home-tab .quiz-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
         }
 
-        /* Fix cho mobile */
+        #home-tab .quiz-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.03), rgba(118, 75, 162, 0.03));
+            border: 2px solid #e1e5f2;
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 300px;
+        }
+
+        #home-tab .quiz-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: scaleY(0);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #home-tab .quiz-card:hover {
+            border-color: #667eea;
+            transform: translateY(-8px);
+            box-shadow: 0 16px 40px rgba(102, 126, 234, 0.2);
+        }
+
+        #home-tab .quiz-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        #home-tab .quiz-card-header {
+            flex: 1;
+            margin-bottom: 20px;
+        }
+
+        #home-tab .quiz-card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            line-height: 1.3;
+        }
+
+        #home-tab .quiz-card-title::before {
+            content: '📝';
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        #home-tab .quiz-card-description {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            min-height: 48px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        #home-tab .quiz-card-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: #666;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        #home-tab .quiz-card-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        #home-tab .quiz-card-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        #home-tab .quiz-card-actions .btn {
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            flex: 1;
+            justify-content: center;
+            min-width: 80px;
+        }
+
+        #home-tab .quiz-card-actions .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        #home-tab .quiz-card-actions .btn-primary:hover {
+            background: linear-gradient(135deg, #5a67d8, #6b46c1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        #home-tab .quiz-card-actions .btn-secondary {
+            background: #f7fafc;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+
+        #home-tab .quiz-card-actions .btn-secondary:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+            transform: translateY(-1px);
+        }
+
+        #home-tab .quiz-card-actions .btn-share-quiz {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+        }
+
+        #home-tab .quiz-card-actions .btn-share-quiz:hover {
+            background: linear-gradient(135deg, #38a169, #2f855a);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+        }
+
+        /* Responsive chỉ cho home tab */
         @media (max-width: 768px) {
-            .explore-adaptive-container {
-                padding-left: 12px !important;
-                padding-right: 12px !important;
-                margin: 0 !important;
+            #home-tab .quiz-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
             }
 
-            .smart-control-panel {
-                grid-template-columns: 1fr !important;
-                gap: 12px !important;
+            #home-tab .quiz-card {
+                padding: 20px;
+                min-height: 260px;
             }
 
-            .control-card {
-                margin: 0 !important;
-                width: 100% !important;
+            #home-tab .quiz-card-actions {
+                flex-direction: column;
             }
 
-            .explore-header-adaptive {
-                margin-left: 0 !important;
-                margin-right: 0 !important;
-                padding-left: 12px !important;
-                padding-right: 12px !important;
+            #home-tab .quiz-card-actions .btn {
+                flex: none;
+                width: 100%;
             }
         }
 
-        /* Fix cho mobile nhỏ */
         @media (max-width: 480px) {
-            .explore-adaptive-container {
-                padding: 8px !important;
+            #home-tab .quiz-card {
+                padding: 16px;
+                min-height: 240px;
             }
 
-            .explore-header-adaptive {
-                padding: 8px !important;
-                margin: 0 !important;
+            #home-tab .quiz-card-title {
+                font-size: 18px;
             }
 
-            .smart-control-panel {
-                gap: 8px !important;
-            }
-
-            .control-card {
-                padding: 12px !important;
+            #home-tab .quiz-card-description {
+                font-size: 14px;
+                min-height: 42px;
             }
         }
     </style>
