@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Carousel Simple</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Link CSS carousel -->
+    <link rel="stylesheet" href="src/css/components/style-quiz-carousel.css">
+
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-primary: #333;
+            --text-secondary: #666;
+            --text-tertiary: #999;
+            --border-color: #e1e5f2;
+            --primary-color: #667eea;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🎠 Test Carousel Hiệu Ứng Lướt</h1>
+
+        <!-- Carousel Container -->
+        <div id="carousel-container"></div>
+    </div>
+
+    <script>
+        // Dữ liệu test
+        const testQuizzes = [
+            {
+                id: 1,
+                title: 'Toán Học Lớp 10',
+                description: 'Ôn tập kiến thức toán học cơ bản',
+                totalQuestions: 20,
+                createdAt: new Date()
+            },
+            {
+                id: 2,
+                title: 'Vật Lý Lớp 11',
+                description: 'Các định luật vật lý quan trọng',
+                totalQuestions: 15,
+                createdAt: new Date()
+            },
+            {
+                id: 3,
+                title: 'Hóa Học Lớp 12',
+                description: 'Ôn tập hóa học hữu cơ và vô cơ',
+                totalQuestions: 25,
+                createdAt: new Date()
+            },
+            {
+                id: 4,
+                title: 'Tiếng Anh TOEIC',
+                description: 'Luyện thi TOEIC 600+',
+                totalQuestions: 30,
+                createdAt: new Date()
+            },
+            {
+                id: 5,
+                title: 'Lịch Sử Việt Nam',
+                description: 'Các sự kiện lịch sử quan trọng',
+                totalQuestions: 18,
+                createdAt: new Date()
+            },
+            {
+                id: 6,
+                title: 'Địa Lý Thế Giới',
+                description: 'Kiến thức địa lý toàn cầu',
+                totalQuestions: 22,
+                createdAt: new Date()
+            }
+        ];
+
+        // Render carousel
+        function renderCarousel() {
+            const container = document.getElementById('carousel-container');
+
+            const carouselHTML = `
+                <div class="loop-images">
+                    <div class="carousel-track" style="--time: 60s; --total: ${testQuizzes.length};">
+                        ${testQuizzes.map((quiz, index) => {
+                const createdDate = new Date(quiz.createdAt).toLocaleDateString('vi-VN');
+
+                return `
+                                <div class="carousel-item" style="--i: ${index + 1};" data-quiz-id="${quiz.id}">
+                                    <div class="quiz-card">
+                                        <div class="quiz-card-header">
+                                            <div class="quiz-card-title">${quiz.title}</div>
+                                            <div class="quiz-card-description">${quiz.description}</div>
+                                            <div class="quiz-card-meta">
+                                                <span><i class="fas fa-question-circle"></i> ${quiz.totalQuestions} câu</span>
+                                                <span><i class="fas fa-calendar"></i> ${createdDate}</span>
+                                            </div>
+                                        </div>
+                                        <div class="quiz-card-actions">
+                                            <button class="quiz-start-btn" onclick="alert('Bắt đầu quiz: ${quiz.title}')">
+                                                <i class="fas fa-play"></i>
+                                                Vào ôn thi
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+            }).join('')}
+                    </div>
+                    <span class="scroll-down">Lướt liên tục <span class="arrow">↓</span></span>
+                </div>
+            `;
+
+            container.innerHTML = carouselHTML;
+            console.log('✅ Carousel rendered successfully');
+        }
+
+        // Load carousel khi trang load xong
+        document.addEventListener('DOMContentLoaded', renderCarousel);
+    </script>
+</body>
+
+</html>

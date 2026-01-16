@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Debug Carousel</title>
+</head>
+
+<body>
+    <h1>Debug Script</h1>
+    <p>Mở Console (F12) và paste đoạn code này vào Console khi đang ở trang index.html:</p>
+
+    <pre style="background: #f5f5f5; padding: 20px; border-radius: 8px;">
+// Kiểm tra element
+console.log('home-quiz-grid:', document.getElementById('home-quiz-grid'));
+console.log('HTML bên trong:', document.getElementById('home-quiz-grid').innerHTML);
+
+// Kiểm tra có loop-images không
+console.log('Có loop-images?', document.querySelector('.loop-images'));
+console.log('Có carousel-track?', document.querySelector('.carousel-track'));
+console.log('Có carousel-item?', document.querySelectorAll('.carousel-item').length);
+
+// Kiểm tra CSS
+const track = document.querySelector('.carousel-track');
+if (track) {
+    console.log('Carousel track styles:', window.getComputedStyle(track));
+}
+    </pre>
+
+    <hr>
+
+    <h2>Hoặc thử force reload carousel:</h2>
+    <pre style="background: #f5f5f5; padding: 20px; border-radius: 8px;">
+// Force reload carousel
+if (window.quizManager) {
+    window.quizManager.loadHomeQuizGrid();
+}
+    </pre>
+</body>
+
+</html>

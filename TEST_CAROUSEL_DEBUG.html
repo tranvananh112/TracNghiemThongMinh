@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Carousel Animation</title>
+    <link rel="stylesheet" href="src/css/components/style-quiz-carousel.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .debug-info {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔍 Debug Carousel Animation</h1>
+
+    <div class="debug-info">
+        <strong>Test:</strong> Kiểm tra xem carousel có lướt không<br>
+        <strong>Expected:</strong> Các quiz cards sẽ lướt từ phải sang trái<br>
+        <strong>Status:</strong> <span id="status">Đang kiểm tra...</span>
+    </div>
+
+    <div id="home-quiz-grid" class="quiz-grid">
+        <!-- Carousel sẽ được render ở đây -->
+    </div>
+
+    <script>
+        // Fake quiz data
+        const testQuizzes = [
+            {
+                id: 1,
+                title: 'Test Quiz 1',
+                description: 'Mô tả test quiz 1',
+                totalQuestions: 10,
+                createdAt: new Date()
+            },
+            {
+                id: 2,
+                title: 'Test Quiz 2',
+                description: 'Mô tả test quiz 2',
+                totalQuestions: 15,
+                createdAt: new Date()
+            },
+            {
+                id: 3,
+                title: 'Test Quiz 3',
+                description: 'Mô tả test quiz 3',
+                totalQuestions: 20,
+                createdAt: new Date()
+            }
+        ];
+
+        function renderTestCarousel() {
+            const homeQuizGrid = document.getElementById('home-quiz-grid');
+            const statusEl = document.getElementById('status');
+
+            console.log('🎠 Rendering test carousel...');
+
+            const quizBackgrounds = [
+                'https://images.unsplash.com/photo-1758314896569-b3639ee707c4?q=80&w=715&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                'https://plus.unsplash.com/premium_photo-1671649240322-2124cd07eaae?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                'https://plus.unsplash.com/premium_photo-1673029925648-af80569efc46?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+            ];
+
+            const carouselHTML = `
+                <div class="loop-images">
+                    <div class="carousel-track" style="--time: 20s; --total: ${testQuizzes.length};">
+                        ${testQuizzes.map((quiz, index) => {
+                const backgroundImage = quizBackgrounds[index % quizBackgrounds.length];
+                const createdDate = new Date(quiz.createdAt).toLocaleDateString('vi-VN');
+
+                return `
+                                <div class="carousel-item" style="--i: ${index + 1};" data-quiz-id="${quiz.id}">
+                                    <div class="quiz-card" style="background-image: url('${backgroundImage}');">
+                                        <div class="quiz-card-header">
+                                            <div class="quiz-card-title">${quiz.title}</div>
+                                            <div class="quiz-card-description">${quiz.description}</div>
+                                            <div class="quiz-card-meta">
+                                                <span><i class="fas fa-question-circle"></i> ${quiz.totalQuestions} câu</span>
+                                                <span><i class="fas fa-calendar"></i> ${createdDate}</span>
+                                            </div>
+                                        </div>
+                                        <div class="quiz-card-actions">
+                                            <button class="quiz-start-btn" onclick="alert('Test: ${quiz.title}')">
+                                                <i class="fas fa-play"></i>
+                                                Vào ôn thi
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+            }).join('')}
+                    </div>
+                    <span class="scroll-down">Test Carousel <span class="arrow">↓</span></span>
+                </div>
+            `;
+
+            homeQuizGrid.innerHTML = carouselHTML;
+            console.log('✅ Test carousel HTML inserted');
+
+            // Check if animation is working
+            setTimeout(() => {
+                const carouselItems = document.querySelectorAll('.carousel-item');
+                console.log('🔍 Found carousel items:', carouselItems.length);
+
+                if (carouselItems.length > 0) {
+                    statusEl.textContent = '✅ Carousel rendered successfully! Check if items are moving.';
+                    statusEl.style.color = 'green';
+
+                    // Check animation
+                    const firstItem = carouselItems[0];
+                    const computedStyle = window.getComputedStyle(firstItem);
+                    const animationName = computedStyle.animationName;
+
+                    console.log('🎨 Animation name:', animationName);
+
+                    if (animationName && animationName !== 'none') {
+                        statusEl.textContent += ' Animation is active!';
+                    } else {
+                        statusEl.textContent += ' ⚠️ Animation may not be working.';
+                        statusEl.style.color = 'orange';
+                    }
+                } else {
+                    statusEl.textContent = '❌ No carousel items found';
+                    statusEl.style.color = 'red';
+                }
+            }, 500);
+        }
+
+        // Render carousel when page loads
+        document.addEventListener('DOMContentLoaded', renderTestCarousel);
+    </script>
+</body>
+
+</html>

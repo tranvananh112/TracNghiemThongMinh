@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo - Quiz Carousel Lướt Tự Động</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            background-color: #667eea;
+            font-size: 62.5%;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .demo-header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .demo-header h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .demo-header p {
+            font-size: 1.6rem;
+            color: #666;
+        }
+
+        .section-title {
+            font-size: 2.4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* CAROUSEL STYLES - CODE GỐC */
+        .loop-images {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            background-color: white;
+            overflow: hidden;
+        }
+
+        .carousel-track {
+            --left: -300rem;
+            min-width: calc(10rem * var(--total));
+            height: 30rem;
+            position: relative;
+        }
+
+        .carousel-track .carousel-item {
+            position: absolute;
+            width: 30rem;
+            height: 30rem;
+            left: 100%;
+            display: flex;
+            justify-content: center;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+            animation: scroll-left var(--time) linear infinite;
+            animation-delay: calc(var(--time) / var(--total) * (var(--i) - 1) - var(--time));
+            will-change: left;
+            transition: 0.5s ease-in-out;
+            cursor: pointer;
+        }
+
+        .carousel-track .carousel-item .quiz-card {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background-color: rgba(255, 255, 255, 0.95);
+            transform: rotateY(-45deg);
+            transition: 0.5s ease-in-out;
+            mask: linear-gradient(black 70%, transparent 100%);
+            -webkit-mask: linear-gradient(black 70%, transparent 100%);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid #e1e5f2;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .carousel-track .carousel-item:hover .quiz-card {
+            transform: rotateY(0deg) translateY(-1rem);
+        }
+
+        @keyframes scroll-left {
+            to {
+                left: var(--left);
+            }
+        }
+
+        .carousel-track .carousel-item .quiz-card-header {
+            position: relative;
+            padding: 24px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .carousel-track .carousel-item .quiz-card-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #333;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .carousel-track .carousel-item .quiz-card-description {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .carousel-track .carousel-item .quiz-card-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 1.2rem;
+            color: #999;
+            flex-wrap: wrap;
+        }
+
+        .carousel-track .carousel-item .quiz-card-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 10px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            font-weight: 500;
+        }
+
+        .carousel-track .carousel-item .quiz-card-meta span i {
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+
+        .carousel-track .carousel-item .quiz-card-actions {
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .carousel-track .carousel-item .quiz-start-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-track .carousel-item:hover .quiz-start-btn {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Color Variants */
+        .carousel-track .carousel-item:nth-child(3n+1) .quiz-card-header {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 167, 38, 0.1) 100%);
+        }
+
+        .carousel-track .carousel-item:nth-child(3n+1) .quiz-card-meta span i {
+            color: #FF6B6B;
+        }
+
+        .carousel-track .carousel-item:nth-child(3n+1) .quiz-start-btn {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FFA726 100%);
+        }
+
+        .carousel-track .carousel-item:nth-child(3n+2) .quiz-card-header {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.1) 0%, rgba(69, 183, 209, 0.1) 100%);
+        }
+
+        .carousel-track .carousel-item:nth-child(3n+2) .quiz-card-meta span i {
+            color: #4ECDC4;
+        }
+
+        .carousel-track .carousel-item:nth-child(3n+2) .quiz-start-btn {
+            background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%);
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 5rem;
+            left: 0;
+            right: 0;
+            font-family: 'Inter', sans-serif;
+            text-align: center;
+            font-size: 1.6rem;
+            color: #666;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .scroll-down .arrow {
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-10px);
+            }
+
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="loop-images">
+        <div class="carousel-track" style="--time: 60s; --total: 6;">
+            <!-- Quiz 1 -->
+            <div class="carousel-item" style="--i: 1;">
+                <div class="quiz-card">
+                    <div class="quiz-card-header">
+                        <div class="quiz-card-title">TRẮC NGHIỆM QUY TRÌNH SẢN XUẤT (SAP ERP) - P2</div>
+                        <div class="quiz-card-description">Ôn thi về quy trình sản xuất trong hệ thống SAP ERP phần 2
+                        </div>
+                        <div class="quiz-card-meta">
+                            <span><i class="fas fa-question-circle"></i> 30 câu</span>
+                            <span><i class="fas fa-calendar"></i> 26/12/2025</span>
+                        </div>
+                    </div>
+                    <div class="quiz-card-actions">
+                        <button class="quiz-start-btn">
+                            <i class="fas fa-play"></i>
+                            Vào ôn thi
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz 2 -->
+            <div class="carousel-item" style="--i: 2;">
+                <div class="quiz-card">
+                    <div class="quiz-card-header">
+                        <div class="quiz-card-title">Câu Trắc Nghiệm Về Thương Mại Điện Tử</div>
+                        <div class="quiz-card-description">Đề trắc nghiệm thi về thương mại điện tử và marketing online
+                        </div>
+                        <div class="quiz-card-meta">
+                            <span><i class="fas fa-question-circle"></i> 30 câu</span>
+                            <span><i class="fas fa-calendar"></i> 23/12/2025</span>
+                        </div>
+                    </div>
+                    <div class="quiz-card-actions">
+                        <button class="quiz-start-btn">
+                            <i class="fas fa-play"></i>
+                            Vào ôn thi
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz 3 -->
+            <div class="carousel-item" style="--i: 3;">
+                <div class="quiz-card">
+                    <div class="quiz-card-header">
+                        <div class="quiz-card-title">OnTap_CuoiKy_IS425_SEO</div>
+                        <div class="quiz-card-description">Ôn tập cuối kỳ môn SEO và Marketing số</div>
+                        <div class="quiz-card-meta">
+                            <span><i class="fas fa-question-circle"></i> 30 câu</span>
+                            <span><i class="fas fa-calendar"></i> 19/12/2025</span>
+                        </div>
+                    </div>
+                    <div class="quiz-card-actions">
+                        <button class="quiz-start-btn">
+                            <i class="fas fa-play"></i>
+                            Vào ôn thi
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz 4 -->
+            <div class="carousel-item" style="--i: 4;">
+                <div class="quiz-card">
+                    <div class="quiz-card-header">
+                        <div class="quiz-card-title">Toán Cao Cấp - Giải Tích</div>
+                        <div class="quiz-card-description">Bài tập trắc nghiệm về đạo hàm, tích phân và chuỗi số</div>
+                        <div class="quiz-card-meta">
+                            <span><i class="fas fa-question-circle"></i> 25 câu</span>
+                            <span><i class="fas fa-calendar"></i> 15/12/2025</span>
+                        </div>
+                    </div>
+                    <div class="quiz-card-actions">
+                        <button class="quiz-start-btn">
+                            <i class="fas fa-play"></i>
+                            Vào ôn thi
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz 5 -->
+            <div class="carousel-item" style="--i: 5;">
+                <div class="quiz-card">
+                    <div class="quiz-card-header">
+                        <div class="quiz-card-title">Tiếng Anh Giao Tiếp Cơ Bản</div>
+                        <div class="quiz-card-description">Luyện tập từ vựng và ngữ pháp tiếng Anh cơ bản</div>
+                        <div class="quiz-card-meta">
+                            <span><i class="fas fa-question-circle"></i> 40 câu</span>
+                            <span><i class="fas fa-calendar"></i> 10/12/2025</span>
+                        </div>
+                    </div>
+                    <div class="quiz-card-actions">
+                        <button class="quiz-start-btn">
+                            <i class="fas fa-play"></i>
+                            Vào ôn thi
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz 6 -->
+            <div class="carousel-item" style="--i: 6;">
+                <div class="quiz-card">
+                    <div class="quiz-card-header">
+                        <div class="quiz-card-title">Lập Trình Web với JavaScript</div>
+                        <div class="quiz-card-description">Kiểm tra kiến thức về DOM, Event, và ES6+</div>
+                        <div class="quiz-card-meta">
+                            <span><i class="fas fa-question-circle"></i> 35 câu</span>
+                            <span><i class="fas fa-calendar"></i> 05/12/2025</span>
+                        </div>
+                    </div>
+                    <div class="quiz-card-actions">
+                        <button class="quiz-start-btn">
+                            <i class="fas fa-play"></i>
+                            Vào ôn thi
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="scroll-down">Lướt liên tục <span class="arrow">↓</span></span>
+    </div>
+
+    <script>
+        document.querySelectorAll('.quiz-start-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                alert('🎮 Bắt đầu làm bài quiz!');
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Carousel Integration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+
+        /* CAROUSEL CSS - COPY VÀO FILE CSS CHÍNH */
+        .loop-images {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            position: relative;
+            min-height: 400px;
+            width: 100%;
+            overflow: hidden;
+            padding: 40px 0;
+            background: white;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .carousel-track {
+            --left: -300rem;
+            min-width: calc(10rem * var(--total));
+            height: 30rem;
+            position: relative;
+        }
+
+        .carousel-track .carousel-item {
+            position: absolute;
+            width: 30rem;
+            height: 30rem;
+            left: 100%;
+            display: flex;
+            justify-content: center;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+            animation: scroll-left var(--time) linear infinite;
+            animation-delay: calc(var(--time) / var(--total) * (var(--i) - 1) - var(--time));
+            will-change: left;
+            transition: 0.5s ease-in-out;
+            cursor: pointer;
+        }
+
+        @keyframes scroll-left {
+            to {
+                left: var(--left);
+            }
+        }
+
+        .carousel-track .carousel-item .quiz-card {
+            width: 100%;
+            height: 100%;
+            background: white;
+            transform: rotateY(-45deg);
+            transition: 0.5s ease-in-out;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid #e1e5f2;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .carousel-track .carousel-item:hover .quiz-card {
+            transform: rotateY(0deg) translateY(-1rem);
+        }
+
+        .quiz-card-header {
+            padding: 24px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            flex: 1;
+        }
+
+        .quiz-card-title {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .quiz-card-description {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 16px;
+        }
+
+        .quiz-card-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .quiz-card-meta span {
+            padding: 5px 10px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .quiz-card-actions {
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .quiz-start-btn {
+            width: 100%;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 2rem;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Test Carousel - Nếu thấy hiệu ứng ở đây thì code đúng</h1>
+
+    <div class="section-title">📚 Quiz Carousel Test</div>
+
+    <!-- COPY ĐOẠN HTML NÀY VÀO index.html -->
+    <div class="loop-images">
+        <div class="carousel-track" style="--time: 60s; --total: 2;">
+            <div class="carousel-item" style="--i: 1;">
+                <div class="quiz-card">
+                    <div class="quiz-card-header">
+                        <div class="quiz-card-title">HTHDNNL 1</div>
+                        <div class="quiz-card-description">Không có mô tả</div>
+                        <div class="quiz-card-meta">
+                            <span>30 câu</span>
+                            <span>27/12/2025</span>
+                        </div>
+                    </div>
+                    <div class="quiz-card-actions">
+                        <button class="quiz-start-btn">▶ Vào ôn thi</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-item" style="--i: 2;">
+                <div class="quiz-card">
+                    <div class="quiz-card-header">
+                        <div class="quiz-card-title">HTHDNNL</div>
+                        <div class="quiz-card-description">Không có mô tả</div>
+                        <div class="quiz-card-meta">
+                            <span>30 câu</span>
+                            <span>27/12/2025</span>
+                        </div>
+                    </div>
+                    <div class="quiz-card-actions">
+                        <button class="quiz-start-btn">▶ Vào ôn thi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="scroll-down">Lướt liên tục ↓</span>
+    </div>
+
+    <div style="margin-top: 40px; padding: 20px; background: #fff3cd; border-radius: 8px;">
+        <h3>✅ Nếu bạn thấy 2 quiz cards lướt ngang từ phải sang trái:</h3>
+        <p>→ Code carousel hoạt động tốt!</p>
+        <p>→ Vấn đề là ở index.html chưa load đúng</p>
+        <br>
+        <h3>❌ Nếu không thấy hiệu ứng:</h3>
+        <p>→ Có thể trình duyệt không hỗ trợ CSS variables</p>
+        <p>→ Hoặc cần clear cache (Ctrl + Shift + Delete)</p>
+    </div>
+</body>
+
+</html>

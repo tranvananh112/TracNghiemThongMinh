@@ -367,9 +367,213 @@ class QuizManager {
             return;
         }
 
-        // Hiển thị tối đa 6 quiz gần nhất ở trang chủ
+        // Hiển thị carousel luôn, nếu không có quiz thì hiển thị empty state đẹp
+        if (this.quizzes.length > 0) {
+            this.loadQuizCarousel();
+        } else {
+            homeQuizGrid.innerHTML = `
+                <div class="empty-state-card">
+                    <i class="fas fa-folder-open"></i>
+                    <h3>Chưa có quiz nào</h3>
+                    <p>Hãy tạo quiz đầu tiên của bạn để thấy hiệu ứng lướt đẹp!</p>
+                    <button class="btn-primary" data-tab="input">
+                        <i class="fas fa-plus"></i>
+                        Tạo quiz mới
+                    </button>
+                </div>
+            `;
+        }
+
+        // Load shared quiz carousel
+        this.loadSharedQuizCarousel();
+    }
+
+    loadQuizCarousel() {
+        const homeQuizGrid = document.getElementById('home-quiz-grid');
         const recentQuizzes = this.quizzes.slice(-6).reverse();
-        console.log('📋 Recent quizzes:', recentQuizzes.map(q => q.title));
+        console.log('🎠 Loading quiz carousel with', recentQuizzes.length, 'quizzes');
+        console.log('📋 Quiz data:', recentQuizzes);
+
+        // Mảng hình ảnh đẹp cho quiz cards
+        const quizBackgrounds = [
+            'https://images.unsplash.com/photo-1758314896569-b3639ee707c4?q=80&w=715&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            'https://plus.unsplash.com/premium_photo-1671649240322-2124cd07eaae?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            'https://plus.unsplash.com/premium_photo-1673029925648-af80569efc46?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            'https://plus.unsplash.com/premium_photo-1666533099824-abd0ed813f2a?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            'https://plus.unsplash.com/premium_photo-1671105035554-7f8c2a587201?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            'https://plus.unsplash.com/premium_photo-1686750875748-d00684d36b1e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        ];
+
+        // Clear existing content
+        homeQuizGrid.innerHTML = '';
+
+        // Create loop-images container
+        const loopImages = document.createElement('div');
+        loopImages.className = 'loop-images';
+        loopImages.style.cssText = 'display: flex !important; align-items: center !important; justify-content: center !important; flex-direction: column !important; position: relative !important; min-height: 400px !important; width: 100% !important; overflow: hidden !important; padding: 40px 0 !important;';
+
+        // Create carousel track
+        const carouselTrack = document.createElement('div');
+        carouselTrack.className = 'carousel-track';
+        carouselTrack.style.cssText = 'min-width: calc(10rem * ' + recentQuizzes.length + '); height: 30rem; position: relative !important;';
+
+        // Create carousel items
+        recentQuizzes.forEach((quiz, index) => {
+            const description = quiz.description && quiz.description.trim() ? quiz.description : 'Không có mô tả';
+            const createdDate = new Date(quiz.createdAt).toLocaleDateString('vi-VN');
+            const backgroundImage = quizBackgrounds[index % quizBackgrounds.length];
+
+            // Create carousel item
+            const carouselItem = document.createElement('div');
+            carouselItem.className = 'carousel-item';
+            carouselItem.setAttribute('data-quiz-id', quiz.id);
+            carouselItem.style.cssText = `
+                position: absolute !important; 
+                width: 30rem !important; 
+                height: 30rem !important; 
+                left: 100% !important; 
+                display: flex !important; 
+                justify-content: center !important; 
+                perspective: 1000px !important; 
+                transform-style: preserve-3d !important; 
+                animation: scroll-left-anim 60s linear infinite !important; 
+                animation-delay: ${60 / recentQuizzes.length * index - 60}s !important; 
+                will-change: left !important; 
+                transition: 0.5s ease-in-out !important; 
+                cursor: pointer !important;
+            `;
+
+            // Create quiz card
+            const quizCard = document.createElement('div');
+            quizCard.className = 'quiz-card';
+            quizCard.style.cssText = `
+                width: 100% !important; 
+                height: 100% !important; 
+                background-image: url('${backgroundImage}'); 
+                background-size: cover !important; 
+                background-position: center !important; 
+                background-repeat: no-repeat !important; 
+                transform: rotateY(-45deg) !important; 
+                transition: 0.5s ease-in-out !important; 
+                border-radius: 20px !important; 
+                overflow: hidden !important; 
+                border: 2px solid #e1e5f2 !important; 
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important; 
+                backdrop-filter: blur(10px) !important; 
+                display: flex !important; 
+                flex-direction: column !important; 
+                position: relative !important;
+            `;
+
+            // Create overlay
+            const overlay = document.createElement('div');
+            overlay.style.cssText = 'position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.6) 100%); z-index: 1;';
+
+            // Create header
+            const header = document.createElement('div');
+            header.className = 'quiz-card-header';
+            header.style.cssText = 'position: relative !important; padding: 24px !important; background: transparent !important; border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important; flex: 1 !important; display: flex !important; flex-direction: column !important; z-index: 2 !important;';
+
+            const title = document.createElement('div');
+            title.className = 'quiz-card-title';
+            title.style.cssText = 'font-size: 18px !important; font-weight: 700 !important; margin-bottom: 10px !important; color: white !important; line-height: 1.4 !important; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;';
+            title.textContent = quiz.title;
+
+            const desc = document.createElement('div');
+            desc.className = 'quiz-card-description';
+            desc.style.cssText = 'font-size: 14px !important; color: rgba(255, 255, 255, 0.9) !important; margin-bottom: 16px !important; line-height: 1.5 !important; flex: 1 !important; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;';
+            desc.textContent = description;
+
+            const meta = document.createElement('div');
+            meta.className = 'quiz-card-meta';
+            meta.style.cssText = 'display: flex !important; gap: 12px !important; font-size: 12px !important; color: rgba(255, 255, 255, 0.8) !important; flex-wrap: wrap !important;';
+            meta.innerHTML = `
+                <span style="display: flex !important; align-items: center !important; gap: 6px !important; padding: 6px 12px !important; background: rgba(255, 255, 255, 0.2) !important; border-radius: 15px !important; border: 1px solid rgba(255, 255, 255, 0.3) !important; font-weight: 500 !important; backdrop-filter: blur(10px) !important;"><i class="fas fa-question-circle" style="color: rgba(255, 255, 255, 0.9) !important; font-size: 11px !important;"></i> ${quiz.totalQuestions} câu</span>
+                <span style="display: flex !important; align-items: center !important; gap: 6px !important; padding: 6px 12px !important; background: rgba(255, 255, 255, 0.2) !important; border-radius: 15px !important; border: 1px solid rgba(255, 255, 255, 0.3) !important; font-weight: 500 !important; backdrop-filter: blur(10px) !important;"><i class="fas fa-calendar" style="color: rgba(255, 255, 255, 0.9) !important; font-size: 11px !important;"></i> ${createdDate}</span>
+            `;
+
+            // Create actions
+            const actions = document.createElement('div');
+            actions.className = 'quiz-card-actions';
+            actions.style.cssText = 'padding: 20px !important; background: transparent !important; backdrop-filter: blur(10px) !important; z-index: 2 !important; position: relative !important;';
+
+            const button = document.createElement('button');
+            button.className = 'quiz-start-btn';
+            button.setAttribute('data-quiz-id', quiz.id);
+            button.style.cssText = 'width: 100% !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; padding: 14px 20px !important; background: rgba(255, 255, 255, 0.9) !important; color: #333 !important; border: none !important; border-radius: 12px !important; font-size: 14px !important; font-weight: 600 !important; cursor: pointer !important; transition: all 0.3s ease !important; backdrop-filter: blur(10px) !important; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;';
+            button.innerHTML = '<i class="fas fa-play"></i> Vào ôn thi';
+
+            // Assemble elements
+            header.appendChild(title);
+            header.appendChild(desc);
+            header.appendChild(meta);
+            actions.appendChild(button);
+            quizCard.appendChild(overlay);
+            quizCard.appendChild(header);
+            quizCard.appendChild(actions);
+            carouselItem.appendChild(quizCard);
+            carouselTrack.appendChild(carouselItem);
+        });
+
+        // Create scroll down text
+        const scrollDown = document.createElement('span');
+        scrollDown.className = 'scroll-down';
+        scrollDown.style.cssText = 'position: absolute !important; bottom: 2rem !important; left: 0 !important; right: 0 !important; font-family: "Poppins", sans-serif !important; text-align: center !important; font-size: 14px !important; color: #666 !important; display: flex !important; flex-direction: column !important; align-items: center !important; text-decoration: none !important; opacity: 0.8 !important; font-weight: 500 !important;';
+        scrollDown.innerHTML = 'Các bài quiz của bạn <span class="arrow" style="font-size: 18px !important; margin-top: 5px !important; animation: bounce-anim 2s infinite !important;">↓</span>';
+
+        // Assemble carousel
+        loopImages.appendChild(carouselTrack);
+        loopImages.appendChild(scrollDown);
+        homeQuizGrid.appendChild(loopImages);
+
+        // Add CSS animations
+        const animationCSS = document.createElement('style');
+        animationCSS.innerHTML = `
+            @keyframes scroll-left-anim {
+                0% { left: 100%; }
+                100% { left: -300rem; }
+            }
+            
+            @keyframes bounce-anim {
+                0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+                40% { transform: translateY(-10px); }
+                60% { transform: translateY(-5px); }
+            }
+            
+            .carousel-item:hover .quiz-card {
+                transform: rotateY(0deg) translateY(-1rem) !important;
+            }
+            
+            .carousel-item:hover .quiz-start-btn {
+                transform: translateY(-2px) !important;
+                background: white !important;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+            }
+        `;
+        document.head.appendChild(animationCSS);
+
+        console.log('✅ Quiz carousel HTML inserted');
+        console.log('📦 Carousel container:', homeQuizGrid);
+
+        // Thêm event listeners
+        this.attachCarouselEventListeners();
+
+        // Debug: Kiểm tra xem carousel có được render không
+        setTimeout(() => {
+            const carouselItems = document.querySelectorAll('.carousel-item');
+            console.log('🔍 Found carousel items:', carouselItems.length);
+            if (carouselItems.length > 0) {
+                console.log('✅ Carousel animation should be working');
+            } else {
+                console.log('❌ No carousel items found - check CSS/HTML');
+            }
+        }, 100);
+    }
+
+    loadQuizGrid() {
+        const homeQuizGrid = document.getElementById('home-quiz-grid');
+        const recentQuizzes = this.quizzes.slice(-6).reverse();
+        console.log('📋 Loading quiz grid with', recentQuizzes.length, 'quizzes');
 
         const quizHTML = recentQuizzes.map(quiz => {
             const description = quiz.description && quiz.description.trim() ? quiz.description : 'Không có mô tả';
@@ -408,6 +612,142 @@ class QuizManager {
 
         // Thêm event listeners cho các nút
         this.attachHomeQuizEventListeners();
+    }
+
+    attachCarouselEventListeners() {
+        const carouselItems = document.querySelectorAll('.carousel-item');
+
+        carouselItems.forEach(item => {
+            const startBtn = item.querySelector('.quiz-start-btn');
+            if (startBtn) {
+                startBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const quizId = startBtn.getAttribute('data-quiz-id');
+                    console.log('🎮 Starting quiz from carousel:', quizId);
+                    this.startQuizById(quizId);
+                });
+            }
+        });
+    }
+
+    async loadSharedQuizCarousel() {
+        const sharedCarousel = document.getElementById('shared-quiz-carousel');
+        if (!sharedCarousel) return;
+
+        console.log('🌐 Loading shared quiz carousel...');
+
+        try {
+            // Lấy quiz đã chia sẻ từ exploreQuizManager nếu có
+            if (window.exploreQuizManager && typeof window.exploreQuizManager.loadSharedQuizzes === 'function') {
+                await window.exploreQuizManager.loadSharedQuizzes();
+
+                // Lấy danh sách quiz đã chia sẻ
+                const sharedQuizzes = window.exploreQuizManager.sharedQuizzes || [];
+
+                if (sharedQuizzes.length >= 3) {
+                    const recentShared = sharedQuizzes.slice(0, 6);
+
+                    // Mảng hình ảnh đẹp cho shared quiz cards
+                    const sharedBackgrounds = [
+                        'https://plus.unsplash.com/premium_photo-1686844462591-393ceae12be0?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                        'https://plus.unsplash.com/premium_photo-1686839181367-febb561faa53?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                        'https://plus.unsplash.com/premium_photo-1671199850329-91cae34a6b6d?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                        'https://plus.unsplash.com/premium_photo-1685655611311-9f801b43b9fa?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                        'https://plus.unsplash.com/premium_photo-1675598468920-878ae1e46f14?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                        'https://images.unsplash.com/photo-1718036094878-ecdce2b1be95?q=80&w=715&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                    ];
+
+                    const carouselHTML = `
+                        <div class="loop-images">
+                            <div class="carousel-track" style="--time: 60s; --total: ${recentShared.length};">
+                                ${recentShared.map((quiz, index) => {
+                        const description = quiz.description || 'Không có mô tả';
+                        const createdDate = quiz.created_at ? new Date(quiz.created_at).toLocaleDateString('vi-VN') : 'N/A';
+                        const backgroundImage = sharedBackgrounds[index % sharedBackgrounds.length];
+
+                        return `
+                                        <div class="carousel-item" style="--i: ${index + 1};" data-quiz-id="${quiz.id}">
+                                            <div class="quiz-card" style="background-image: url('${backgroundImage}');">
+                                                <div class="quiz-card-header">
+                                                    <div class="quiz-card-title">${quiz.title}</div>
+                                                    <div class="quiz-card-description">${description}</div>
+                                                    <div class="quiz-card-meta">
+                                                        <span><i class="fas fa-user"></i> ${quiz.user_name || 'Ẩn danh'}</span>
+                                                        <span><i class="fas fa-calendar"></i> ${createdDate}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="quiz-card-actions">
+                                                    <button class="quiz-start-btn shared-quiz-btn" data-quiz-id="${quiz.id}">
+                                                        <i class="fas fa-play"></i>
+                                                        Làm bài
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `;
+                    }).join('')}
+                            </div>
+                            <span class="scroll-down">Quiz từ cộng đồng <span class="arrow">↓</span></span>
+                        </div>
+                    `;
+
+                    sharedCarousel.innerHTML = carouselHTML;
+
+                    // Attach event listeners cho shared quiz
+                    this.attachSharedCarouselEventListeners();
+
+                    console.log('✅ Shared quiz carousel loaded');
+                } else {
+                    sharedCarousel.innerHTML = `
+                        <div class="empty-state-card">
+                            <i class="fas fa-globe"></i>
+                            <h3>Chưa có quiz nào được chia sẻ</h3>
+                            <p>Hãy chia sẻ quiz của bạn để mọi người cùng học!</p>
+                        </div>
+                    `;
+                }
+            } else {
+                // Hiển thị empty state đẹp khi chưa có quiz chia sẻ
+                sharedCarousel.innerHTML = `
+                    <div class="empty-state-card">
+                        <i class="fas fa-globe"></i>
+                        <h3>Chưa có quiz nào được chia sẻ</h3>
+                        <p>Hãy chia sẻ quiz của bạn để mọi người cùng học!</p>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            console.error('❌ Error loading shared quiz carousel:', error);
+            sharedCarousel.innerHTML = `
+                <div class="empty-state-card">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Không thể tải quiz đã chia sẻ</h3>
+                    <p>Vui lòng thử lại sau</p>
+                </div>
+            `;
+        }
+    }
+
+    attachSharedCarouselEventListeners() {
+        const sharedBtns = document.querySelectorAll('.shared-quiz-btn');
+
+        sharedBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const quizId = btn.getAttribute('data-quiz-id');
+                console.log('🌐 Starting shared quiz:', quizId);
+
+                // Chuyển sang tab explore và load quiz
+                if (window.exploreQuizManager && typeof window.exploreQuizManager.loadSharedQuizById === 'function') {
+                    this.switchTab('explore');
+                    window.exploreQuizManager.loadSharedQuizById(quizId);
+                } else {
+                    this.showToast('Tính năng đang được phát triển', 'info');
+                }
+            });
+        });
     }
 
     attachHomeQuizEventListeners() {
@@ -1259,6 +1599,7 @@ class QuizManager {
             `;
         }
     }
+
 }
 
 // Expose QuizManager to window for patches that access window.QuizManager

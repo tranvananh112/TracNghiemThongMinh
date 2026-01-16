@@ -1071,8 +1071,12 @@ class ExploreQuizManager {
         const trendingQuizzes = this.getTrendingQuizzes(quizzes);
         const latestQuizzes = this.getLatestQuizzes(quizzes);
 
-        // Render trending quizzes
-        this.renderQuizSection('trending-quizzes', trendingQuizzes.slice(0, 10));
+        // Render trending quizzes với carousel nếu có đủ quiz
+        if (trendingQuizzes.length >= 3) {
+            this.renderTrendingWithCarousel('trending-quizzes', trendingQuizzes.slice(0, 12));
+        } else {
+            this.renderQuizSection('trending-quizzes', trendingQuizzes.slice(0, 10));
+        }
 
         // Render latest quizzes
         this.renderQuizSection('latest-quizzes', latestQuizzes.slice(0, 10));
@@ -1173,6 +1177,262 @@ class ExploreQuizManager {
                 window.optimizeContentAwareLayout();
             }
         }, 100);
+    }
+
+    // 🔥 Render trending quizzes với hiệu ứng carousel
+    renderTrendingWithCarousel(containerId, quizzes) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        // Mảng hình ảnh cho trending carousel
+        const trendingImages = [
+            'https://images.unsplash.com/photo-1758314896569-b3639ee707c4?q=80&w=715&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            'https://plus.unsplash.com/premium_photo-1671649240322-2124cd07eaae?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            'https://plus.unsplash.com/premium_photo-1673029925648-af80569efc46?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            'https://plus.unsplash.com/premium_photo-1666533099824-abd0ed813f2a?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            'https://plus.unsplash.com/premium_photo-1671105035554-7f8c2a587201?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            'https://plus.unsplash.com/premium_photo-1686750875748-d00684d36b1e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            'https://plus.unsplash.com/premium_photo-1686844462591-393ceae12be0?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            'https://plus.unsplash.com/premium_photo-1686839181367-febb561faa53?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            'https://plus.unsplash.com/premium_photo-1671199850329-91cae34a6b6d?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            'https://plus.unsplash.com/premium_photo-1685655611311-9f801b43b9fa?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            'https://plus.unsplash.com/premium_photo-1675598468920-878ae1e46f14?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            'https://images.unsplash.com/photo-1718036094878-ecdce2b1be95?q=80&w=715&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        ];
+
+        // Clear container
+        container.innerHTML = '';
+
+        // Sử dụng cấu trúc HTML từ file txt với quiz data - Compact version
+        const carouselHTML = `
+            <div class="loop-images trending-loop-images" style="min-height: 280px; padding: 20px 0 25px 0; margin-bottom: 25px;">
+                <div class="carousel-track trending-carousel-track" style="--time: 40s; --total: ${quizzes.length}; --left: -300rem;">
+                    ${quizzes.map((quiz, index) => {
+            const timeAgo = this.getTimeAgo(quiz.sharedAt);
+            const categoryName = this.getCategoryName(quiz.category || 'khac');
+            const categoryIcon = this.getCategoryIcon(quiz.category || 'khac');
+            const backgroundImage = trendingImages[index % trendingImages.length];
+
+            return `
+                            <div class="carousel-item trending-carousel-item" 
+                                 data-quiz-id="${quiz.id}"
+                                 style="--i: ${index + 1};"
+                                 onclick="exploreQuizManager.startPracticeMode('${quiz.id}')">
+                                <div class="trending-quiz-card" 
+                                     style="width: 100%; height: 100%; background-image: url('${backgroundImage}'); background-size: cover; background-position: center; transform: rotateY(-45deg); transition: 0.5s ease-in-out; border-radius: 16px; overflow: hidden; border: 2px solid #667eea; box-shadow: 0 6px 24px rgba(102, 126, 234, 0.25); backdrop-filter: blur(8px); display: flex; flex-direction: column; position: relative; mask: linear-gradient(black 75%, transparent 100%); -webkit-mask: linear-gradient(black 75%, transparent 100%);">
+                                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(102, 126, 234, 0.88) 0%, rgba(118, 75, 162, 0.92) 100%); z-index: 1;"></div>
+                                    <div class="trending-card-header" style="position: relative; padding: 12px; background: transparent; flex: 1; display: flex; flex-direction: column; z-index: 2; min-height: 0;">
+                                        <div class="trending-category" style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; background: rgba(255, 255, 255, 0.95); border-radius: 12px; font-size: 9px; font-weight: 600; color: #667eea; margin-bottom: 6px; width: fit-content; box-shadow: 0 1px 4px rgba(0,0,0,0.1);">
+                                            <i class="${categoryIcon}"></i> ${categoryName}
+                                        </div>
+                                        <div class="trending-title" style="font-size: 13px; font-weight: 700; margin-bottom: 5px; color: white; line-height: 1.2; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${this.escapeHtml(quiz.title)}</div>
+                                        
+                                        ${quiz.description ? `
+                                        <div class="trending-description" style="font-size: 10px; color: rgba(255, 255, 255, 0.85); margin-bottom: 6px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);">
+                                            ${this.escapeHtml(quiz.description)}
+                                        </div>
+                                        ` : ''}
+                                        
+                                        <div class="trending-stats" style="display: flex; gap: 4px; margin-bottom: 6px; flex-wrap: wrap;">
+                                            <div style="display: flex; align-items: center; gap: 2px; padding: 2px 5px; background: rgba(255, 255, 255, 0.25); border-radius: 8px; font-size: 8px; color: white; font-weight: 600;">
+                                                <i class="fas fa-fire" style="color: #ff6b6b;"></i> ${quiz.attempts || 0}
+                                            </div>
+                                            <div style="display: flex; align-items: center; gap: 2px; padding: 2px 5px; background: rgba(255, 255, 255, 0.25); border-radius: 8px; font-size: 8px; color: white; font-weight: 600;">
+                                                <i class="fas fa-eye" style="color: #4ecdc4;"></i> ${quiz.views || 0}
+                                            </div>
+                                            ${quiz.difficulty ? `
+                                            <div style="display: flex; align-items: center; gap: 2px; padding: 2px 5px; background: rgba(255, 255, 255, 0.25); border-radius: 8px; font-size: 8px; color: white; font-weight: 600;">
+                                                <i class="fas fa-chart-line" style="color: #ffa726;"></i> ${this.getDifficultyText(quiz.difficulty)}
+                                            </div>
+                                            ` : ''}
+                                        </div>
+                                        
+                                        <div class="trending-meta" style="display: flex; gap: 4px; font-size: 7px; color: rgba(255, 255, 255, 0.9); flex-wrap: wrap; margin-bottom: 6px;">
+                                            <span style="display: flex; align-items: center; gap: 2px; padding: 1px 4px; background: rgba(255, 255, 255, 0.15); border-radius: 5px;"><i class="fas fa-user" style="color: #64b5f6;"></i> ${this.escapeHtml(quiz.userName)}</span>
+                                            <span style="display: flex; align-items: center; gap: 2px; padding: 1px 4px; background: rgba(255, 255, 255, 0.15); border-radius: 5px;"><i class="fas fa-question-circle" style="color: #81c784;"></i> ${quiz.totalQuestions} câu</span>
+                                            ${quiz.timeLimit ? `
+                                            <span style="display: flex; align-items: center; gap: 2px; padding: 1px 4px; background: rgba(255, 255, 255, 0.15); border-radius: 5px;"><i class="fas fa-stopwatch" style="color: #ffb74d;"></i> ${quiz.timeLimit}p</span>
+                                            ` : ''}
+                                            <span style="display: flex; align-items: center; gap: 2px; padding: 1px 4px; background: rgba(255, 255, 255, 0.15); border-radius: 5px;"><i class="fas fa-clock" style="color: #f06292;"></i> ${timeAgo}</span>
+                                        </div>
+                                        
+                                        ${quiz.tags && quiz.tags.length > 0 ? `
+                                        <div class="trending-tags" style="display: flex; gap: 2px; margin-top: auto; flex-wrap: wrap;">
+                                            ${quiz.tags.slice(0, 2).map(tag => `
+                                                <span style="font-size: 6px; padding: 1px 3px; background: rgba(255, 255, 255, 0.2); color: rgba(255, 255, 255, 0.9); border-radius: 6px; font-weight: 500;">#${this.escapeHtml(tag)}</span>
+                                            `).join('')}
+                                            ${quiz.tags.length > 2 ? `<span style="font-size: 6px; padding: 1px 3px; background: rgba(255, 255, 255, 0.2); color: rgba(255, 255, 255, 0.9); border-radius: 6px; font-weight: 500;">+${quiz.tags.length - 2}</span>` : ''}
+                                        </div>
+                                        ` : ''}
+                                    </div>
+                                    <div class="trending-actions" style="padding: 8px 12px; background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(8px); z-index: 3; position: relative; border-top: 1px solid rgba(255, 255, 255, 0.2);">
+                                        <button class="trending-btn" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 4px; padding: 6px 10px; background: rgba(255, 255, 255, 0.95); color: #667eea; border: none; border-radius: 8px; font-size: 10px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(8px); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);">
+                                            <i class="fas fa-play"></i> Vào ôn thi
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+        }).join('')}
+                </div>
+                <span class="scroll-down trending-scroll-text" style="position: absolute; bottom: 1rem; left: 0; right: 0; font-family: 'Poppins', sans-serif; text-align: center; font-size: 13px; color: #667eea; display: flex; flex-direction: column; align-items: center; text-decoration: none; opacity: 0.8; font-weight: 600;">
+                    📈 Đề thi xu hướng <span class="arrow" style="font-size: 16px; margin-top: 4px;">↓</span>
+                </span>
+            </div>
+        `;
+
+        container.innerHTML = carouselHTML;
+
+        // Áp dụng CSS từ file txt với màu chủ đạo của website
+        if (!document.getElementById('trending-carousel-styles')) {
+            const trendingStyles = document.createElement('style');
+            trendingStyles.id = 'trending-carousel-styles';
+            trendingStyles.innerHTML = `
+                @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+                
+                /* Trending carousel styles based on txt files */
+                .trending-loop-images {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                    position: relative;
+                    width: 100%;
+                    overflow: hidden;
+                }
+                
+                .trending-carousel-track {
+                    min-width: calc(10rem * var(--total));
+                    height: 24rem;
+                    position: relative;
+                }
+                
+                .trending-carousel-item {
+                    position: absolute;
+                    width: 24rem;
+                    height: 24rem;
+                    left: 100%;
+                    display: flex;
+                    justify-content: center;
+                    perspective: 1000px;
+                    transform-style: preserve-3d;
+                    animation: scroll-left var(--time) linear infinite;
+                    animation-delay: calc(var(--time) / var(--total) * (var(--i) - 1) - var(--time));
+                    will-change: left;
+                    transition: 0.5s ease-in-out;
+                    cursor: pointer;
+                    backface-visibility: hidden;
+                    -webkit-backface-visibility: hidden;
+                }
+                
+                .trending-carousel-item:hover .trending-quiz-card {
+                    transform: rotateY(0deg) translateY(-1rem) !important;
+                    border-color: #764ba2 !important;
+                    box-shadow: 0 12px 40px rgba(118, 75, 162, 0.4) !important;
+                }
+                
+                .trending-carousel-item:hover .trending-btn {
+                    transform: translateY(-2px) !important;
+                    background: white !important;
+                    color: #764ba2 !important;
+                    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3) !important;
+                }
+                
+                @keyframes scroll-left {
+                    to {
+                        left: var(--left);
+                    }
+                }
+                
+                .trending-scroll-text .arrow {
+                    animation: bounce 2s infinite;
+                }
+                
+                @keyframes bounce {
+                    0%, 20%, 50%, 80%, 100% {
+                        transform: translateY(0);
+                    }
+                    40% {
+                        transform: translateY(-10px);
+                    }
+                    60% {
+                        transform: translateY(-5px);
+                    }
+                }
+                
+                .trending-category {
+                    animation: pulse 3s infinite !important;
+                }
+                
+                @keyframes pulse {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.03); }
+                }
+                
+                /* Responsive cho mobile */
+                @media (max-width: 768px) {
+                    .trending-loop-images {
+                        min-height: 240px !important;
+                        padding: 15px 0 20px 0 !important;
+                    }
+                    
+                    .trending-carousel-track {
+                        height: 20rem !important;
+                    }
+                    
+                    .trending-carousel-item {
+                        width: 20rem !important;
+                        height: 20rem !important;
+                    }
+                }
+                
+                @media (max-width: 480px) {
+                    .trending-loop-images {
+                        min-height: 220px !important;
+                        padding: 12px 0 18px 0 !important;
+                    }
+                    
+                    .trending-carousel-track {
+                        height: 18rem !important;
+                    }
+                    
+                    .trending-carousel-item {
+                        width: 18rem !important;
+                        height: 18rem !important;
+                    }
+                }
+                
+                /* Desktop - hiển thị 3 cards cùng lúc */
+                @media (min-width: 1200px) {
+                    .trending-loop-images {
+                        min-height: 300px !important;
+                    }
+                    
+                    .trending-carousel-track {
+                        height: 26rem !important;
+                    }
+                    
+                    .trending-carousel-item {
+                        width: 26rem !important;
+                        height: 26rem !important;
+                    }
+                }
+                
+                /* Smooth performance optimizations */
+                @media (prefers-reduced-motion: reduce) {
+                    .trending-carousel-item {
+                        animation: none;
+                    }
+                    
+                    .trending-scroll-text .arrow {
+                        animation: none;
+                    }
+                }
+            `;
+            document.head.appendChild(trendingStyles);
+        }
+
+        console.log('📈 Trending carousel rendered with', quizzes.length, 'quizzes using smooth txt-based animations');
     }
 
     // Lấy quiz xu hướng (sắp xếp theo views + attempts)
@@ -2777,6 +3037,17 @@ class ExploreQuizManager {
             'khac': 'fas fa-book'
         };
         return categoryIcons[category] || 'fas fa-book';
+    }
+
+    // Lấy text độ khó
+    getDifficultyText(difficulty) {
+        const difficultyTexts = {
+            'easy': 'Dễ',
+            'medium': 'Trung bình',
+            'hard': 'Khó',
+            'expert': 'Chuyên gia'
+        };
+        return difficultyTexts[difficulty] || 'Trung bình';
     }
 
     // Khởi tạo bộ lọc danh mục
