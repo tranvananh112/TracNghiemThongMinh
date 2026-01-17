@@ -52,21 +52,7 @@ class QuizManager {
         }
     }
 
-    toggleTheme() {
-        document.body.classList.toggle('dark-mode');
-        const isDark = document.body.classList.contains('dark-mode');
-        const icon = document.querySelector('#theme-toggle i');
-
-        if (isDark) {
-            icon.classList.replace('fa-moon', 'fa-sun');
-            localStorage.setItem('theme', 'dark');
-            this.showToast('Đã chuyển sang chế độ tối', 'success');
-        } else {
-            icon.classList.replace('fa-sun', 'fa-moon');
-            localStorage.setItem('theme', 'light');
-            this.showToast('Đã chuyển sang chế độ sáng', 'success');
-        }
-    }
+    // toggleTheme method removed - now handled by ThemeToggleManager
 
     showToast(message, type = 'success') {
         const existingToast = document.querySelector('.toast');
@@ -97,10 +83,13 @@ class QuizManager {
     }
 
     initializeEventListeners() {
-        // Theme toggle
-        document.getElementById('theme-toggle').addEventListener('click', () => {
-            this.toggleTheme();
-        });
+        // Theme toggle - Updated to use new theme toggle or skip if not found
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            console.log('⚠️ Old theme toggle found but method removed. Use ThemeToggleManager instead.');
+        } else {
+            console.log('✅ Theme toggle handled by ThemeToggleManager');
+        }
 
         // Tab navigation
         document.querySelectorAll('.nav-btn').forEach(btn => {
