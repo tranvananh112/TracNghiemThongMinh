@@ -1,0 +1,253 @@
+:root {
+    --primary-blue: #4A90E2;
+    --light-blue: #E3F2FD;
+    --dark-gray: #2C2C2C;
+    --light-gray: #F5F5F5;
+    --white: #FFFFFF;
+    --text-dark: #333333;
+    --text-light: #666666;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --border-radius: 25px;
+}
+
+/* Reset và base styles */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+}
+
+body {
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-dark);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.menu-container {
+    width: 100%;
+    max-width: 400px;
+}
+
+.menu-wrap {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    position: relative;
+    box-shadow:
+        0 10px 30px var(--shadow),
+        0 1px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    border: 1px solid rgba(74, 144, 226, 0.1);
+
+    &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary-blue), #64B5F6);
+        z-index: 10;
+    }
+}
+
+.menu-nav {
+    position: relative;
+    anchor-name: --nav;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.menu-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 16px 20px;
+    color: var(--text-light);
+    text-decoration: none;
+    border-radius: 15px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 500;
+    font-size: 16px;
+    z-index: 10;
+
+    i {
+        font-size: 18px;
+        width: 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+
+    span {
+        flex: 1;
+        transition: all 0.3s ease;
+    }
+
+    &:hover {
+        color: var(--primary-blue);
+        transform: translateX(5px);
+
+        i {
+            transform: scale(1.1);
+        }
+    }
+
+    &.active {
+        anchor-name: --active;
+        color: var(--white);
+        font-weight: 600;
+
+        i {
+            transform: scale(1.1);
+        }
+    }
+
+    &:before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 15px;
+        opacity: 0;
+        background: var(--light-blue);
+        transition: opacity 0.3s ease;
+    }
+
+    &:hover:before {
+        anchor-name: --nav;
+        opacity: 0.5;
+    }
+}
+
+.bubble {
+    position: absolute;
+    border-radius: 15px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+
+    &.active {
+        position-anchor: --active;
+        top: anchor(top);
+        right: anchor(right);
+        bottom: anchor(bottom);
+        left: anchor(left);
+        z-index: 2;
+        background: linear-gradient(135deg, var(--primary-blue) 0%, #64B5F6 100%);
+        box-shadow:
+            0 4px 15px rgba(74, 144, 226, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    &.hover {
+        z-index: 1;
+        background: var(--light-blue);
+        position-anchor: --nav;
+        top: anchor(top);
+        right: anchor(right);
+        bottom: anchor(bottom);
+        left: anchor(left);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+}
+
+/* Hiệu ứng đặc biệt cho item đầu tiên (Trang Chủ) */
+.menu-item:first-child.active {
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #64B5F6 100%);
+
+    &:before {
+        content: "🏠";
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 12px;
+        opacity: 0.7;
+    }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .menu-container {
+        max-width: 100%;
+    }
+
+    .menu-item {
+        padding: 14px 18px;
+        font-size: 15px;
+
+        i {
+            font-size: 16px;
+        }
+    }
+}
+
+/* Animation cho khi load trang */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.menu-wrap {
+    animation: slideInUp 0.6s ease-out;
+}
+
+.menu-item {
+    animation: slideInUp 0.6s ease-out;
+    animation-fill-mode: both;
+}
+
+.menu-item:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.menu-item:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.menu-item:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.menu-item:nth-child(4) {
+    animation-delay: 0.25s;
+}
+
+.menu-item:nth-child(5) {
+    animation-delay: 0.3s;
+}
+
+.menu-item:nth-child(6) {
+    animation-delay: 0.35s;
+}
+
+.menu-item:nth-child(7) {
+    animation-delay: 0.4s;
+}
+
+.menu-item:nth-child(8) {
+    animation-delay: 0.45s;
+}
+
+.menu-item:nth-child(9) {
+    animation-delay: 0.5s;
+}

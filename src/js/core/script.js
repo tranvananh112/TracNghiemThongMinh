@@ -179,11 +179,28 @@ class QuizManager {
     }
 
     switchTab(tabName) {
-        // Update nav buttons
+        // Update nav buttons (header tabs)
         document.querySelectorAll('.nav-btn').forEach(btn => {
             btn.classList.remove('active');
         });
-        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        const headerNavBtn = document.querySelector(`.nav-btn[data-tab="${tabName}"]`);
+        if (headerNavBtn) {
+            headerNavBtn.classList.add('active');
+        }
+
+        // Update sidebar nav items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        const sidebarNavItem = document.querySelector(`.nav-item[data-tab="${tabName}"]`);
+        if (sidebarNavItem) {
+            sidebarNavItem.classList.add('active');
+
+            // Update bubble position if bubble navigation exists
+            if (window.bubbleNav) {
+                window.bubbleNav.setActiveItem(sidebarNavItem);
+            }
+        }
 
         // Update tab content
         document.querySelectorAll('.tab-content').forEach(tab => {
