@@ -45,10 +45,13 @@
 
         // Close sidebar when clicking nav items on mobile
         navItems.forEach(function (item) {
-            item.addEventListener('click', function () {
-                // Only close on mobile/tablet
+            item.addEventListener('click', function (e) {
+                // Don't prevent default - let main navigation handler work
+                // Only close sidebar on mobile/tablet after a short delay
                 if (window.innerWidth < 1024) {
-                    closeSidebar();
+                    setTimeout(() => {
+                        closeSidebar();
+                    }, 100); // Small delay to let navigation happen first
                 }
             });
         });
@@ -113,6 +116,21 @@
         }
 
         console.log('✅ Mobile menu initialized');
+
+        // Debug: Check nav items
+        setTimeout(() => {
+            const navItems = document.querySelectorAll('.nav-item');
+            console.log('🔍 Found', navItems.length, 'nav items');
+            navItems.forEach((item, index) => {
+                const tabName = item.dataset.tab;
+                console.log(`Nav item ${index + 1}:`, tabName, item);
+
+                // Test click detection
+                item.addEventListener('touchstart', (e) => {
+                    console.log('👆 Touch detected on nav item:', tabName);
+                }, { passive: true });
+            });
+        }, 500);
     }
 
     function toggleSidebar() {

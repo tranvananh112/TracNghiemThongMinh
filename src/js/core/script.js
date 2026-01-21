@@ -91,13 +91,34 @@ class QuizManager {
             console.log('✅ Theme toggle handled by ThemeToggleManager');
         }
 
-        // Tab navigation
+        // Tab navigation - Header buttons
         document.querySelectorAll('.nav-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const tabName = e.currentTarget.dataset.tab;
                 this.switchTab(tabName);
             });
         });
+
+        // Tab navigation - Sidebar nav items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const tabName = e.currentTarget.dataset.tab;
+                console.log('🔄 Nav item clicked:', tabName); // Debug log
+                if (tabName) {
+                    this.switchTab(tabName);
+
+                    // Close mobile sidebar after navigation
+                    if (window.innerWidth < 1024 && window.MobileMenu) {
+                        setTimeout(() => {
+                            window.MobileMenu.close();
+                        }, 150);
+                    }
+                }
+            });
+        });
+
+        console.log('✅ Navigation event listeners set up for', document.querySelectorAll('.nav-item').length, 'nav items');
 
         // Quiz creation
         document.getElementById('process-quiz').addEventListener('click', () => {

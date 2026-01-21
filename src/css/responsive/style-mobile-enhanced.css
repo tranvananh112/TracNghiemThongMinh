@@ -1521,10 +1521,27 @@ body {
    ======================================== */
 @media (max-width: 1023px) {
 
+    /* Ensure sidebar is properly positioned and clickable */
+    .sidebar {
+        z-index: 1000 !important;
+        position: fixed !important;
+    }
+
     /* Giảm độ chói cho nav items trên mobile */
     .sidebar .nav-item {
         background: transparent !important;
         color: var(--text-primary) !important;
+        pointer-events: auto !important;
+        /* Ensure clickable */
+        position: relative !important;
+        z-index: 10 !important;
+        cursor: pointer !important;
+        touch-action: manipulation !important;
+        /* Better touch response */
+        min-height: 44px !important;
+        /* Better touch target */
+        display: flex !important;
+        align-items: center !important;
     }
 
     .sidebar .nav-item.active {
