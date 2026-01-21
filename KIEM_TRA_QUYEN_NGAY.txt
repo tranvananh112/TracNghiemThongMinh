@@ -1,0 +1,59 @@
+🔐 KIỂM TRA HỆ THỐNG QUYỀN NGAY
+
+=== BƯỚC 1: MỞ TRANG CHỦ ===
+1. Mở file index.html
+2. Vào tab "Khám Phá Đề Thi"
+
+=== BƯỚC 2: NHẬP TÊN NGƯỜI DÙNG ===
+1. Tìm ô "Tên người dùng" ở đầu trang
+2. Nhập tên của bạn (ví dụ: "Nguyen Van A")
+3. Nhấn Enter hoặc click ra ngoài
+
+=== BƯỚC 3: KIỂM TRA QUYỀN ===
+1. Click nút "Kiểm tra quyền" (màu vàng)
+2. Xem thông tin hiển thị:
+   - Tên hiện tại
+   - Số bài có thể sửa
+   - Số bài của bạn
+
+=== BƯỚC 4: TẠO QUIZ TEST ===
+1. Vào tab "Tạo Bài Quiz"
+2. Tạo một quiz đơn giản
+3. Vào tab "Quản Lý Quiz"
+4. Click "Chia sẻ" cho quiz vừa tạo
+5. Nhập đúng tên bạn đã đặt ở bước 2
+6. Chia sẻ quiz
+
+=== BƯỚC 5: KIỂM TRA KẾT QUẢ ===
+1. Quay lại tab "Khám Phá Đề Thi"
+2. Tìm quiz bạn vừa chia sẻ
+3. Kiểm tra xem có nút "Sửa" và "Xóa" không
+
+=== BƯỚC 6: TEST NGƯỜI DÙNG KHÁC ===
+1. Đổi tên người dùng thành tên khác
+2. Kiểm tra lại quiz - nút Sửa/Xóa sẽ biến mất
+3. Đổi lại tên ban đầu - nút sẽ xuất hiện lại
+
+=== BƯỚC 7: KIỂM TRA CONSOLE ===
+1. Nhấn F12 để mở Developer Tools
+2. Vào tab Console
+3. Tìm các dòng log bắt đầu bằng "🔐"
+4. Kiểm tra thông tin permission
+
+=== KẾT QUẢ MONG ĐỢI ===
+✅ Nút Sửa/Xóa chỉ hiện với quiz của bạn
+✅ Console log hiển thị đúng thông tin quyền
+✅ Nút "Kiểm tra quyền" hiển thị thông tin chính xác
+✅ Đổi tên người dùng thay đổi quyền tương ứng
+
+=== NẾU CÓ LỖI ===
+1. Mở file TEST_PERMISSION_SYSTEM.html
+2. Chạy test để xác định vấn đề
+3. Kiểm tra HUONG_DAN_HE_THONG_QUYEN.md
+4. Xem console log để debug
+
+=== ADMIN TEST ===
+1. Nhấn Ctrl+Shift+I để mở console
+2. Gõ: adminManager.enableAdminMode()
+3. Nhập mật khẩu: 093701
+4. Kiểm tra - bây giờ bạn có quyền với mọi quiz

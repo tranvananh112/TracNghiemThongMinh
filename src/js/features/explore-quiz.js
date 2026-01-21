@@ -11,6 +11,126 @@ class ExploreQuizManager {
         this.retryCount = 0;
         this.maxRetries = 3;
         this.serverInfo = null;
+        this.isAdminMode = false; // Will be set by admin manager
+    }
+
+    // 🔐 PERMISSION SYSTEM - Kiểm tra quyền truy cập quiz
+    checkQuizPermission(quiz, action = 'view') {
+        // Lấy thông tin user hiện tại từ nhiều nguồn
+        const currentUserName = this.currentUserName ||
+            localStorage.getItem('userName') ||
+            localStorage.getItem('currentUserName') ||
+            '';
+
+        const isAdmin = this.isAdminMode || (window.adminManager && window.adminManager.isAdminMode);
+
+        // Lấy tên owner của quiz từ nhiều field có thể có
+        const quizOwner = quiz.user_name || quiz.userName || quiz.owner || quiz.createdBy || '';
+
+        console.log('🔐 Checking permission:', {
+            action,
+            currentUser: currentUserName,
+            quizOwner: quizOwner,
+            isAdmin,
+            quizData: {
+                id: quiz.id,
+                title: quiz.title,
+                user_name: quiz.user_name,
+                userName: quiz.userName,
+                owner: quiz.owner,
+                createdBy: quiz.createdBy
+            }
+        });
+
+        // Admin có tất cả quyền
+        if (isAdmin) {
+            console.log('✅ Admin access granted');
+            return true;
+        }
+
+        // Kiểm tra quyền theo action
+        switch (action) {
+            case 'view':
+            case 'practice':
+                // Tất cả đều có quyền xem và làm bài
+                return true;
+
+            case 'edit':
+            case 'delete':
+                // Kiểm tra nếu không có tên user hiện tại
+                if (!currentUserName) {
+                    console.log('❌ No current user name found');
+                    return false;
+                }
+
+                // Kiểm tra nếu không có owner của quiz
+                if (!quizOwner) {
+                    console.log('❌ No quiz owner found');
+                    return false;
+                }
+
+                // So sánh tên user (case-insensitive và trim whitespace)
+                const hasPermission = currentUserName.trim().toLowerCase() === quizOwner.trim().toLowerCase();
+
+                console.log(hasPermission ?
+                    `✅ Owner access granted (${currentUserName} === ${quizOwner})` :
+                    `❌ Access denied (${currentUserName} !== ${quizOwner})`
+                );
+
+                return hasPermission;
+
+            default:
+                return false;
+        }
+    }
+
+    // 🔐 Tạo action buttons dựa trên quyền
+    generateQuizActionButtons(quiz) {
+        const canEdit = this.checkQuizPermission(quiz, 'edit');
+        const canDelete = this.checkQuizPermission(quiz, 'delete');
+
+        console.log(`🎯 Generating buttons for quiz "${quiz.title}":`, {
+            canEdit,
+            canDelete,
+            currentUser: this.currentUserName || localStorage.getItem('userName'),
+            quizOwner: quiz.user_name || quiz.userName || quiz.owner
+        });
+
+        let actionButtons = `
+            <button class="btn-quiz-action btn-quiz-secondary" onclick="exploreQuizManager.viewQuizDetails('${quiz.id}')" style="display: flex !important;">
+                <i class="fas fa-info-circle"></i>
+                <span>Chi tiết</span>
+            </button>
+        `;
+
+        // Thêm nút chỉnh sửa nếu có quyền
+        if (canEdit) {
+            console.log(`✅ Adding EDIT button for quiz ${quiz.id}`);
+            actionButtons += `
+                <button class="btn-quiz-action btn-quiz-warning" onclick="exploreQuizManager.editQuiz('${quiz.id}')" title="Chỉnh sửa bài thi" style="display: flex !important; background: linear-gradient(135deg, #f6ad55, #ed8936) !important; color: white !important; border: none !important;">
+                    <i class="fas fa-edit"></i>
+                    <span>Sửa</span>
+                </button>
+            `;
+        } else {
+            console.log(`❌ No EDIT permission for quiz ${quiz.id}`);
+        }
+
+        // Thêm nút xóa nếu có quyền
+        if (canDelete) {
+            console.log(`✅ Adding DELETE button for quiz ${quiz.id}`);
+            actionButtons += `
+                <button class="btn-quiz-action btn-quiz-danger" onclick="exploreQuizManager.confirmDeleteQuiz('${quiz.id}')" title="Xóa bài thi" style="display: flex !important; background: linear-gradient(135deg, #fc8181, #e53e3e) !important; color: white !important; border: none !important;">
+                    <i class="fas fa-trash"></i>
+                    <span>Xóa</span>
+                </button>
+            `;
+        } else {
+            console.log(`❌ No DELETE permission for quiz ${quiz.id}`);
+        }
+
+        console.log(`🔧 Generated HTML:`, actionButtons);
+        return actionButtons;
     }
 
     // Phát hiện URL server tự động
@@ -888,14 +1008,170 @@ class ExploreQuizManager {
 
     // Thiết lập tên người dùng
     setupUserName() {
+        // Đồng bộ tên người dùng từ localStorage
+        const savedUserName = localStorage.getItem('userName') || localStorage.getItem('currentUserName') || '';
+        if (savedUserName && !this.currentUserName) {
+            this.currentUserName = savedUserName;
+            console.log('📝 Loaded user name from localStorage:', this.currentUserName);
+        }
+
         const userNameInput = document.getElementById('user-name-input');
         if (userNameInput) {
             userNameInput.value = this.currentUserName;
             userNameInput.addEventListener('change', (e) => {
                 this.currentUserName = e.target.value.trim();
                 localStorage.setItem('userName', this.currentUserName);
+                localStorage.setItem('currentUserName', this.currentUserName); // Backup key
+                console.log('💾 Saved user name:', this.currentUserName);
+
+                // Re-render quizzes để cập nhật permissions
+                if (this.sharedQuizzes.length > 0) {
+                    console.log('🔄 Re-rendering quizzes with new user permissions');
+                    this.renderSharedQuizzes(this.sharedQuizzes);
+                }
+            });
+
+            // Thêm event listener cho blur để đảm bảo lưu khi user rời khỏi input
+            userNameInput.addEventListener('blur', (e) => {
+                const newUserName = e.target.value.trim();
+                if (newUserName !== this.currentUserName) {
+                    this.currentUserName = newUserName;
+                    localStorage.setItem('userName', this.currentUserName);
+                    localStorage.setItem('currentUserName', this.currentUserName);
+                    console.log('💾 Saved user name on blur:', this.currentUserName);
+
+                    // Re-render quizzes
+                    if (this.sharedQuizzes.length > 0) {
+                        this.renderSharedQuizzes(this.sharedQuizzes);
+                    }
+                }
             });
         }
+
+        console.log('👤 Current user name setup:', this.currentUserName);
+    }
+
+    // 🔍 DEBUG: Hiển thị thông tin permission cho tất cả quiz
+    debugPermissions() {
+        console.log('🔍 === PERMISSION DEBUG INFO ===');
+        console.log('Current User:', this.currentUserName || localStorage.getItem('userName') || 'NOT SET');
+        console.log('Admin Mode:', this.isAdminMode || (window.adminManager && window.adminManager.isAdminMode));
+        console.log('Total Quizzes:', this.sharedQuizzes.length);
+
+        this.sharedQuizzes.forEach((quiz, index) => {
+            const canEdit = this.checkQuizPermission(quiz, 'edit');
+            const canDelete = this.checkQuizPermission(quiz, 'delete');
+
+            console.log(`Quiz ${index + 1}: "${quiz.title}"`);
+            console.log(`  Owner: ${quiz.user_name || quiz.userName || quiz.owner || 'UNKNOWN'}`);
+            console.log(`  Can Edit: ${canEdit ? '✅' : '❌'}`);
+            console.log(`  Can Delete: ${canDelete ? '✅' : '❌'}`);
+        });
+        console.log('🔍 === END DEBUG INFO ===');
+    }
+
+    // 🔍 Hiển thị debug info trên UI
+    showPermissionDebugUI() {
+        // Xóa debug UI cũ nếu có
+        document.querySelector('.permission-debug')?.remove();
+
+        const currentUser = this.currentUserName || localStorage.getItem('userName') || 'CHƯA NHẬP TÊN';
+        const isAdmin = this.isAdminMode || (window.adminManager && window.adminManager.isAdminMode);
+
+        let ownedQuizzes = 0;
+        let editableQuizzes = 0;
+
+        this.sharedQuizzes.forEach(quiz => {
+            if (this.checkQuizPermission(quiz, 'edit')) {
+                editableQuizzes++;
+                const quizOwner = quiz.user_name || quiz.userName || quiz.owner || '';
+                if (quizOwner.toLowerCase() === currentUser.toLowerCase()) {
+                    ownedQuizzes++;
+                }
+            }
+        });
+
+        const debugDiv = document.createElement('div');
+        debugDiv.className = 'permission-debug';
+        debugDiv.innerHTML = `
+            <div style="font-weight: bold; margin-bottom: 8px;">🔐 Thông Tin Quyền</div>
+            <div>👤 Tên: ${currentUser}</div>
+            <div>👑 Admin: ${isAdmin ? 'Có' : 'Không'}</div>
+            <div>📝 Bài có thể sửa: ${editableQuizzes}/${this.sharedQuizzes.length}</div>
+            <div>🏠 Bài của bạn: ${ownedQuizzes}</div>
+            <button onclick="exploreQuizManager.hidePermissionDebugUI()" style="margin-top: 8px; padding: 4px 8px; background: #f56565; color: white; border: none; border-radius: 4px; cursor: pointer;">Đóng</button>
+        `;
+
+        document.body.appendChild(debugDiv);
+    }
+
+    // Ẩn debug UI
+    hidePermissionDebugUI() {
+        document.querySelector('.permission-debug')?.remove();
+    }
+
+    // 🔧 FORCE: Đảm bảo nút permission hiển thị
+    forceShowPermissionButtons() {
+        console.log('🔧 Force checking permission buttons...');
+
+        const quizCards = document.querySelectorAll('[data-quiz-id]');
+        console.log(`📋 Found ${quizCards.length} quiz cards`);
+
+        quizCards.forEach((card, index) => {
+            const quizId = card.getAttribute('data-quiz-id');
+            const actionsDiv = card.querySelector('.quiz-card-actions');
+
+            if (!actionsDiv) {
+                console.log(`⚠️ Card ${index + 1}: Missing quiz-card-actions div`);
+                return;
+            }
+
+            const editBtn = actionsDiv.querySelector('.btn-quiz-warning');
+            const deleteBtn = actionsDiv.querySelector('.btn-quiz-danger');
+            const detailBtn = actionsDiv.querySelector('.btn-quiz-secondary');
+
+            console.log(`📋 Card ${index + 1} (ID: ${quizId}):`);
+            console.log(`   - Detail button: ${detailBtn ? '✅' : '❌'}`);
+            console.log(`   - Edit button: ${editBtn ? '✅' : '❌'}`);
+            console.log(`   - Delete button: ${deleteBtn ? '✅' : '❌'}`);
+
+            // Đảm bảo CSS hiển thị
+            if (actionsDiv) {
+                actionsDiv.style.display = 'flex';
+                actionsDiv.style.gap = '8px';
+                actionsDiv.style.padding = '10px 0';
+                actionsDiv.style.borderTop = '1px solid #e2e8f0';
+                actionsDiv.style.borderBottom = '1px solid #e2e8f0';
+            }
+
+            // Đảm bảo các nút hiển thị
+            const allButtons = actionsDiv.querySelectorAll('.btn-quiz-action');
+            allButtons.forEach(btn => {
+                btn.style.display = 'flex';
+                btn.style.alignItems = 'center';
+                btn.style.justifyContent = 'center';
+                btn.style.gap = '4px';
+                btn.style.padding = '8px 12px';
+                btn.style.borderRadius = '8px';
+                btn.style.border = 'none';
+                btn.style.cursor = 'pointer';
+                btn.style.fontWeight = '600';
+                btn.style.fontSize = '13px';
+            });
+
+            // Highlight nút permission nếu có
+            if (editBtn) {
+                editBtn.style.background = 'linear-gradient(135deg, #f6ad55, #ed8936)';
+                editBtn.style.color = 'white';
+            }
+
+            if (deleteBtn) {
+                deleteBtn.style.background = 'linear-gradient(135deg, #fc8181, #e53e3e)';
+                deleteBtn.style.color = 'white';
+            }
+        });
+
+        console.log('✅ Force permission buttons check completed');
     }
 
     // Thiết lập event listeners
@@ -1153,10 +1429,7 @@ class ExploreQuizManager {
                         </div>
                         
                         <div class="quiz-card-actions">
-                            <button class="btn-quiz-action btn-quiz-secondary" onclick="exploreQuizManager.viewQuizDetails('${quiz.id}')">
-                                <i class="fas fa-info-circle"></i>
-                                <span>Chi tiết</span>
-                            </button>
+                            ${this.generateQuizActionButtons(quiz)}
                         </div>
                         <div class="quiz-card-practice-action">
                             <button class="btn-quiz-practice-full" onclick="exploreQuizManager.startPracticeMode('${quiz.id}')">
@@ -1171,12 +1444,21 @@ class ExploreQuizManager {
 
         container.innerHTML = quizzesHTML;
 
+        // 🔍 DEBUG: Hiển thị thông tin permission sau khi render
+        console.log('🎨 Rendered quizzes, debugging permissions...');
+        this.debugPermissions();
+
+        // 🔧 FORCE: Đảm bảo nút permission hiển thị
+        setTimeout(() => {
+            this.forceShowPermissionButtons();
+        }, 100);
+
         // 🎯 APPLY DYNAMIC CONTENT-AWARE LAYOUT after rendering
         setTimeout(() => {
             if (window.optimizeContentAwareLayout) {
                 window.optimizeContentAwareLayout();
             }
-        }, 100);
+        }, 200);
     }
 
     // 🔥 Render trending quizzes với hiệu ứng carousel

@@ -1,0 +1,73 @@
+🔥 CÁCH FIX ĐƠN GIẢN NHẤT
+
+=== BƯỚC 1 ===
+Mở trang index.html
+
+=== BƯỚC 2 ===  
+Nhấn F12 → chọn Console
+
+=== BƯỚC 3 ===
+Copy và paste lệnh này, nhấn Enter:
+
+```javascript
+// Fix nút Sửa/Xóa ngay lập tức
+document.querySelectorAll('[data-quiz-id]').forEach(card => {
+    let actions = card.querySelector('.quiz-card-actions');
+    if (!actions) {
+        actions = document.createElement('div');
+        actions.className = 'quiz-card-actions';
+        actions.style.cssText = 'display:flex;gap:8px;padding:10px 0;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;';
+        const content = card.querySelector('.quiz-card-content, .shared-quiz-content');
+        if (content) content.appendChild(actions);
+    }
+    
+    if (!actions.querySelector('.btn-quiz-warning')) {
+        actions.innerHTML = `
+            <button onclick="alert('Chi tiết')" style="flex:1;padding:8px 12px;border:none;border-radius:8px;background:linear-gradient(135deg,#e2e8f0,#cbd5e0);color:#4a5568;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;font-weight:600;">
+                <i class="fas fa-info-circle"></i> Chi tiết
+            </button>
+            <button onclick="alert('Chỉnh sửa')" style="flex:1;padding:8px 12px;border:none;border-radius:8px;background:linear-gradient(135deg,#f6ad55,#ed8936);color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;font-weight:600;">
+                <i class="fas fa-edit"></i> Sửa
+            </button>
+            <button onclick="alert('Xóa')" style="flex:1;padding:8px 12px;border:none;border-radius:8px;background:linear-gradient(135deg,#fc8181,#e53e3e);color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;font-weight:600;">
+                <i class="fas fa-trash"></i> Xóa
+            </button>
+        `;
+    }
+});
+console.log('✅ Đã thêm nút Sửa/Xóa cho tất cả quiz!');
+```
+
+=== KẾT QUẢ ===
+✅ Thấy nút "Sửa" màu vàng
+✅ Thấy nút "Xóa" màu đỏ
+✅ Click vào sẽ có thông báo
+
+=== NẾU MUỐN CHỨC NĂNG THẬT ===
+Chạy thêm lệnh này để kết nối với hệ thống:
+
+```javascript
+// Kết nối với hệ thống thật
+if (window.exploreQuizManager) {
+    document.querySelectorAll('.btn-quiz-warning').forEach(btn => {
+        const card = btn.closest('[data-quiz-id]');
+        const quizId = card?.getAttribute('data-quiz-id');
+        if (quizId) {
+            btn.onclick = () => window.exploreQuizManager.editQuiz(quizId);
+        }
+    });
+    
+    document.querySelectorAll('.btn-quiz-danger').forEach(btn => {
+        const card = btn.closest('[data-quiz-id]');
+        const quizId = card?.getAttribute('data-quiz-id');
+        if (quizId) {
+            btn.onclick = () => window.exploreQuizManager.confirmDeleteQuiz(quizId);
+        }
+    });
+    
+    console.log('✅ Đã kết nối với chức năng thật!');
+}
+```
+
+=== XONG ===
+Bây giờ bạn có thể chỉnh sửa/xóa quiz của mình!

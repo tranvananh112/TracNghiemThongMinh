@@ -786,6 +786,16 @@
                                     <span>Làm mới</span>
                                 </button>
                             </div>
+
+                            <!-- Debug Permission Card -->
+                            <div class="control-card action-card">
+                                <button class="smart-btn warning full-width"
+                                    onclick="exploreQuizManager.showPermissionDebugUI()"
+                                    title="Kiểm tra quyền chỉnh sửa/xóa bài thi">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <span>Kiểm tra quyền</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -5609,6 +5619,12 @@
             border: 1px solid var(--adaptive-border);
         }
 
+        .smart-btn.warning {
+            background: linear-gradient(135deg, #f6ad55, #ed8936);
+            color: white;
+            border: 1px solid #ed8936;
+        }
+
         .smart-btn.full-width {
             width: 100%;
         }
@@ -5625,6 +5641,11 @@
         .smart-btn.secondary:hover {
             background: var(--adaptive-bg-primary);
             border-color: var(--adaptive-primary);
+        }
+
+        .smart-btn.warning:hover {
+            background: linear-gradient(135deg, #ed8936, #dd6b20);
+            border-color: #dd6b20;
         }
 
         .filter-result {

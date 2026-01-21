@@ -1,0 +1,104 @@
+🔥 KIỂM TRA QUYỀN TRONG 1 PHÚT
+
+=== BƯỚC 1: MỞ TRANG CHỦ ===
+Mở file index.html trong trình duyệt
+
+=== BƯỚC 2: MỞ CONSOLE ===
+Nhấn F12 → chọn tab Console
+
+=== BƯỚC 3: CHẠY LỆNH TEST ===
+Copy và paste lệnh này vào Console, nhấn Enter:
+
+```javascript
+// Test nhanh permission system
+const testUser = 'TestUser123';
+localStorage.setItem('userName', testUser);
+if (window.exploreQuizManager) {
+    window.exploreQuizManager.currentUserName = testUser;
+    
+    // Tạo quiz test
+    const testQuiz = {
+        id: 'test-' + Date.now(),
+        title: 'Quiz Test Permission',
+        userName: testUser,
+        user_name: testUser,
+        totalQuestions: 5,
+        sharedAt: new Date().toISOString()
+    };
+    
+    // Thêm vào danh sách
+    window.exploreQuizManager.sharedQuizzes.unshift(testQuiz);
+    
+    // Render lại
+    window.exploreQuizManager.renderSharedQuizzes(window.exploreQuizManager.sharedQuizzes);
+    
+    console.log('✅ Đã thêm quiz test. Kiểm tra giao diện!');
+} else {
+    console.log('❌ Vui lòng vào tab "Khám Phá Đề Thi" trước');
+}
+```
+
+=== BƯỚC 4: KIỂM TRA KẾT QUẢ ===
+- Vào tab "Khám Phá Đề Thi"
+- Tìm quiz "Quiz Test Permission" 
+- Kiểm tra có nút "Sửa" (màu vàng) và "Xóa" (màu đỏ) không
+
+=== NẾU KHÔNG THẤY NÚT ===
+Chạy lệnh này để force hiển thị:
+
+```javascript
+// Force hiển thị nút cho tất cả quiz
+document.querySelectorAll('[data-quiz-id]').forEach(card => {
+    let actions = card.querySelector('.quiz-card-actions');
+    if (!actions) {
+        actions = document.createElement('div');
+        actions.className = 'quiz-card-actions';
+        const content = card.querySelector('.quiz-card-content, .shared-quiz-content');
+        if (content) content.appendChild(actions);
+    }
+    
+    if (!actions.querySelector('.btn-quiz-warning')) {
+        actions.innerHTML += `
+            <button class="btn-quiz-action btn-quiz-warning" style="background: #f6ad55; color: white; padding: 8px 12px; border: none; border-radius: 8px; margin: 2px;">
+                <i class="fas fa-edit"></i> Sửa
+            </button>
+            <button class="btn-quiz-action btn-quiz-danger" style="background: #e53e3e; color: white; padding: 8px 12px; border: none; border-radius: 8px; margin: 2px;">
+                <i class="fas fa-trash"></i> Xóa
+            </button>
+        `;
+    }
+});
+console.log('✅ Đã force thêm nút cho tất cả quiz');
+```
+
+=== KIỂM TRA NHANH KHÁC ===
+
+1. Kiểm tra tên người dùng:
+```javascript
+console.log('Tên hiện tại:', localStorage.getItem('userName'));
+```
+
+2. Kiểm tra số quiz:
+```javascript
+console.log('Số quiz:', window.exploreQuizManager?.sharedQuizzes?.length || 0);
+```
+
+3. Đặt tên mới:
+```javascript
+localStorage.setItem('userName', 'TenMoi123');
+window.exploreQuizManager.currentUserName = 'TenMoi123';
+```
+
+=== KẾT QUẢ MONG ĐỢI ===
+✅ Thấy nút "Sửa" màu vàng
+✅ Thấy nút "Xóa" màu đỏ  
+✅ Console không có lỗi
+✅ Click nút có phản hồi
+
+=== NẾU VẪN KHÔNG ĐƯỢC ===
+1. Chụp màn hình console
+2. Chụp màn hình giao diện
+3. Gửi kèm thông tin:
+   - Trình duyệt đang dùng
+   - Tên người dùng
+   - Có lỗi gì trong console không

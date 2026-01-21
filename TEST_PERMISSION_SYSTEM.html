@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Permission System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        input,
+        select {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .quiz-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+
+        .permission-buttons {
+            margin-top: 10px;
+        }
+
+        .permission-buttons button {
+            font-size: 12px;
+            padding: 5px 10px;
+        }
+
+        .btn-edit {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+        }
+
+        .btn-view {
+            background: #6c757d;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔐 Test Hệ Thống Quyền Quiz</h1>
+
+    <div class="test-section">
+        <h2>1. Thiết Lập Người Dùng</h2>
+        <label>Tên người dùng hiện tại:</label>
+        <input type="text" id="current-user" placeholder="Nhập tên của bạn" value="">
+        <button onclick="setCurrentUser()">Đặt làm người dùng hiện tại</button>
+        <button onclick="clearUser()">Xóa người dùng</button>
+
+        <div id="user-status" class="test-result info">
+            Chưa có người dùng nào được đặt
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Tạo Quiz Test</h2>
+        <label>Tên quiz:</label>
+        <input type="text" id="quiz-title" placeholder="Tên quiz" value="Quiz Test">
+
+        <label>Người tạo:</label>
+        <input type="text" id="quiz-owner" placeholder="Tên người tạo" value="">
+
+        <button onclick="addTestQuiz()">Thêm Quiz Test</button>
+        <button onclick="clearQuizzes()">Xóa tất cả Quiz</button>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Danh Sách Quiz & Quyền</h2>
+        <div id="quiz-list">
+            <div class="info test-result">Chưa có quiz nào</div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Test Admin Mode</h2>
+        <button onclick="toggleAdminMode()">Bật/Tắt Admin Mode</button>
+        <div id="admin-status" class="test-result info">Admin Mode: Tắt</div>
+    </div>
+
+    <div class="test-section">
+        <h2>5. Test Kết Quả</h2>
+        <button onclick="runAllTests()">Chạy Tất Cả Test</button>
+        <div id="test-results"></div>
+    </div>
+
+    <script>
+        // Mock ExploreQuizManager
+        class MockExploreQuizManager {
+            constructor() {
+                this.currentUserName = localStorage.getItem('userName') || '';
+                this.isAdminMode = false;
+                this.testQuizzes = [];
+            }
+
+            checkQuizPermission(quiz, action = 'view') {
+                const currentUserName = this.currentUserName || localStorage.getItem('userName') || '';
+                const isAdmin = this.isAdminMode;
+
+                console.log('🔐 Checking permission:', {
+                    action,
+                    currentUser: currentUserName,
+                    quizOwner: quiz.user_name || quiz.userName,
+                    isAdmin
+                });
+
+                if (isAdmin) {
+                    return true;
+                }
+
+                switch (action) {
+                    case 'view':
+                    case 'practice':
+                        return true;
+                    case 'edit':
+                    case 'delete':
+                        const quizOwner = quiz.user_name || quiz.userName || '';
+                        return currentUserName.trim().toLowerCase() === quizOwner.trim().toLowerCase();
+                    default:
+                        return false;
+                }
+            }
+
+            generateQuizActionButtons(quiz) {
+                const canEdit = this.checkQuizPermission(quiz, 'edit');
+                const canDelete = this.checkQuizPermission(quiz, 'delete');
+
+                let buttons = `<button class="btn-view">Xem</button>`;
+
+                if (canEdit) {
+                    buttons += `<button class="btn-edit">Sửa</button>`;
+                }
+
+                if (canDelete) {
+                    buttons += `<button class="btn-delete">Xóa</button>`;
+                }
+
+                return buttons;
+            }
+        }
+
+        // Khởi tạo mock manager
+        const mockManager = new MockExploreQuizManager();
+
+        // Functions
+        function setCurrentUser() {
+            const userName = document.getElementById('current-user').value.trim();
+            mockManager.currentUserName = userName;
+            localStorage.setItem('userName', userName);
+
+            document.getElementById('user-status').innerHTML =
+                `<strong>Người dùng hiện tại:</strong> ${userName || 'Chưa đặt'}`;
+            document.getElementById('user-status').className =
+                userName ? 'test-result success' : 'test-result error';
+
+            renderQuizzes();
+        }
+
+        function clearUser() {
+            mockManager.currentUserName = '';
+            localStorage.removeItem('userName');
+            document.getElementById('current-user').value = '';
+            document.getElementById('user-status').innerHTML = 'Chưa có người dùng nào được đặt';
+            document.getElementById('user-status').className = 'test-result info';
+            renderQuizzes();
+        }
+
+        function addTestQuiz() {
+            const title = document.getElementById('quiz-title').value.trim();
+            const owner = document.getElementById('quiz-owner').value.trim();
+
+            if (!title || !owner) {
+                alert('Vui lòng nhập đầy đủ tên quiz và người tạo');
+                return;
+            }
+
+            const quiz = {
+                id: Date.now().toString(),
+                title: title,
+                userName: owner,
+                user_name: owner,
+                totalQuestions: Math.floor(Math.random() * 20) + 5
+            };
+
+            mockManager.testQuizzes.push(quiz);
+            renderQuizzes();
+
+            // Clear inputs
+            document.getElementById('quiz-title').value = 'Quiz Test ' + (mockManager.testQuizzes.length + 1);
+            document.getElementById('quiz-owner').value = '';
+        }
+
+        function clearQuizzes() {
+            mockManager.testQuizzes = [];
+            renderQuizzes();
+        }
+
+        function toggleAdminMode() {
+            mockManager.isAdminMode = !mockManager.isAdminMode;
+            document.getElementById('admin-status').innerHTML =
+                `Admin Mode: ${mockManager.isAdminMode ? 'Bật' : 'Tắt'}`;
+            document.getElementById('admin-status').className =
+                mockManager.isAdminMode ? 'test-result success' : 'test-result info';
+            renderQuizzes();
+        }
+
+        function renderQuizzes() {
+            const container = document.getElementById('quiz-list');
+
+            if (mockManager.testQuizzes.length === 0) {
+                container.innerHTML = '<div class="info test-result">Chưa có quiz nào</div>';
+                return;
+            }
+
+            const currentUser = mockManager.currentUserName || localStorage.getItem('userName') || 'Chưa đặt';
+
+            let html = `<div class="info test-result">
+                <strong>Người dùng hiện tại:</strong> ${currentUser}<br>
+                <strong>Admin Mode:</strong> ${mockManager.isAdminMode ? 'Bật' : 'Tắt'}
+            </div>`;
+
+            mockManager.testQuizzes.forEach(quiz => {
+                const canEdit = mockManager.checkQuizPermission(quiz, 'edit');
+                const canDelete = mockManager.checkQuizPermission(quiz, 'delete');
+                const isOwner = (quiz.userName || '').toLowerCase() === currentUser.toLowerCase();
+
+                html += `
+                    <div class="quiz-card">
+                        <h4>${quiz.title}</h4>
+                        <p><strong>Người tạo:</strong> ${quiz.userName}</p>
+                        <p><strong>Số câu:</strong> ${quiz.totalQuestions}</p>
+                        <p><strong>Bạn là chủ sở hữu:</strong> ${isOwner ? '✅ Có' : '❌ Không'}</p>
+                        <p><strong>Quyền sửa:</strong> ${canEdit ? '✅ Có' : '❌ Không'}</p>
+                        <p><strong>Quyền xóa:</strong> ${canDelete ? '✅ Có' : '❌ Không'}</p>
+                        <div class="permission-buttons">
+                            ${mockManager.generateQuizActionButtons(quiz)}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function runAllTests() {
+            const results = document.getElementById('test-results');
+            let html = '<h3>Kết Quả Test:</h3>';
+            let passCount = 0;
+            let totalTests = 0;
+
+            // Test 1: User không có quyền sửa quiz của người khác
+            totalTests++;
+            mockManager.currentUserName = 'User1';
+            const quiz1 = { userName: 'User2', title: 'Quiz của User2' };
+            const canEdit1 = mockManager.checkQuizPermission(quiz1, 'edit');
+            if (!canEdit1) {
+                html += '<div class="success test-result">✅ Test 1 PASS: User không thể sửa quiz của người khác</div>';
+                passCount++;
+            } else {
+                html += '<div class="error test-result">❌ Test 1 FAIL: User có thể sửa quiz của người khác</div>';
+            }
+
+            // Test 2: User có quyền sửa quiz của chính mình
+            totalTests++;
+            const quiz2 = { userName: 'User1', title: 'Quiz của User1' };
+            const canEdit2 = mockManager.checkQuizPermission(quiz2, 'edit');
+            if (canEdit2) {
+                html += '<div class="success test-result">✅ Test 2 PASS: User có thể sửa quiz của chính mình</div>';
+                passCount++;
+            } else {
+                html += '<div class="error test-result">❌ Test 2 FAIL: User không thể sửa quiz của chính mình</div>';
+            }
+
+            // Test 3: Admin có quyền sửa mọi quiz
+            totalTests++;
+            mockManager.isAdminMode = true;
+            const canEditAdmin = mockManager.checkQuizPermission(quiz1, 'edit');
+            if (canEditAdmin) {
+                html += '<div class="success test-result">✅ Test 3 PASS: Admin có thể sửa mọi quiz</div>';
+                passCount++;
+            } else {
+                html += '<div class="error test-result">❌ Test 3 FAIL: Admin không thể sửa quiz</div>';
+            }
+
+            // Test 4: Case-insensitive username
+            totalTests++;
+            mockManager.isAdminMode = false;
+            mockManager.currentUserName = 'USER1';
+            const quiz4 = { userName: 'user1', title: 'Quiz case test' };
+            const canEdit4 = mockManager.checkQuizPermission(quiz4, 'edit');
+            if (canEdit4) {
+                html += '<div class="success test-result">✅ Test 4 PASS: Username case-insensitive hoạt động</div>';
+                passCount++;
+            } else {
+                html += '<div class="error test-result">❌ Test 4 FAIL: Username case-sensitive</div>';
+            }
+
+            // Tổng kết
+            html += `<div class="${passCount === totalTests ? 'success' : 'error'} test-result">
+                <strong>Tổng kết: ${passCount}/${totalTests} tests passed</strong>
+            </div>`;
+
+            results.innerHTML = html;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function () {
+            const savedUser = localStorage.getItem('userName');
+            if (savedUser) {
+                document.getElementById('current-user').value = savedUser;
+                mockManager.currentUserName = savedUser;
+                setCurrentUser();
+            }
+
+            // Set default quiz owner to current user
+            document.getElementById('quiz-owner').value = savedUser || '';
+        });
+    </script>
+</body>
+
+</html>

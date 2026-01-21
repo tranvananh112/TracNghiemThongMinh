@@ -232,19 +232,56 @@ class SupabaseQuizManager {
         WITH CHECK (true);
     */
 
+    // Test connection to Supabase
+    async testConnection() {
+        if (!this.isAvailable()) {
+            return { success: false, error: 'Supabase not configured' };
+        }
+
+        try {
+            // Simple test query
+            const { data, error } = await this.supabase
+                .from(this.tableName)
+                .select('id')
+                .limit(1);
+
+            if (error) {
+                return { success: false, error: error.message };
+            }
+
+            return { success: true, message: 'Connection successful' };
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    }
+
     // Chia sẻ quiz lên Supabase
     async shareQuiz(quiz, userName) {
         if (!this.isAvailable()) {
             throw new Error('Supabase không khả dụng. Vui lòng cấu hình SUPABASE_URL và SUPABASE_ANON_KEY');
         }
 
+        // Validate input data
+        if (!quiz) {
+            throw new Error('Quiz data is required');
+        }
+        if (!quiz.title || quiz.title.trim() === '') {
+            throw new Error('Quiz title is required');
+        }
+        if (!quiz.questions || !Array.isArray(quiz.questions) || quiz.questions.length === 0) {
+            throw new Error('Quiz must have at least one question');
+        }
+        if (!userName || userName.trim() === '') {
+            throw new Error('User name is required');
+        }
+
         try {
             const quizData = {
-                title: quiz.title,
+                title: quiz.title.trim(),
                 description: quiz.description || 'Không có mô tả',
                 questions: quiz.questions,
                 total_questions: quiz.questions.length,
-                user_name: userName,
+                user_name: userName.trim(),
                 views: 0,
                 attempts: 0,
                 likes: 0,
@@ -254,6 +291,13 @@ class SupabaseQuizManager {
                 category: quiz.category || 'general'
             };
 
+            console.log('📤 Sending quiz data to Supabase:', {
+                title: quizData.title,
+                questionsCount: quizData.total_questions,
+                userName: quizData.user_name,
+                category: quizData.category
+            });
+
             const { data, error } = await this.supabase
                 .from(this.tableName)
                 .insert([quizData])
@@ -261,8 +305,11 @@ class SupabaseQuizManager {
                 .single();
 
             if (error) {
-                throw error;
+                console.error('❌ Supabase insert error:', error);
+                throw new Error(`Database error: ${error.message}`);
             }
+
+            console.log('✅ Quiz shared successfully to Supabase:', data.id);
 
             return {
                 success: true,
@@ -274,7 +321,7 @@ class SupabaseQuizManager {
                 }
             };
         } catch (error) {
-            console.error('Error sharing quiz to Supabase:', error);
+            console.error('❌ Error sharing quiz to Supabase:', error);
             throw error;
         }
     }

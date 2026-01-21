@@ -1,0 +1,126 @@
+🔥 KIỂM TRA QUYỀN NGAY LÚNG TÙNG - 2 PHÚT
+
+=== CÁCH 1: DEBUG TRỰC TIẾP TRÊN TRANG CHÍNH ===
+
+1. MỞ TRANG CHỦ (index.html)
+
+2. NHẤN F12 ĐỂ MỞ CONSOLE
+
+3. COPY VÀ PASTE ĐOẠN CODE NÀY VÀO CONSOLE:
+
+```javascript
+// Kiểm tra nhanh permission system
+console.log('🔍 KIỂM TRA QUYỀN NHANH');
+
+// Đặt tên người dùng
+const testUser = 'NguyenVanA';
+localStorage.setItem('userName', testUser);
+if (window.exploreQuizManager) {
+    window.exploreQuizManager.currentUserName = testUser;
+}
+console.log('✅ Đã đặt tên:', testUser);
+
+// Kiểm tra quiz hiện có
+if (window.exploreQuizManager && window.exploreQuizManager.sharedQuizzes.length > 0) {
+    console.log('📝 Kiểm tra quiz:');
+    window.exploreQuizManager.sharedQuizzes.forEach((quiz, i) => {
+        const canEdit = window.exploreQuizManager.checkQuizPermission(quiz, 'edit');
+        console.log(`${i+1}. "${quiz.title}" - Quyền sửa: ${canEdit ? '✅' : '❌'}`);
+    });
+    
+    // Re-render để cập nhật UI
+    window.exploreQuizManager.renderSharedQuizzes(window.exploreQuizManager.sharedQuizzes);
+    console.log('🔄 Đã cập nhật giao diện');
+} else {
+    console.log('⚠️ Không có quiz nào');
+}
+```
+
+4. NHẤN ENTER ĐỂ CHẠY
+
+5. XEM KẾT QUẢ TRONG CONSOLE VÀ KIỂM TRA GIAO DIỆN
+
+=== CÁCH 2: MỞ FILE DEBUG ===
+
+1. MỞ FILE: DEBUG_PERMISSION_NGAY.html
+
+2. NHẬP TÊN NGƯỜI DÙNG
+
+3. CLICK "Test Permission"
+
+4. XEM KẾT QUẢ
+
+=== CÁCH 3: KIỂM TRA TỪNG BƯỚC ===
+
+BƯỚC 1: Kiểm tra localStorage
+```javascript
+console.log('userName:', localStorage.getItem('userName'));
+```
+
+BƯỚC 2: Kiểm tra exploreQuizManager
+```javascript
+console.log('Manager exists:', !!window.exploreQuizManager);
+if (window.exploreQuizManager) {
+    console.log('Current user:', window.exploreQuizManager.currentUserName);
+    console.log('Quiz count:', window.exploreQuizManager.sharedQuizzes.length);
+}
+```
+
+BƯỚC 3: Đặt tên và test
+```javascript
+localStorage.setItem('userName', 'TestUser');
+window.exploreQuizManager.currentUserName = 'TestUser';
+```
+
+BƯỚC 4: Kiểm tra UI
+```javascript
+document.querySelectorAll('.btn-quiz-warning').length; // Số nút Sửa
+document.querySelectorAll('.btn-quiz-danger').length;  // Số nút Xóa
+```
+
+=== NẾU VẪN KHÔNG THẤY NÚT ===
+
+1. KIỂM TRA TÊN NGƯỜI DÙNG:
+   - Tên bạn nhập khi chia sẻ quiz
+   - Tên trong localStorage
+   - Phải giống nhau (không phân biệt hoa/thường)
+
+2. KIỂM TRA QUIZ:
+   - Quiz có tồn tại không?
+   - Ai là người tạo quiz?
+   - Tên có khớp không?
+
+3. KIỂM TRA CONSOLE:
+   - Có lỗi JavaScript không?
+   - Log permission có hiển thị không?
+   - Có message "Adding EDIT button" không?
+
+=== GIẢI PHÁP NHANH ===
+
+NẾU VẪN KHÔNG ĐƯỢC, CHẠY LỆNH NÀY:
+
+```javascript
+// Force hiển thị nút cho tất cả quiz
+document.querySelectorAll('[data-quiz-id]').forEach(card => {
+    const actions = card.querySelector('.quiz-card-actions');
+    if (actions && !actions.querySelector('.btn-quiz-warning')) {
+        actions.innerHTML += `
+            <button class="btn-quiz-action btn-quiz-warning" onclick="alert('Test Edit')">
+                <i class="fas fa-edit"></i><span>Sửa</span>
+            </button>
+            <button class="btn-quiz-action btn-quiz-danger" onclick="alert('Test Delete')">
+                <i class="fas fa-trash"></i><span>Xóa</span>
+            </button>
+        `;
+    }
+});
+console.log('✅ Đã force thêm nút cho tất cả quiz');
+```
+
+=== LIÊN HỆ HỖ TRỢ ===
+
+Nếu vẫn không được, gửi kèm:
+1. Screenshot console log
+2. Tên người dùng bạn đang dùng  
+3. Tên quiz bạn tạo
+4. Kết quả của lệnh: console.log(localStorage.getItem('userName'))
