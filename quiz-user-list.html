@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Của Bạn - Danh Sách Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .main-container {
+            display: flex;
+            min-height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 40px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 20px;
+            height: fit-content;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: #6c5ce7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .user-name {
+            color: white;
+            font-weight: 600;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 10px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Main Content */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            padding: 20px 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+        }
+
+        .page-title h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .quiz-icon {
+            width: 32px;
+            height: 32px;
+            background: #00b894;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .view-all-link {
+            color: #74b9ff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Carousel Section */
+        .carousel-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-track {
+            position: relative;
+            width: 350px;
+            height: 450px;
+            perspective: 1000px;
+        }
+
+        .quiz-card {
+            position: absolute;
+            width: 300px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(20px);
+        }
+
+        .quiz-card.center {
+            transform: translateX(0) translateY(0) scale(1) rotateY(0deg);
+            z-index: 5;
+            opacity: 1;
+        }
+
+        .quiz-card.up-1 {
+            transform: translateX(-20px) translateY(-80px) scale(0.85) rotateY(15deg);
+            z-index: 4;
+            opacity: 0.8;
+        }
+
+        .quiz-card.up-2 {
+            transform: translateX(-40px) translateY(-140px) scale(0.7) rotateY(25deg);
+            z-index: 3;
+            opacity: 0.6;
+        }
+
+        .quiz-card.down-1 {
+            transform: translateX(-20px) translateY(80px) scale(0.85) rotateY(15deg);
+            z-index: 4;
+            opacity: 0.8;
+        }
+
+        .quiz-card.down-2 {
+            transform: translateX(-40px) translateY(140px) scale(0.7) rotateY(25deg);
+            z-index: 3;
+            opacity: 0.6;
+        }
+
+        .quiz-card.hidden {
+            transform: translateX(-60px) translateY(0) scale(0.5) rotateY(35deg);
+            z-index: 1;
+            opacity: 0.3;
+        }
+
+        .quiz-card-header {
+            height: 200px;
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .quiz-card-icon {
+            font-size: 48px;
+            opacity: 0.9;
+        }
+
+        .quiz-card-content {
+            padding: 25px;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .quiz-card-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2d3436;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .quiz-card-description {
+            font-size: 14px;
+            color: #636e72;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .quiz-card-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #74b9ff;
+            background: rgba(116, 185, 255, 0.1);
+            padding: 6px 10px;
+            border-radius: 15px;
+            border: 1px solid rgba(116, 185, 255, 0.2);
+        }
+
+        .quiz-start-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .quiz-start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.3);
+        }
+
+        /* Controls Section */
+        .controls-section {
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .nav-arrow {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(20px);
+        }
+
+        .nav-arrow:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .nav-arrow img {
+            width: 20px;
+            height: 20px;
+            filter: brightness(0) invert(1);
+        }
+
+        .quiz-info {
+            text-align: center;
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .quiz-name {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            transition: opacity 0.3s ease;
+        }
+
+        .quiz-subject {
+            font-size: 16px;
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+        }
+
+        .dots {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: white;
+            transform: scale(1.2);
+        }
+
+        /* Color Variants */
+        .quiz-card:nth-child(3n+1) .quiz-card-header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffa726 100%);
+        }
+
+        .quiz-card:nth-child(3n+2) .quiz-card-header {
+            background: linear-gradient(135deg, #4ecdc4 0%, #45b7d1 100%);
+        }
+
+        .quiz-card:nth-child(3n+3) .quiz-card-header {
+            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+
+            .controls-section {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+
+            .carousel-container {
+                height: 400px;
+            }
+
+            .quiz-card {
+                width: 280px;
+                height: 350px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .carousel-track {
+                width: 300px;
+                height: 350px;
+            }
+
+            .quiz-card {
+                width: 250px;
+                height: 320px;
+            }
+
+            .quiz-card-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="user-profile">
+                <div class="user-avatar">CN</div>
+                <div class="user-name">Cá nhân</div>
+            </div>
+
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                        <div class="nav-icon">🏠</div>
+                        <span>Trang Chủ</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <div class="nav-icon">📝</div>
+                        <span>Tạo Bài Quiz</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <div class="nav-icon">🤖</div>
+                        <span>AI Tạo Quiz</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <div class="nav-icon">📊</div>
+                        <span>Tạo Phòng Thi</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <div class="nav-icon">🔍</div>
+                        <span>Khám Phá Đề Thi</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <div class="nav-icon">📚</div>
+                        <span>Quản Lý Quiz</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <div class="nav-icon">📄</div>
+                        <span>Làm Bài</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <div class="nav-icon">🏆</div>
+                        <span>Kết Quả</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <div class="nav-icon">📋</div>
+                        <span>Báo Cáo</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-area">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-title">
+                    <div class="quiz-icon">📚</div>
+                    <h1>Quiz Của Bạn</h1>
+                </div>
+                <a href="#" class="view-all-link">Xem tất cả</a>
+            </div>
+
+            <!-- Carousel Section -->
+            <div class="carousel-section">
+                <div class="carousel-container">
+                    <button class="nav-arrow up">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 15l7-7 7 7'/%3E%3C/svg%3E"
+                            alt="Up">
+                    </button>
+
+                    <div class="carousel-track">
+                        <div class="quiz-card center" data-index="0">
+                            <div class="quiz-card-header">
+                                <div class="quiz-card-icon">📚</div>
+                            </div>
+                            <div class="quiz-card-content">
+                                <h3 class="quiz-card-title">Câu hỏi Thi Chứng Chỉ Tin Học Cơ Bản (V2)</h3>
+                                <p class="quiz-card-description">Chứng Chỉ Tin Học Cơ Bản</p>
+                                <div class="quiz-card-meta">
+                                    <span class="quiz-meta-item">📊 60 câu</span>
+                                    <span class="quiz-meta-item">📅 18/1/2026</span>
+                                </div>
+                                <button class="quiz-start-btn">
+                                    ▶ Vào làm thi
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="quiz-card up-1" data-index="1">
+                            <div class="quiz-card-header">
+                                <div class="quiz-card-icon">💻</div>
+                            </div>
+                            <div class="quiz-card-content">
+                                <h3 class="quiz-card-title">Câu hỏi Thi Chứng Chỉ Tin Học Cơ Bản</h3>
+                                <p class="quiz-card-description">Trắc Nghiệm Thi Chứng chỉ tin học CƠ BẢN</p>
+                                <div class="quiz-card-meta">
+                                    <span class="quiz-meta-item">📊 47 câu</span>
+                                    <span class="quiz-meta-item">📅 18/1/2026</span>
+                                </div>
+                                <button class="quiz-start-btn">
+                                    ▶ Vào làm thi
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="quiz-card up-2" data-index="2">
+                            <div class="quiz-card-header">
+                                <div class="quiz-card-icon">🎯</div>
+                            </div>
+                            <div class="quiz-card-content">
+                                <h3 class="quiz-card-title">TRẮC NGHIỆM QUY TRÌNH SẢN XUẤT (SAP ERP) - P2</h3>
+                                <p class="quiz-card-description">ôn thi</p>
+                                <div class="quiz-card-meta">
+                                    <span class="quiz-meta-item">📊 30 câu</span>
+                                    <span class="quiz-meta-item">📅 24/12/2025</span>
+                                </div>
+                                <button class="quiz-start-btn">
+                                    ▶ Vào làm thi
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="quiz-card down-1" data-index="3">
+                            <div class="quiz-card-header">
+                                <div class="quiz-card-icon">🔬</div>
+                            </div>
+                            <div class="quiz-card-content">
+                                <h3 class="quiz-card-title">Kiểm tra Kiến thức Khoa học</h3>
+                                <p class="quiz-card-description">Bài kiểm tra tổng hợp các môn khoa học</p>
+                                <div class="quiz-card-meta">
+                                    <span class="quiz-meta-item">📊 25 câu</span>
+                                    <span class="quiz-meta-item">📅 20/1/2026</span>
+                                </div>
+                                <button class="quiz-start-btn">
+                                    ▶ Vào làm thi
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="quiz-card down-2" data-index="4">
+                            <div class="quiz-card-header">
+                                <div class="quiz-card-icon">🌍</div>
+                            </div>
+                            <div class="quiz-card-content">
+                                <h3 class="quiz-card-title">Địa lý Việt Nam</h3>
+                                <p class="quiz-card-description">Kiến thức địa lý cơ bản về Việt Nam</p>
+                                <div class="quiz-card-meta">
+                                    <span class="quiz-meta-item">📊 35 câu</span>
+                                    <span class="quiz-meta-item">📅 15/1/2026</span>
+                                </div>
+                                <button class="quiz-start-btn">
+                                    ▶ Vào làm thi
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="quiz-card hidden" data-index="5">
+                            <div class="quiz-card-header">
+                                <div class="quiz-card-icon">📖</div>
+                            </div>
+                            <div class="quiz-card-content">
+                                <h3 class="quiz-card-title">Văn học Việt Nam</h3>
+                                <p class="quiz-card-description">Tác phẩm văn học nổi tiếng</p>
+                                <div class="quiz-card-meta">
+                                    <span class="quiz-meta-item">📊 40 câu</span>
+                                    <span class="quiz-meta-item">📅 10/1/2026</span>
+                                </div>
+                                <button class="quiz-start-btn">
+                                    ▶ Vào làm thi
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="nav-arrow down">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E"
+                            alt="Down">
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls Section -->
+        <div class="controls-section">
+            <div class="nav-controls">
+                <button class="nav-arrow up">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 15l7-7 7 7'/%3E%3C/svg%3E"
+                        alt="Up">
+                </button>
+                <button class="nav-arrow down">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E"
+                        alt="Down">
+                </button>
+            </div>
+
+            <div class="quiz-info">
+                <h2 class="quiz-name">Câu hỏi Thi Chứng Chỉ Tin Học Cơ Bản (V2)</h2>
+                <p class="quiz-subject">Chứng Chỉ Tin Học Cơ Bản</p>
+            </div>
+
+            <div class="dots">
+                <div class="dot active" data-index="0"></div>
+                <div class="dot" data-index="1"></div>
+                <div class="dot" data-index="2"></div>
+                <div class="dot" data-index="3"></div>
+                <div class="dot" data-index="4"></div>
+                <div class="dot" data-index="5"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                name: "Câu hỏi Thi Chứng Chỉ Tin Học Cơ Bản (V2)",
+                subject: "Chứng Chỉ Tin Học Cơ Bản",
+                questions: 60,
+                date: "18/1/2026",
+                icon: "📚"
+            },
+            {
+                name: "Câu hỏi Thi Chứng Chỉ Tin Học Cơ Bản",
+                subject: "Trắc Nghiệm Thi Chứng chỉ tin học CƠ BẢN",
+                questions: 47,
+                date: "18/1/2026",
+                icon: "💻"
+            },
+            {
+                name: "TRẮC NGHIỆM QUY TRÌNH SẢN XUẤT (SAP ERP) - P2",
+                subject: "ôn thi",
+                questions: 30,
+                date: "24/12/2025",
+                icon: "🎯"
+            },
+            {
+                name: "Kiểm tra Kiến thức Khoa học",
+                subject: "Bài kiểm tra tổng hợp các môn khoa học",
+                questions: 25,
+                date: "20/1/2026",
+                icon: "🔬"
+            },
+            {
+                name: "Địa lý Việt Nam",
+                subject: "Kiến thức địa lý cơ bản về Việt Nam",
+                questions: 35,
+                date: "15/1/2026",
+                icon: "🌍"
+            },
+            {
+                name: "Văn học Việt Nam",
+                subject: "Tác phẩm văn học nổi tiếng",
+                questions: 40,
+                date: "10/1/2026",
+                icon: "📖"
+            }
+        ];
+
+        const cards = document.querySelectorAll(".quiz-card");
+        const dots = document.querySelectorAll(".dot");
+        const quizName = document.querySelector(".quiz-name");
+        const quizSubject = document.querySelector(".quiz-subject");
+        const upArrows = document.querySelectorAll(".nav-arrow.up");
+        const downArrows = document.querySelectorAll(".nav-arrow.down");
+        let currentIndex = 0;
+        let isAnimating = false;
+
+        function updateCarousel(newIndex) {
+            if (isAnimating) return;
+            isAnimating = true;
+
+            currentIndex = (newIndex + cards.length) % cards.length;
+
+            cards.forEach((card, i) => {
+                const offset = (i - currentIndex + cards.length) % cards.length;
+
+                card.classList.remove(
+                    "center",
+                    "up-1",
+                    "up-2",
+                    "down-1",
+                    "down-2",
+                    "hidden"
+                );
+
+                if (offset === 0) {
+                    card.classList.add("center");
+                } else if (offset === 1) {
+                    card.classList.add("down-1");
+                } else if (offset === 2) {
+                    card.classList.add("down-2");
+                } else if (offset === cards.length - 1) {
+                    card.classList.add("up-1");
+                } else if (offset === cards.length - 2) {
+                    card.classList.add("up-2");
+                } else {
+                    card.classList.add("hidden");
+                }
+            });
+
+            dots.forEach((dot, i) => {
+                dot.classList.toggle("active", i === currentIndex);
+            });
+
+            quizName.style.opacity = "0";
+            quizSubject.style.opacity = "0";
+
+            setTimeout(() => {
+                quizName.textContent = quizData[currentIndex].name;
+                quizSubject.textContent = quizData[currentIndex].subject;
+                quizName.style.opacity = "1";
+                quizSubject.style.opacity = "1";
+            }, 300);
+
+            setTimeout(() => {
+                isAnimating = false;
+            }, 800);
+        }
+
+        upArrows.forEach(arrow => {
+            arrow.addEventListener("click", () => {
+                updateCarousel(currentIndex - 1);
+            });
+        });
+
+        downArrows.forEach(arrow => {
+            arrow.addEventListener("click", () => {
+                updateCarousel(currentIndex + 1);
+            });
+        });
+
+        dots.forEach((dot, i) => {
+            dot.addEventListener("click", () => {
+                updateCarousel(i);
+            });
+        });
+
+        cards.forEach((card, i) => {
+            card.addEventListener("click", () => {
+                updateCarousel(i);
+            });
+        });
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowUp") {
+                updateCarousel(currentIndex - 1);
+            } else if (e.key === "ArrowDown") {
+                updateCarousel(currentIndex + 1);
+            }
+        });
+
+        // Touch/Swipe support
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        document.addEventListener("touchstart", (e) => {
+            touchStartY = e.changedTouches[0].screenY;
+        });
+
+        document.addEventListener("touchend", (e) => {
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartY - touchEndY;
+
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    updateCarousel(currentIndex + 1);
+                } else {
+                    updateCarousel(currentIndex - 1);
+                }
+            }
+        }
+
+        // Auto-play (optional)
+        let autoPlayInterval;
+
+        function startAutoPlay() {
+            autoPlayInterval = setInterval(() => {
+                updateCarousel(currentIndex + 1);
+            }, 5000);
+        }
+
+        function stopAutoPlay() {
+            clearInterval(autoPlayInterval);
+        }
+
+        // Pause auto-play on hover
+        document.querySelector('.carousel-container').addEventListener('mouseenter', stopAutoPlay);
+        document.querySelector('.carousel-container').addEventListener('mouseleave', startAutoPlay);
+
+        // Initialize
+        updateCarousel(0);
+        // startAutoPlay(); // Uncomment to enable auto-play
+    </script>
+</body>
+
+</html>

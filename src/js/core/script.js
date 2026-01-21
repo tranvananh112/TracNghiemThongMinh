@@ -1024,6 +1024,7 @@ class QuizManager {
     renderQuiz() {
         const container = document.getElementById('quiz-container');
 
+        // Tối ưu: Render header trước, questions sau
         const quizHTML = `
             <div class="progress-bar-container">
                 <div class="progress-bar" id="quiz-progress-bar" style="width: 0%"></div>
@@ -1040,28 +1041,8 @@ class QuizManager {
                 </div>
             </div>
 
-            <div class="questions-container">
-                ${this.currentQuiz.questions.map((question, index) => `
-                    <div class="question-card">
-                        <div class="question-header">
-                            <div class="question-number">${index + 1}</div>
-                            <div class="question-text">${question.question}</div>
-                        </div>
-                        <div class="options">
-                            ${question.options.map(option => `
-                                <label class="option" for="q${index}_${option.letter}">
-                                    <input type="radio" 
-                                           id="q${index}_${option.letter}" 
-                                           name="question_${index}" 
-                                           value="${option.letter}"
-                                           onchange="quizManager.updateAnswer(${index}, '${option.letter}')">
-                                    <span class="option-label">${option.letter}.</span>
-                                    <span class="option-text">${option.text}</span>
-                                </label>
-                            `).join('')}
-                        </div>
-                    </div>
-                `).join('')}
+            <div class="questions-container" id="questions-container">
+                <!-- Questions sẽ được render lazy -->
             </div>
 
             <div class="quiz-submit">
@@ -1076,24 +1057,98 @@ class QuizManager {
         `;
 
         container.innerHTML = quizHTML;
+
+        // Tối ưu: Render questions với batching để tránh lag
+        this.renderQuestionsLazy();
         this.startTimer();
         this.updateProgressBar();
     }
 
+    // Tối ưu: Render questions theo batch để tránh lag
+    renderQuestionsLazy() {
+        const questionsContainer = document.getElementById('questions-container');
+        const batchSize = 8; // Tăng batch size để render nhanh hơn
+        let currentBatch = 0;
+
+        // Tối ưu: Event delegation cho tất cả radio buttons
+        questionsContainer.addEventListener('change', (e) => {
+            if (e.target.type === 'radio') {
+                const questionIndex = parseInt(e.target.name.replace('question_', ''));
+                const selectedAnswer = e.target.value;
+                this.updateAnswer(questionIndex, selectedAnswer);
+            }
+        });
+
+        const renderBatch = () => {
+            const start = currentBatch * batchSize;
+            const end = Math.min(start + batchSize, this.currentQuiz.questions.length);
+
+            const batchHTML = this.currentQuiz.questions.slice(start, end).map((question, relativeIndex) => {
+                const index = start + relativeIndex;
+                return `
+                    <div class="question-card" data-question-index="${index}">
+                        <div class="question-header">
+                            <div class="question-number">${index + 1}</div>
+                            <div class="question-text">${question.question}</div>
+                        </div>
+                        <div class="options">
+                            ${question.options.map(option => `
+                                <label class="option" for="q${index}_${option.letter}">
+                                    <input type="radio" 
+                                           id="q${index}_${option.letter}" 
+                                           name="question_${index}" 
+                                           value="${option.letter}">
+                                    <span class="option-label">${option.letter}.</span>
+                                    <span class="option-text">${option.text}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            questionsContainer.insertAdjacentHTML('beforeend', batchHTML);
+            currentBatch++;
+
+            // Tiếp tục render batch tiếp theo
+            if (end < this.currentQuiz.questions.length) {
+                // Tối ưu: Giảm timeout để render nhanh hơn
+                if (window.requestIdleCallback) {
+                    requestIdleCallback(renderBatch, { timeout: 30 });
+                } else {
+                    setTimeout(renderBatch, 3);
+                }
+            }
+        };
+
+        // Bắt đầu render batch đầu tiên
+        renderBatch();
+    }
+
     updateProgressBar() {
+        // Tối ưu: Cache DOM elements
+        if (!this.progressBarCache) {
+            this.progressBarCache = {
+                progressBar: document.getElementById('quiz-progress-bar'),
+                answeredCountEl: document.getElementById('answered-count')
+            };
+        }
+
         const answeredCount = Object.keys(this.currentAnswers).length;
         const totalQuestions = this.currentQuiz.totalQuestions;
         const percentage = (answeredCount / totalQuestions) * 100;
 
-        const progressBar = document.getElementById('quiz-progress-bar');
-        const answeredCountEl = document.getElementById('answered-count');
+        // Tối ưu: Chỉ update nếu có thay đổi
+        if (this.lastAnsweredCount !== answeredCount) {
+            this.lastAnsweredCount = answeredCount;
 
-        if (progressBar) {
-            progressBar.style.width = percentage + '%';
-        }
+            if (this.progressBarCache.progressBar) {
+                this.progressBarCache.progressBar.style.width = percentage + '%';
+            }
 
-        if (answeredCountEl) {
-            answeredCountEl.textContent = answeredCount;
+            if (this.progressBarCache.answeredCountEl) {
+                this.progressBarCache.answeredCountEl.textContent = answeredCount;
+            }
         }
     }
 
@@ -1111,15 +1166,44 @@ class QuizManager {
     }
 
     updateAnswer(questionIndex, selectedAnswer) {
+        // Tối ưu: Cập nhật data ngay lập tức
         this.currentAnswers[questionIndex] = selectedAnswer;
 
-        const option = document.querySelector(`#q${questionIndex}_${selectedAnswer}`).closest('.option');
-        document.querySelectorAll(`input[name="question_${questionIndex}"]`).forEach(input => {
-            input.closest('.option').classList.remove('selected');
-        });
-        option.classList.add('selected');
+        // Tối ưu: Immediate visual feedback - không chờ requestAnimationFrame
+        const clickedInput = document.getElementById(`q${questionIndex}_${selectedAnswer}`);
+        if (clickedInput) {
+            const optionContainer = clickedInput.closest('.option');
+            const questionContainer = clickedInput.closest('.question-card');
 
-        this.updateProgressBar();
+            if (questionContainer && optionContainer) {
+                // Tối ưu: Synchronous DOM update cho immediate feedback
+                const allOptions = questionContainer.querySelectorAll('.option');
+
+                // Tối ưu: Single loop với early exit
+                for (let i = 0; i < allOptions.length; i++) {
+                    const option = allOptions[i];
+                    if (option === optionContainer) {
+                        option.classList.add('selected');
+                    } else {
+                        option.classList.remove('selected');
+                    }
+                }
+            }
+        }
+
+        // Tối ưu: Async progress update để không block UI
+        this.throttleProgressUpdate();
+    }
+
+    // Tối ưu: Throttle thay vì debounce để responsive hơn
+    throttleProgressUpdate() {
+        if (!this.progressUpdateThrottled) {
+            this.progressUpdateThrottled = true;
+            requestAnimationFrame(() => {
+                this.updateProgressBar();
+                this.progressUpdateThrottled = false;
+            });
+        }
     }
 
     submitQuiz() {

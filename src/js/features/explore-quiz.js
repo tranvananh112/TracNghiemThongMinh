@@ -3131,6 +3131,9 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
         exploreQuizManager = new ExploreQuizManager();
 
+        // Expose ngay sau khi khởi tạo
+        window.exploreQuizManager = exploreQuizManager;
+
         // Đợi một chút để đảm bảo DOM đã sẵn sàng
         setTimeout(() => {
             if (exploreQuizManager) {
@@ -3142,6 +3145,3 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('❌ Error initializing Explore Quiz Manager:', error);
     }
 });
-
-// Expose để debug
-window.exploreQuizManager = exploreQuizManager;

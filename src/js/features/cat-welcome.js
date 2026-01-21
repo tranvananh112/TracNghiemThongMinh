@@ -10,10 +10,13 @@ class CatWelcome {
 
     init() {
         // Chỉ hiện cho người dùng mới (chưa từng vào)
-        if (!this.hasVisited) {
+        // TEMP: Force show for testing - remove this line in production
+        if (!this.hasVisited || window.location.search.includes('showcat=1')) {
             this.createWelcomeAnimation();
-            // Đánh dấu đã xem
-            localStorage.setItem('catWelcomeShown', 'true');
+            // Đánh dấu đã xem (chỉ khi không phải test)
+            if (!window.location.search.includes('showcat=1')) {
+                localStorage.setItem('catWelcomeShown', 'true');
+            }
         }
     }
 
@@ -28,9 +31,34 @@ class CatWelcome {
 
         // Tạo con mèo
         const catGif = document.createElement('img');
-        catGif.src = 'Cat Hello GIF by Mikitti.gif';
+        catGif.src = 'assets/images/Cat Hello GIF by Mikitti.gif';
         catGif.className = 'cat-hello-gif';
         catGif.alt = 'Chào mừng!';
+        catGif.style.cssText = `
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        `;
+
+        // Error handling cho GIF
+        catGif.onerror = () => {
+            console.warn('Cat GIF not found, using fallback');
+            catGif.style.cssText += `
+                background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 40px;
+            `;
+            catGif.innerHTML = '🐱';
+            catGif.removeAttribute('src');
+        };
+
+        catGif.onload = () => {
+            console.log('✅ Cat GIF loaded successfully!');
+        };
 
         // Tạo bubble chào
         const welcomeBubble = document.createElement('div');
